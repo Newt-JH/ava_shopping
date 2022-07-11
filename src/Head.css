@@ -1,0 +1,25 @@
+img {
+    max-width: 70px;
+    max-height: 70px;
+    margin: 20px;
+   }
+
+.divv {
+    display: inline-block;
+    width: 49%;
+    height: 80px;
+}
+
+.divv2 {
+    display: inline-block;
+    width: 49%;
+}
+
+.di {
+    background-color: antiquewhite;
+}
+
+strong {
+    font-size: 100%;
+    margin-right: 15px;
+}
