@@ -1,7 +1,12 @@
 import axios from 'axios';
+import './Login.css'
 import React ,{Component, useState} from 'react';
 import { useNavigate } from "react-router-dom";
-import './Login.css'
+import {Cookies} from 'react-cookie'
+
+const cookies = new Cookies();
+
+
 function Login() {
 
     const [id, setID] = useState('');
@@ -25,10 +30,19 @@ function Login() {
           userID: id,
           userPassword: password
         }
-      }).then(function loginCheck(res){
-        if(res.data === "OK"){
+      })
+      .then(function loginCheck(res){
+        if(res.data.me === "OK"){
+          const time = 1000*60*15;
             // 로그인 성공 시
-            console.log(res.data);
+            console.log(res.data.token);
+            console.log(res.data.userIndex);
+            if(cookies.get("loginCookie") === undefined){
+              cookies.set("loginCookie", res.data.token, { path: "/", expires : new Date(Date.now() + time) })
+              cookies.set("userIndex",res.data.userIndex, { path: "/", expires : new Date(Date.now() + time) })
+            }else{
+              console.log("쿠키가 이미 있음");
+            }
             navigate("/");
         }else{
             // 로그인 실패 시
@@ -42,8 +56,8 @@ function Login() {
   return (
     <>
 <form className='frmNewAcc' onSubmit={submitHandler}>
-		<input type="text" value={id} onChange={idChangeHandler}></input>
-        <input type="password" value={password} onChange={passwordChangeHandler}></input>
+		<input type="text" value={id} minLength="4" onChange={idChangeHandler} ></input>
+        <input type="password" value={password}  minLength="4" onChange={passwordChangeHandler}></input>
         <input type="submit" value="로그인"></input>
 </form>
     </>

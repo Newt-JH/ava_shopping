@@ -8,17 +8,60 @@ const connection = mysql.createConnection({
     database: 'ava_shopping'
 });
 
+
+
+// JWT 구현
+
+
+
+const jwt = require('jsonwebtoken');
+const secret = 'hwan'
+
+
+
+
+
+
 // 로그인
-function newLogin(userID,userPassword,res){
-    const query = `select userPassword from user where userID = "${userID}";`
+function newLogin(userID, userPassword, res) {
+
+    const query = `select userPassword,userIndex from user where userID = "${userID}";`
     connection.query(query,
-        (err,rows) => {
-            if(err) {throw err}
-            else if(rows[0].userPassword === userPassword){
-                return res.json("OK")
-            }else{
+        (err, rows) => {
+            if (err) { throw err }
+            else if (rows[0].userPassword === userPassword) {
+
+                token = jwt.sign({
+                    type: 'JWT',
+                    userIndex: rows[0].userIndex
+                }, secret, {
+                    expiresIn: '15m', // 만료시간 15분
+                    issuer: userID,
+                });
+
+                return res.json(
+                    {
+                        me: "OK",
+                        token: token,
+                        userIndex: rows[0].userIndex
+                    }
+                )
+            } else {
                 return res.json("FAIL")
-            }   
+            }
+        })
+}
+
+
+// 유저 인덱스 조회
+function readUserIndex(userID,res) {
+    const query = `select * from user where userID like "${userID}"`
+    connection.query(query,
+        (err, rows) => {
+            if (err) {
+                throw err;
+            }
+            return res.json(rows);
         })
 }
 
@@ -33,12 +76,26 @@ function newUser(user) {
     )
 }
 
+// 유저 아이디 중복 체크
+function idCheck(id, res) {
+    const query = `select * from user where userID like "${id}"`;
+    connection.query(query,
+        (err, row) => {
+            if (err) { throw err }
+            else if (row[0] === undefined) {
+                return res.json("OK");
+            } else {
+                return res.json("NO");
+            }
+        })
+}
+
 // 전체 회원 조회
 function readAllUser(res) {
     const query = `select * from user`
     connection.query(query,
-        (err,rows) => {
-            if(err) {
+        (err, rows) => {
+            if (err) {
                 throw err;
             }
             return res.json(rows);
@@ -46,11 +103,11 @@ function readAllUser(res) {
 }
 
 // 회원 상세 보기
-function readOneUser(params,res) {
+function readOneUser(params, res) {
     const query = `select * from user where userIndex = ${params}`
     connection.query(query,
-        (err,rows) => {
-            if(err) {
+        (err, rows) => {
+            if (err) {
                 throw err;
             }
             console.log("Select One Success");
@@ -58,12 +115,15 @@ function readOneUser(params,res) {
         })
 }
 
+
+
+
 // 유저 닉네임 수정
-function updateUserNick(params,userName){
+function updateUserNick(params, userName) {
     const query = `update user set userName = "${userName}" where userIndex = ${params}`;
-       connection.query(query,
+    connection.query(query,
         (err) => {
-            if(err) {
+            if (err) {
                 throw err;
             }
             console.log("Name Update Success")
@@ -71,11 +131,11 @@ function updateUserNick(params,userName){
 }
 
 // 유저 삭제
-function deleteUser(params,res){
+function deleteUser(params, res) {
     const query = `delete from user where userIndex = ${params};`
     connection.query(query,
         (err) => {
-            if(err) {
+            if (err) {
                 throw err;
             }
             console.log("Delete Success")
@@ -88,5 +148,7 @@ module.exports = {
     readOneUser,
     updateUserNick,
     deleteUser,
-    newLogin
+    newLogin,
+    idCheck,
+    readUserIndex
 }

@@ -61,9 +61,9 @@ router.post('/reg',upload.single('proDetailImg'),function(req, res, next) {
     const pro = {
         cateIndex: rb.cateIndex,
         proName: rb.proName,
-        proProfile: rb.proProfile,
+        proProfile: req.file.path.slice(12),
         proContents: rb.proContents,
-        proDetailImg: req.file.path,
+        proDetailImg: req.file.path.slice(12),
         proPrice: rb.proPrice,
         proCount: rb.proCount
     }
