@@ -22,7 +22,7 @@ function newProduct(pro) {
 
 // 상품 전체 읽기
 function readProduct(res) {
-    const query = `select * from product`
+    const query = `select * from product where proCount > 0`
     connection.query(query,
         (err,rows) => {
             if(err) {
@@ -47,7 +47,7 @@ function readOneProduct(params,res) {
 
 // 상품 검색
 function serchProduct(params,res) {
-    const query = `select * from product where proName like "%${params}%"`
+    const query = `select * from product where proName like "%${params}%" and proCount > 0`
     connection.query(query,
         (err,rows) => {
             if(err) {

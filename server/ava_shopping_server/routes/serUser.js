@@ -4,6 +4,8 @@ var router = express.Router();
 const crypto = require('crypto');
 
 
+
+
 // 로그인
 router.post('/login',function(req,res){
     rb = req.body;
@@ -14,6 +16,15 @@ router.post('/login',function(req,res){
     // 가져온 비밀번호
     db.newLogin(userID,password,res);
 })
+
+// 로그인 시 유저 인덱스 읽어오기
+router.post('/login/index',function(req,res){
+    rb = req.body;
+    userID = rb.userID;
+
+    db.readUserIndex(userID,res)
+})
+
 // 전체 회원 읽어오기
 router.get('/', function (req, res) {
     db.readAllUser(res);
@@ -40,6 +51,15 @@ router.post('/reg', function (req, res) {
     db.newUser(user);
     res.json("OK");
 })
+
+// Join ID 중복 체크
+router.post('/join/idcheck', function(req,res){
+    rb = req.body;
+    id = rb.userID;
+    db.idCheck(id,res);
+})
+
+
 
 // 유저 닉네임 수정
 router.put('/update/name/:id', function (req, res) {

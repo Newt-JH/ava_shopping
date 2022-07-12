@@ -51,9 +51,9 @@ function ProDetail(props) {
                         <th></th>
                     </tr>
                     <td>{detailData.proName}</td>
-                    <td><img src={'../shopping_img/'+ detailData.proProfile}></img></td>
+                    <td><img src={detailData.proProfile}></img></td>
                     <td>{detailData.proContents}</td>
-                    <td><img src={detailData.proDetailImg.slice(12)}></img></td>
+                    <td><img src={detailData.proDetailImg}></img></td>
                     <td>{detailData.proPrice}</td>
                     <td>{detailData.proCount}</td>
                     <td><Link to={"../order/"+id}><button>구매 버튼</button></Link></td>

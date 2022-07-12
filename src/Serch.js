@@ -46,7 +46,7 @@ function Search(props) {
                     {data.map((datas) => (
                         <tr>
                             <td>{datas.proName}</td>
-                            <td><Link to={"../product/"+datas.proIndex}><img src={'./shopping_img/' + datas.proProfile}></img></Link></td>
+                            <td><Link to={"../product/"+datas.proIndex}><img src={datas.proProfile}></img></Link></td>
                             <td>{datas.proPrice}</td>
                             <td>{datas.proCount}</td>
                         </tr>

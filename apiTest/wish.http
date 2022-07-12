@@ -1,0 +1,16 @@
+###
+POST http://localhost:3000/product
+Accept: application/json
+Accept-Encoding: gzip
+Content-Type: application/json
+Accept-version: 1.0.0
+authtoken: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjgxYWYxYTMwNTgyMWRiMGI2OWYyMTNkNmU0NDQyNDQwMTU5YjgyODUyYzU0NTIwODcyNmE2MDkzNjUzNjNiOGIiLCJyb2xlIjoiY3VzdG9tZXIiLCJpYXQiOjE2MjE0ODU5ODQsImV4cCI6MTYyMjA5MDc4NCwic3ViIjoiTEs5QzNSQ1dXSlZNIn0.nJQzda2pEasp88O5Wxbn5cPn9kgG4NjNXJ0qRmTq5Vw
+
+{
+    "productID": "UPKTRM6VSLSE"
+}
+
+###
+GET http://localhost:3000/product
+Accept-version: 1.0.0
+authtoken: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjgxYWYxYTMwNTgyMWRiMGI2OWYyMTNkNmU0NDQyNDQwMTU5YjgyODUyYzU0NTIwODcyNmE2MDkzNjUzNjNiOGIiLCJyb2xlIjoiY3VzdG9tZXIiLCJpYXQiOjE2MjE0ODU5ODQsImV4cCI6MTYyMjA5MDc4NCwic3ViIjoiTEs5QzNSQ1dXSlZNIn0.nJQzda2pEasp88O5Wxbn5cPn9kgG4NjNXJ0qRmTq5Vw

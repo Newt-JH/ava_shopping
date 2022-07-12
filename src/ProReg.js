@@ -80,8 +80,8 @@ function ProReg() {
         <input type="number" value={cateIndex} onChange={cateIndexHandler}></input>
         상품 이름
         <input type="text" value={proName} onChange={proNameHandler}></input>
-        상품 프로필 사진
-        <input type="text" value={proProfile} onChange={proProfileHanlder}></input>
+        {/* 상품 프로필 사진
+        <input type="text" value={proProfile} onChange={proProfileHanlder}></input> */}
         상품 설명
         <input type="text" value={proContents} onChange={proContentsHandler}></input>
         상품 상세 이미지
