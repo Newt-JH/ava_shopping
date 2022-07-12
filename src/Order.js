@@ -114,7 +114,7 @@ function Order(props) {
 
         <form className='frmNewAcc' onSubmit={submitHandler}>
             구매 수량
-            <input type="text" value={orderCount} onChange={orderCountHandler}></input>
+            <input type="number" value={orderCount} max={detailData.proCount} onChange={orderCountHandler} ></input>
             구매 가격
             <input type="text" value={orderCount * detailData.proPrice} onChange={orderCountHandler}></input>
             <input type="submit" value="구매"></input>
