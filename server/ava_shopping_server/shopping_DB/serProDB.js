@@ -58,6 +58,19 @@ function serchProduct(params,res) {
         })
 }
 
+// 카테고리 검색
+function serchCate(params,res) {
+    const query = `select * from product where cateIndex = ${params} and proCount > 0`
+    connection.query(query,
+        (err,rows) => {
+            if(err) {
+                throw err;
+            }
+            console.log("Select One Success");
+            return res.json(rows);
+        })
+}
+
 // 상품 수정
 function updateProduct(params,pro){
     const query = `update product set cateIndex = "${pro.cateIndex}",proName ="${pro.proName}",proProfile="${pro.proProfile}",proContents="${pro.proContents}",proDetailImg="${pro.proDetailImg}",proPrice=${pro.proPrice},proCount = ${pro.proCount} where proIndex = ${params}`;
@@ -88,5 +101,6 @@ module.exports = {
     readOneProduct,
     updateProduct,
     deleteProduct,
-    serchProduct
+    serchProduct,
+    serchCate
 }

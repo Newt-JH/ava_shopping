@@ -16,9 +16,9 @@ function Join() {
 
 
   const idChangeHandler = (e) => {
-    setID(e.target.value);
+    setID(e.target.value)
 
-    if(id.length > 3){
+    if(e.target.value.length > 3){
       axios({
         url: 'http://localhost:3000/user/join/idcheck', // api 호출 주소
         method: 'post',
