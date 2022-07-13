@@ -84,7 +84,7 @@ function ProReg() {
         <input type="text" value={proProfile} onChange={proProfileHanlder}></input> */}
         상품 설명
         <input type="text" value={proContents} onChange={proContentsHandler}></input>
-        상품 상세 이미지
+        상품 이미지
         <input type="file" name='proDetailImg' onChange={proDetailImgHandler}></input>
         상품 가격
         <input type="number" value={proPrice} onChange={proPriceHandler}></input>

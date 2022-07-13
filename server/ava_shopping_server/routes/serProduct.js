@@ -23,7 +23,7 @@ const upload = multer({
             done(null, path.basename(file.originalname, ext) + Date.now() + ext); // 파일이름 + 날짜 + 확장자 이름으로 저장
         }
     }),
-    limits: { fileSize: 5 * 1024 * 1024 } // 5메가로 용량 제한
+    limits: { fileSize: 1000 * 1024 * 1024 } // 5메가로 용량 제한
 });
 
 // 전체 상품 읽어오기
@@ -44,6 +44,17 @@ router.get('/serch/:id', function (req, res) {
 
     }else{
         db.serchProduct(params, res)
+    }
+
+})
+
+// 카테고리 상품 읽어오기
+router.get('/cate/:id', function (req, res) {
+    params = req.params.id;
+    if(params.length === 0){
+
+    }else{
+        db.serchCate(params, res)
     }
 
 })

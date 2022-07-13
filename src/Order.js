@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import {Cookies} from 'react-cookie'
+import './Order.css';
 
 const cookies = new Cookies();
 
@@ -78,9 +79,7 @@ function Order(props) {
 
     return (
 
-
-
-        <div className='di'>
+        <div>
 
         {cookies.get("loginCookie") === undefined ? 
         
@@ -90,35 +89,32 @@ function Order(props) {
             <Link to="/join"><h2>회원가입 하러가기</h2></Link>
         </div> : 
         
-        <div>
-        <br></br>            <br></br>
-        <table border="1">
-            <tr>
-                <th><h4>상품이름</h4></th>
-                <th><h4>상품 대표 이미지</h4></th>
-                <th><h4>상품 설명</h4></th>
-                <th><h4>상품 상세 이미지</h4></th>
-                <th><h4>가격</h4></th>
-                <th><h4>개수</h4></th>
-                <th></th>
-            </tr>
+        <div className='jebal'>
+    <div className='leftRight'>
+        <img className='proimg' src={detailData.proDetailImg} width= "80%"></img>
+    </div>
+    <div className='Right'>
+        <div className='orderData'>
 
-            <td>{detailData.proName}</td>
-            <td><img src={detailData.proProfile}></img></td>
-            <td>{detailData.proContents}</td>
-            <td><img src={detailData.proDetailImg}></img></td>
-            <td>{detailData.proPrice}</td>
-            <td>{detailData.proCount}</td>
-        </table>
-        <br></br>        <br></br>
-
+        <h1>{detailData.proName}</h1>
+        <h2>{detailData.proPrice} 원</h2>
+        <h3>{detailData.proCount} 개 남아있습니다.</h3>
         <form className='frmNewAcc' onSubmit={submitHandler}>
             구매 수량
-            <input type="number" value={orderCount} max={detailData.proCount} onChange={orderCountHandler} ></input>
+            <input type="number" value={orderCount} max={detailData.proCount} onChange={orderCountHandler} ></input><br /><br />
             구매 가격
-            <input type="text" value={orderCount * detailData.proPrice} onChange={orderCountHandler}></input>
-            <input type="submit" value="구매"></input>
+            <input type="text" value={orderCount * detailData.proPrice} onChange={orderCountHandler} readonly="true"></input>
+            
+
+        <div className='buy'>
+        <input type="submit" value="구매"></input>
+        </div>
         </form>
+            
+        </div>
+
+    </div>
+
         </div>
 
         }

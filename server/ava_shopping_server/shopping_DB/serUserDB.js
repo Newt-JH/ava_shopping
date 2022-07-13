@@ -29,6 +29,7 @@ function newLogin(userID, userPassword, res) {
     connection.query(query,
         (err, rows) => {
             if (err) { throw err }
+
             else if (rows[0].userPassword === userPassword) {
 
                 token = jwt.sign({

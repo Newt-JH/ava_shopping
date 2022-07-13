@@ -1,8 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Link,useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
+import { useTheme } from '@mui/material/styles';
+import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
 
 function Search(props) {
+
+    //   MUI
+    const theme = useTheme();
+    //
 
     const [data, setData] = useState([
         {
@@ -30,29 +41,37 @@ function Search(props) {
 
     } else {
         return (
-            <div className='di'>
-                <div className='ho'>
-                </div>
-                <br></br>            <br></br>
+            <div>
+                {data.map((datas) => (
+                     <Card sx={{ display: 'flex', width: '500px',height: '200px', margin: "0 auto" ,justifyContent: "space-between",alignItems: 'center' ,marginBottom: "0px",marginTop: "20px"}}>
+                        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                            <CardContent sx={{ flex: '1 0 auto' }}>
+                                <Typography sx={{fontWeight:900}} className='proName' component="div" variant="h5">
+                                    {datas.proName}
+                                </Typography>
+                                <Typography variant="subtitle1" color="text.secondary" component="div">
+                                    {datas.proPrice} 원
+                                </Typography>
+                                <Typography variant="subtitle2" color="text.secondary" component="div">
+                                    {datas.proCount} 개
+                                </Typography>
+                                <br></br>
+                            </CardContent>
+                            <Box sx={{ display: 'flex', alignItems: 'center', pl: 1, pb: 1 }}>
 
-                <table border="1">
-                    <tr>
-                        <th><h4>상품이름</h4></th>
-                        <th><h4>상품 대표 이미지</h4></th>
-                        <th><h4>가격</h4></th>
-                        <th><h4>개수</h4></th>
-                        <th></th>
-                    </tr>
-                    {data.map((datas) => (
-                        <tr>
-                            <td>{datas.proName}</td>
-                            <td><Link to={"../product/"+datas.proIndex}><img src={datas.proProfile}></img></Link></td>
-                            <td>{datas.proPrice}</td>
-                            <td>{datas.proCount}</td>
-                        </tr>
-                    ))}
-                </table>
-                <br></br>        <br></br>
+                            </Box>
+                        </Box>
+                        <Link to={"../product/"+datas.proIndex}><CardMedia
+                            component="img"
+                            sx={{ width: 180 }}
+                            image={datas.proProfile}
+                            alt="No pic"
+                        /></Link>
+                        
+                    </Card>
+
+                ))}
+
             </div>
         );
     }

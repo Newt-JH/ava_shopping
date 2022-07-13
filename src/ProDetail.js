@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link,useParams } from 'react-router-dom';
 
+import './Order.css';
+
 function ProDetail(props) {
 
     const [data, setData] = useState([
@@ -35,31 +37,33 @@ function ProDetail(props) {
     }
 
         return (
-            <div className='di'>
-                <div className='ho'>
-                </div>
-                <br></br>            <br></br>
-                <table border="1">
-                    <tr>
-                        <th><h4>상품이름</h4></th>
-                        <th><h4>상품 대표 이미지</h4></th>
-                        <th><h4>상품 설명</h4></th>
-                        <th><h4>상품 상세 이미지</h4></th>
-                        <th><h4>가격</h4></th>
-                        <th><h4>개수</h4></th>
-                        <th><h4>구매</h4></th>
-                        <th></th>
-                    </tr>
-                    <td>{detailData.proName}</td>
-                    <td><img src={detailData.proProfile}></img></td>
-                    <td>{detailData.proContents}</td>
-                    <td><img src={detailData.proDetailImg}></img></td>
-                    <td>{detailData.proPrice}</td>
-                    <td>{detailData.proCount}</td>
-                    <td><Link to={"../order/"+id}><button>구매 버튼</button></Link></td>
-                </table>
-                <br></br>        <br></br>
+        <div className='mainpage'>
+
+            <div className='jebal'>
+            <div className='leftRight'>
+                <img className='proimg' src={detailData.proDetailImg} width= "400px"></img>
             </div>
+            <div className='Right'>
+                <div className='orderData'>
+        
+                <h1>{detailData.proName}</h1>
+                <a>{detailData.proContents}</a>
+                <h2>{detailData.proPrice} 원</h2>
+                <h3>{detailData.proCount} 개 남아있습니다.</h3>
+                <div className='buy'>
+                <Link to={"../order/"+id}><button>구매하러 가기</button></Link>
+                </div>
+        
+                    
+                </div>
+        
+            </div>
+            </div>
+    
+
+            
+            </div>
+
         );
     }
 

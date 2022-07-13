@@ -9,16 +9,20 @@ import ProAll from './ProAll';
 import ProDetail from './ProDetail';
 import Search from './Serch';
 import Order from './Order';
+import Main from './Main';
+import Cate from './Cate';
+
 
 function App() {
 
 
   return (
-    <div className='main'>
+    <div className='main1'>
       <BrowserRouter>
         <Head />
 
         <Routes>
+          <Route path="/" element={<Main />}></Route>
           <Route path="/login" element={<Login />}></Route>
           <Route path="/join" element={<Join />}></Route>
           {/* 글 등록 */}
@@ -29,6 +33,8 @@ function App() {
           <Route path="/product/:id" element={<ProDetail />}></Route>
           {/* 글 검색 페이지 */}
           <Route path="/product/serch/:id" element={<Search />}></Route>
+          {/* 카테고리 페이지 */}
+          <Route path="/product/cate/:id" element={<Cate />}></Route>
           {/* 주문 페이지 */}
           <Route path="/order/:id" element={<Order />}></Route>
         </Routes>
