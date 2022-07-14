@@ -12,6 +12,7 @@ router.post('/login',function(req,res){
     userID = rb.userID;
     userPassword = rb.userPassword;
     // 암호화된 비밀번호
+    // sha512로 알고리즘 사용, Id+password값 변환, base64로 인코딩
     password = crypto.createHash("sha512").update(userID + userPassword).digest("base64")
     // 가져온 비밀번호
     db.newLogin(userID,password,res);
@@ -36,6 +37,12 @@ router.get('/:id', function (req, res) {
     db.readOneUser(params, res)
 })
 
+// 마이페이지 구매 정보 읽어오기
+router.get('/mypage/:id', function (req, res) {
+    params = req.params.id;
+    db.readMypage(params, res)
+})
+
 // 회원 등록
 router.post('/reg', function (req, res) {
     rb = req.body;
@@ -58,8 +65,6 @@ router.post('/join/idcheck', function(req,res){
     id = rb.userID;
     db.idCheck(id,res);
 })
-
-
 
 // 유저 닉네임 수정
 router.put('/update/name/:id', function (req, res) {

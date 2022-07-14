@@ -10,28 +10,31 @@ table {
     padding: 20px
 }
 
-.logInput:focus {
-    outline: none;
+.loginInput {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-.logInput:focus {
-    outline: none;
-}
 
-.wrapper1 {
+.wrapper {
     text-align: center;
     margin: auto;
-    margin-top: 125px;
+    margin-top: 20px;
     width: 420px;
-    height: 450px;
+    height: 620px;
     border: solid 3px;
     border-radius: 10%;
     background: rgb(255, 255, 255);
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
     box-shadow: 5px 5px 5px rgb(0 0 0 / 30%);
+}
+
+
+.wrapper a {
+    margin-top: 10px;
 }
 
 .h1 {

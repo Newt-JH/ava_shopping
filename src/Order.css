@@ -1,39 +1,95 @@
-.leftRight{
-    width:48%;
+.leftRight {
+    width: 48%;
     height: 500px;
-    box-sizing:border-box;
-    background:rgb(255, 255, 255);
+    box-sizing: border-box;
+    background: rgb(255, 255, 255);
     display: flex;
     justify-content: center;
+    align-items: center;
 }
 
-.Right{
-    width:300px;
-    height: 300px;
-    box-sizing:border-box;
-    background:rgb(255, 255, 255);
+.Right {
+    width: 300px;
+    height: 350px;
+    box-sizing: border-box;
+    background: rgb(255, 255, 255);
     display: flex;
     justify-content: center;
     border: 1px solid rgb(0, 0, 0);
     border-radius: 20px;
     border-style: dotted;
+    box-shadow: 5px 5px 5px rgb(0 0 0 / 30%);
+    align-items: center;
 }
 
 
 
-.proimg{
+.proimg {
+    width: 400px;
+    ;
+    height: 400px;
     object-fit: contain;
+    border-radius: 20px;
+    box-shadow: 5px 5px 5px rgb(0 0 0 / 30%);
 }
 
-.buy{
+.buy {
     margin-top: 30px;
     margin-bottom: 30px;
     display: flex;
     justify-content: space-evenly;
 }
 
-.jebal{
+.jebal {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+a {
+    margin: 0;
+}
+
+
+.arrow {
+    position: relative;
+}
+
+.arrow::after {
+    position: absolute;
+    left: 0;
+    top: 0;
+    content: '';
+    width: 50px;
+    /* 사이즈 */
+    height: 50px;
+    /* 사이즈 */
+    border-top: 5px solid #000;
+    /* 선 두께 */
+    border-right: 5px solid #000;
+    /* 선 두께 */
+    transform: rotate(225deg);
+    /* 각도 */
+}
+
+.soobutton {
+    display: flex;
+    align-items: center;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.orIn {
+    text-align: center;
+
+}
+
+.orIn2 {
+    text-align: center;
+    width: 70px;
+    margin-left: 10px;
 }

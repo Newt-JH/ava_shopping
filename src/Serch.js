@@ -6,8 +6,9 @@ import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
-import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
+import CateBest from './CateBest';
+import './Search.css'
 
 function Search(props) {
 
@@ -34,7 +35,12 @@ function Search(props) {
     if ((data.length) === 0) {
         return (
             <>
-                <h1>검색 결과가 없습니다.</h1>
+            <div className='wrap'>
+                <a>검색 결과가 없습니다.</a>
+                <a>이런 상품은 어떠신가요?</a>
+                <a>카테고리별 Best 상품입니다.</a>
+                </div>
+                <CateBest />
             </>
         )
     } else if (data[0].proIndex === undefined) {
@@ -67,16 +73,11 @@ function Search(props) {
                             image={datas.proProfile}
                             alt="No pic"
                         /></Link>
-                        
                     </Card>
-
                 ))}
-
             </div>
         );
     }
-
-
 }
 
 export default Search;

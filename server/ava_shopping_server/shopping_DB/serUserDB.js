@@ -8,19 +8,9 @@ const connection = mysql.createConnection({
     database: 'ava_shopping'
 });
 
-
-
 // JWT 구현
-
-
-
 const jwt = require('jsonwebtoken');
 const secret = 'hwan'
-
-
-
-
-
 
 // 로그인
 function newLogin(userID, userPassword, res) {
@@ -53,9 +43,8 @@ function newLogin(userID, userPassword, res) {
         })
 }
 
-
 // 유저 인덱스 조회
-function readUserIndex(userID,res) {
+function readUserIndex(userID, res) {
     const query = `select * from user where userID like "${userID}"`
     connection.query(query,
         (err, rows) => {
@@ -86,6 +75,7 @@ function idCheck(id, res) {
             else if (row[0] === undefined) {
                 return res.json("OK");
             } else {
+
                 return res.json("NO");
             }
         })
@@ -116,7 +106,18 @@ function readOneUser(params, res) {
         })
 }
 
-
+// 마이 페이지
+function readMypage(params, res) {
+    const query = `select \`order\`.proIndex as pi,orderCount,orderDate,orderPrice,proName,proProfile from \`order\`,user,product where \`order\`.userIndex = user.userIndex and \`order\`.proIndex = product.proIndex and \`order\`.userIndex = ${params};`
+    connection.query(query,
+        (err, rows) => {
+            if (err) {
+                throw err;
+            }
+            console.log(rows);
+            return res.json(rows);
+        })
+}
 
 
 // 유저 닉네임 수정
@@ -151,5 +152,6 @@ module.exports = {
     deleteUser,
     newLogin,
     idCheck,
-    readUserIndex
+    readUserIndex,
+    readMypage
 }

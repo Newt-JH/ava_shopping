@@ -34,7 +34,6 @@ function countDown(proIndex,orderCount){
     )
 }
 
-
 // 주문건 전체 읽기
 function readOrder(res) {
     const query = `select * from \`order\``

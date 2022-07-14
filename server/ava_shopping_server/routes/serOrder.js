@@ -37,7 +37,6 @@ db.countDown(ord.proIndex,ord.orderCount)
 // 주문건 수정 ( 미제작 예정 )
 
 // 주문건 삭제
-
 router.delete('/delete/:id',function(req,res) {
     params = req.params.id;
     db.deleteOrder(params,res);

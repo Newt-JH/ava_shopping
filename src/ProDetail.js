@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Link,useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
+import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
 
 import './Order.css';
 
@@ -16,15 +18,11 @@ function ProDetail(props) {
     // 페이지 진입 시 글 읽어오기
     const sendRequest = async () => {
         const response = await axios.get(`http://localhost:3000/product/${id}`);
-        console.log(response.data);
         setData(response.data);
-        console.log(data);
     };
     useEffect(() => {
         sendRequest();
     }, []);
-
-
 
     const detailData = {
         cateIndex: data[0].cateIndex,
@@ -36,36 +34,34 @@ function ProDetail(props) {
         proCount: data[0].proCount
     }
 
-        return (
+    return (
         <div className='mainpage'>
 
             <div className='jebal'>
-            <div className='leftRight'>
-                <img className='proimg' src={detailData.proDetailImg} width= "400px"></img>
-            </div>
-            <div className='Right'>
-                <div className='orderData'>
-        
-                <h1>{detailData.proName}</h1>
-                <a>{detailData.proContents}</a>
-                <h2>{detailData.proPrice} 원</h2>
-                <h3>{detailData.proCount} 개 남아있습니다.</h3>
-                <div className='buy'>
-                <Link to={"../order/"+id}><button>구매하러 가기</button></Link>
+                <div className='leftRight'>
+                    <img className='proimg' src={detailData.proDetailImg} width="400px"></img>
                 </div>
-        
-                    
+                <div className='Right'>
+                    <div className='orderData'>
+
+                        <h1>{detailData.proName}</h1>
+                        <a>{detailData.proContents}</a>
+                        <h2>{detailData.proPrice} 원</h2>
+                        <h3>{detailData.proCount} 개 남아있습니다.</h3>
+                        <div className='buy'>
+                            <Link to={"../order/" + id}>
+                                <Stack spacing={2} direction="row">
+                                    <Button variant="outlined" >Buy</Button>
+                                </Stack>
+                            </Link>
+                        </div>
+                    </div>
                 </div>
-        
             </div>
-            </div>
-    
+        </div>
 
-            
-            </div>
-
-        );
-    }
+    );
+}
 
 
 

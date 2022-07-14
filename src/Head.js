@@ -1,17 +1,16 @@
 import './Head.css'
-import React, { Component, useState } from 'react';
-import { BrowserRouter, Route, Routes, Link, Switch } from "react-router-dom";
+import React, { useState } from 'react';
+import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { Cookies } from 'react-cookie'
 
-const cookies = new Cookies();
-
-
-
 function Head() {
+
+    const cookies = new Cookies();
 
     const [serch, setSearch] = useState('');
     const navigate = useNavigate();
+    const userIndex = cookies.get("userIndex");
 
     const serchHandler = (e) => {
         setSearch(e.target.value);
@@ -34,8 +33,6 @@ function Head() {
         navigate(`/`);
     }
 
-
-
     return (
         <div>
             <div vertical-align="middle" className='di'>
@@ -55,25 +52,28 @@ function Head() {
 
                 {cookies.get("loginCookie") === undefined ?
                     <div align="right" className='divv2'>
-                        <Link to="/join"><button className='login'>회원가입</button></Link>
-                        <Link to="/login"><button className='join'>로그인</button></Link>
+                        <Link to="/join"><button className='join'>회원가입</button></Link>
+                        <Link to="/login"><button className='login'>로그인</button></Link>
                     </div>
                     :
-                    <div align="right" className='divv2'><button className='logout' onClick={logoutOnclick}>로그아웃</button></div>
+                    <div align="right" className='divv2'>
+                        <button className='logout' onClick={logoutOnclick}>로그아웃</button>
+                        <Link to={"/mypage/" + userIndex}><button className='mypage'>내 정보</button></Link>
+                    </div>
                 }
 
             </div>
             <div class="tab">
                 <ul class="tabnav">
-                <li className='tabli'><Link to="/product/cate/1"><a className='taba'>무기</a></Link></li>
-                <li className='tabli'><Link to="/product/cate/2"><a className='taba'>방어구</a></Link></li>
-                <li className='tabli'><Link to="/product/cate/3"><a className='taba'>장신구</a></Link></li>
-                <li className='tabli'><Link to="/product/cate/4"><a className='taba'>펫</a></Link></li>
-                <li className='tabli'><Link to="/product/cate/5"><a className='taba'>설치</a></Link></li>
+                    <li className='tabli'><Link to="/product/cate/1"><a className='taba'>무기</a></Link></li>
+                    <li className='tabli'><Link to="/product/cate/2"><a className='taba'>방어구</a></Link></li>
+                    <li className='tabli'><Link to="/product/cate/3"><a className='taba'>장신구</a></Link></li>
+                    <li className='tabli'><Link to="/product/cate/4"><a className='taba'>펫</a></Link></li>
+                    <li className='tabli'><Link to="/product/cate/5"><a className='taba'>설치</a></Link></li>
                 </ul>
             </div>
-            </div>
-            );
+        </div>
+    );
 }
 
-            export default Head;
+export default Head;

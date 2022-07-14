@@ -8,13 +8,10 @@ function ProReg() {
   const [proName, setproName] = useState('');
   const [proProfile, setproProfile] = useState('');
   const [proContents, setproContents] = useState('');
-
   const [proDetailImg, setproDetailImg] = useState();
-
   const [proPrice, setproPrice] = useState('');
   const [proCount, setproCount] = useState('');
 
-  
   const navigate = useNavigate();
 
   const cateIndexHandler = (e) => {
@@ -77,19 +74,19 @@ function ProReg() {
     <>
       <form className='frmNewAcc' encType='multipart/form-data' onSubmit={submitHandler}>
         카테고리 번호
-        <input type="number" value={cateIndex} onChange={cateIndexHandler}></input>
+        <input type="number" value={cateIndex} onChange={cateIndexHandler} max="5"></input><br></br>
         상품 이름
-        <input type="text" value={proName} onChange={proNameHandler}></input>
+        <input type="text" value={proName} onChange={proNameHandler}></input><br></br>
         {/* 상품 프로필 사진
         <input type="text" value={proProfile} onChange={proProfileHanlder}></input> */}
         상품 설명
-        <input type="text" value={proContents} onChange={proContentsHandler}></input>
+        <input type="text" value={proContents} onChange={proContentsHandler}></input><br></br>
         상품 이미지
-        <input type="file" name='proDetailImg' onChange={proDetailImgHandler}></input>
+        <input type="file" name='proDetailImg' onChange={proDetailImgHandler}></input><br></br>
         상품 가격
-        <input type="number" value={proPrice} onChange={proPriceHandler}></input>
+        <input type="number" value={proPrice} onChange={proPriceHandler}></input><br></br>
         상품 개수
-        <input type="number" value={proCount} onChange={proCountHandler}></input>
+        <input type="number" value={proCount} onChange={proCountHandler}></input><br></br>
 
         <input type="submit" value="상품 등록"></input>
       </form>

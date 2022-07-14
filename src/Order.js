@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link, useParams, useNavigate } from 'react-router-dom';
-import {Cookies} from 'react-cookie'
+import { Cookies } from 'react-cookie'
 import './Order.css';
+import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
+import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
+import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 
 const cookies = new Cookies();
 
@@ -27,13 +31,9 @@ function Order(props) {
     }
 
     //const [userIndex, setUserIndex] = useState('');
-    const [orderCount, setOrderCount] = useState('');
+    const [orderCount, setOrderCount] = useState(0);
     const [orderPrice, setOrderPirce] = useState('');
 
-    const userIndexHandler = (e) => {
-        
-    }
-    //setUserIndex(1);
     const userIndex = cookies.get("userIndex");
 
     const orderCountHandler = (e) => {
@@ -41,22 +41,28 @@ function Order(props) {
         setOrderPirce((e.target.value) * detailData.proPrice);
     }
 
-    const orderPriceHandler = (e) => {
-
-    }
-
     const { id } = useParams();
 
     // 페이지 진입 시 글 읽어오기
     const sendRequest = async () => {
         const response = await axios.get(`http://localhost:3000/product/${id}`);
-        console.log(response.data);
         setData(response.data);
-        console.log(data);
     };
     useEffect(() => {
         sendRequest();
     }, []);
+
+    function leftCount(e) {
+        if (orderCount == 0) {
+            setOrderCount(0)
+        } else {
+            setOrderCount(orderCount - 1)
+        }
+    }
+
+    function rightCount(e) {
+        setOrderCount(orderCount + 1)
+    }
 
     const submitHandler = (event) => {
         event.preventDefault();
@@ -80,49 +86,46 @@ function Order(props) {
     return (
 
         <div>
+            {cookies.get("loginCookie") === undefined ?
+                <div>
+                    <h1>로그인 후 이용해주세요</h1>
+                    <Link to="/login"><h2>로그인 하러가기</h2></Link>
+                    <Link to="/join"><h2>회원가입 하러가기</h2></Link>
+                </div> :
 
-        {cookies.get("loginCookie") === undefined ? 
-        
-        <div>
-            <h1>로그인 후 이용해주세요</h1>
-            <Link to="/login"><h2>로그인 하러가기</h2></Link>
-            <Link to="/join"><h2>회원가입 하러가기</h2></Link>
-        </div> : 
-        
-        <div className='jebal'>
-    <div className='leftRight'>
-        <img className='proimg' src={detailData.proDetailImg} width= "80%"></img>
-    </div>
-    <div className='Right'>
-        <div className='orderData'>
+                <div className='jebal'>
+                    <div className='leftRight'>
+                        <img className='proimg' src={detailData.proDetailImg} width="80%"></img>
+                    </div>
+                    <div className='Right'>
+                        <div className='orderData'>
 
-        <h1>{detailData.proName}</h1>
-        <h2>{detailData.proPrice} 원</h2>
-        <h3>{detailData.proCount} 개 남아있습니다.</h3>
-        <form className='frmNewAcc' onSubmit={submitHandler}>
-            구매 수량
-            <input type="number" value={orderCount} max={detailData.proCount} onChange={orderCountHandler} ></input><br /><br />
-            구매 가격
-            <input type="text" value={orderCount * detailData.proPrice} onChange={orderCountHandler} readonly="true"></input>
-            
+                            <h1>{detailData.proName}</h1>
+                            <h2>{detailData.proPrice} 원</h2>
+                            <h3>{detailData.proCount} 개 남아있습니다.</h3>
+                            <form className='frmNewAcc' onSubmit={submitHandler}>
 
-        <div className='buy'>
-        <input type="submit" value="구매"></input>
+                                <div className='soobutton'>
+                                    구매 수량
+                                    <ArrowLeftIcon sx={{ fontSize: 30 }} onClick={leftCount} />
+                                    <input className='orIn' type="number" value={orderCount} min="1" max={detailData.proCount} onChange={orderCountHandler} ></input>
+                                    <ArrowRightIcon sx={{ fontSize: 30 }} onClick={rightCount} />
+                                </div>
+                                <br /><br />
+                                구매 가격
+                                <input type="text" className='orIn2' value={orderCount * detailData.proPrice} onChange={orderCountHandler} readonly="true"></input>
+                                <div className='buy'>
+                                    <Stack spacing={2} direction="row">
+                                        <Button type='submit' variant="outlined" >Buy</Button>
+                                    </Stack>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            }
         </div>
-        </form>
-            
-        </div>
 
-    </div>
-
-        </div>
-
-        }
-
-
-
-        </div>
-        
     );
 }
 

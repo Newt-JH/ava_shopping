@@ -45,6 +45,23 @@ function readOneProduct(params,res) {
         })
 }
 
+// 카테고리 Best 상품
+function readBest(params,res) {
+    const query = `select sum(orderCount) as oc,\`order\`.proIndex as pi,cateIndex,proProfile
+    from \`order\`,product
+    where \`order\`.proIndex = product.proIndex and cateIndex = ${params}
+    group by \`order\`.proIndex
+    order by oc desc
+    limit 1;`
+
+    connection.query(query,
+        (err,row) => {
+            if(err) {throw err;}
+            return res.json(row);
+        })
+
+}
+
 // 상품 검색
 function serchProduct(params,res) {
     const query = `select * from product where proName like "%${params}%" and proCount > 0`
@@ -102,5 +119,6 @@ module.exports = {
     updateProduct,
     deleteProduct,
     serchProduct,
-    serchCate
+    serchCate,
+    readBest
 }

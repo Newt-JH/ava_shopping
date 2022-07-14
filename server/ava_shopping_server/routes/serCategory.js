@@ -35,7 +35,6 @@ router.put('/update/:id',function(req,res) {
 })
 
 // 카테고리 삭제
-
 router.delete('/delete/:id',function(req,res) {
     params = req.params.id;
     db.deleteCate(params,res);

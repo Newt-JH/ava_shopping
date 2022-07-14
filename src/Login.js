@@ -1,6 +1,6 @@
 import axios from 'axios';
 import './Login.css'
-import React, { Component, useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { Cookies } from 'react-cookie'
 
@@ -22,7 +22,7 @@ function Login() {
   const idChangeHandler = (e) => {
     setID(e.target.value)
 
-    if(e.target.value.length > 3){
+    if (e.target.value.length > 3) {
       axios({
         url: 'http://localhost:3000/user/join/idcheck', // api 호출 주소
         method: 'post',
@@ -30,11 +30,10 @@ function Login() {
           userID: e.target.value,
         }
       }).then(function idCh(res) {
-          // ID 중복 체크
-          setidCheckDiv(res.data)  
-          console.log(res.data)
+        // ID 중복 체크
+        setidCheckDiv(res.data)
       })
-    }else{
+    } else {
       setidCheckDiv("NO");
     }
   }
@@ -46,7 +45,7 @@ function Login() {
   const submitHandler = (event) => {
     event.preventDefault();
 
-    if(idCheckDiv === "NO"){
+    if (idCheckDiv === "NO") {
       axios({
         url: 'http://localhost:3000/user/login', // api 호출 주소
         method: 'post',
@@ -59,8 +58,6 @@ function Login() {
           if (res.data.me === "OK") {
             const time = 1000 * 60 * 15;
             // 로그인 성공 시
-            console.log(res.data.token);
-            console.log(res.data.userIndex);
             if (cookies.get("loginCookie") === undefined) {
               cookies.set("loginCookie", res.data.token, { path: "/", expires: new Date(Date.now() + time) })
               cookies.set("userIndex", res.data.userIndex, { path: "/", expires: new Date(Date.now() + time) })
@@ -73,27 +70,27 @@ function Login() {
             alert(`로그인이 실패하였습니다.`);
             console.log(res.data);
           }
-  
+
         })
-    }else{
+    } else {
       alert("존재하지 않는 아이디입니다.")
     }
-    
+
   }
 
   return (
     <>
 
       <form onSubmit={submitHandler}>
-        <div class="wrapper">
+        <div class="wrapper1">
           <h1 className='h1'>Log In</h1>
 
           <div class="email">
-            <input className='logInput' type="text" value={id} minLength="4" onChange={idChangeHandler} placeholder="ID"></input><br />
+            <input className='logInput' type="text" value={id} minLength="4" maxLength="10" onChange={idChangeHandler} placeholder="ID"></input><br />
           </div>
 
           <div class="password">
-            <input className='logInput' type="password" value={password} minLength="4" onChange={passwordChangeHandler} placeholder="Password"></input><br />
+            <input className='logInput' type="password" value={password} minLength="4" maxLength="10" onChange={passwordChangeHandler} placeholder="Password"></input><br />
           </div>
 
           {/* <button className='subButton'></button> */}
