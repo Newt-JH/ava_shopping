@@ -56,12 +56,12 @@ function Order(props) {
         if (orderCount == 0) {
             setOrderCount(0)
         } else {
-            setOrderCount(orderCount - 1)
+            setOrderCount(Number(orderCount) - 1)
         }
     }
 
     function rightCount(e) {
-        setOrderCount(orderCount + 1)
+        setOrderCount(Number(orderCount) + 1)
     }
 
     const submitHandler = (event) => {
