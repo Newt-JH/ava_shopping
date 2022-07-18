@@ -30,12 +30,17 @@ function ProDetail(props) {
     }, []);
 
     // JWT 토큰 가져와서 디코딩
-    const jwttoken = cookies.get("loginCookie");
-    var decToken = jwt_decode(jwttoken);
+    // 토큰이 없을 경우 예외 처리를 위해 index값 0으로 초기 설정
+    // 토큰 있다면 index값을 유저 index로 변환 / 토큰 없다면 index는 0으로 유지
 
-    // 유저 인덱스 가져오기
-    const index = decToken.userIndex;
-    console.log(index);
+    let index = 0;
+    const jwttoken = cookies.get("loginCookie");
+    if(jwttoken !== undefined){
+        var decToken = jwt_decode(jwttoken);
+        index = decToken.userIndex;
+    }else{
+        index = 0;
+    }
 
     // 찜 목록 추가 or 삭제하는 요청
     const sendWish = async () => {
