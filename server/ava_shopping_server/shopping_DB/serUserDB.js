@@ -133,6 +133,36 @@ function updateUserNick(params, userName) {
         })
 }
 
+// 유저 닉네임 중복 체크
+function nickCheck(params, userName,res) {
+    const query = `select * from user where userName = ${userName}`;
+    connection.query(query,
+        (err,row) => {
+            if (err) {
+                throw err;
+            }if(row[0] === undefined){
+                updateUserNick(params,userName);
+                res.json("OK")
+            }else{
+                res.json("NO")
+            }
+            
+
+        })
+}
+
+// 유저 패스워드 수정
+function updateUserPassword(params, userPassword) {
+    const query = `update user set userPassword = "${userPassword}" where userIndex = ${params}`;
+    connection.query(query,
+        (err) => {
+            if (err) {
+                throw err;
+            }
+            console.log("Password Update Success")
+        })
+}
+
 // 유저 삭제
 function deleteUser(params, res) {
     const query = `delete from user where userIndex = ${params};`
@@ -154,5 +184,7 @@ module.exports = {
     newLogin,
     idCheck,
     readUserIndex,
-    readMypage
+    readMypage,
+    updateUserPassword,
+    nickCheck
 }

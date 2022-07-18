@@ -72,8 +72,18 @@ router.put('/update/name/:id', function (req, res) {
     rb = req.body;
     params = req.params.id;
     userName = rb.userName;
-    db.updateUserNick(params, userName);
-    res.json("유저 닉네임 수정 완료");
+    db.nickCheck(params, userName,res);
+})
+
+// 유저 패스워드 수정
+router.put('/update/password/:id', function (req, res) {
+    rb = req.body;
+    params = req.params.id;
+    password = rb.userPassword;
+     // sha512로 알고리즘 사용, Id+password값 변환, base64로 인코딩
+     userPass = crypto.createHash("sha512").update(rb.userID + password).digest("base64")
+    db.updateUserPassword(params, userPass);
+    res.json("유저 패스워드 수정 완료");
 })
 
 // 유저  삭제

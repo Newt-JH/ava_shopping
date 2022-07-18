@@ -16,7 +16,7 @@ function Head() {
 
     // JWT 토큰 가져와서 디코딩
     // 토큰이 없을 경우 예외 처리를 위해 index값 0으로 초기 설정
-    // 토큰 있다면 index값을 유저 index로 변환 / 토큰 없다면 index는 0으로 유지
+    // 토큰 있다면 index값을 유저 index로 변환 / 토큰 없다면 index는 0
 
     let index = 0;
     const jwttoken = cookies.get("loginCookie");
@@ -74,6 +74,7 @@ function Head() {
                         <button className='logout' onClick={logoutOnclick}>로그아웃</button>
                         <Link to={"/mywish/" + index}><button className='mypage'>찜목록</button></Link>
                         <Link to={"/mypage/" + index}><button className='mypage'>구매목록</button></Link>
+                        <Link to={"/myinfo/" + index}><button className='mypage'>내 정보</button></Link>
                     </div>
                 }
 

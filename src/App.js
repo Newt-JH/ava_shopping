@@ -13,8 +13,8 @@ import Main from './Main';
 import Cate from './Cate';
 import Mypage from './Mypage';
 import Mywish from './Mywish';
+import MyInfo from './MyInfo';
 
-import LoginTwo from './LoginTwo';
 function App() {
 
 
@@ -43,6 +43,8 @@ function App() {
           <Route path="/mypage/:id" element={<Mypage />}></Route>
           {/* 찜목록 페이지 */}
           <Route path="/mywish/:id" element={<Mywish />}></Route>
+          {/* 내 정보 페이지 */}
+          <Route path="/myinfo/:id" element={<MyInfo />}></Route>
         </Routes>
 
       </BrowserRouter>

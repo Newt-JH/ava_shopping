@@ -67,7 +67,7 @@ function serchProduct(params,res) {
     const query = `select * from product where proName like "%${params}%" and proCount > 0
     UNION DISTINCT
     select proIndex,product.cateIndex,proName,proProfile,proContents,proDetailImg,proPrice,proCount from product,category where product.cateIndex = category.cateIndex
-    and category.cateName like "${params}"`
+    and category.cateName = "${params}"`
     connection.query(query,
         (err,rows) => {
             if(err) {

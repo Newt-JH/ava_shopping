@@ -32,12 +32,10 @@ function Mypage(props) {
 
     // 유저 인덱스 가져오기
     const index = decToken.userIndex;
-    console.log(index);
-
 
     // 현재 페이지 인덱스값 가져오기
     const { id } = useParams();
-    console.log(id);
+
     // 현재 내가 있는 페이지와 유저 인덱스가 다르다면 다른 유저의 페이지 진입이므로 막아주기
     const navigate = useNavigate();
     if (String(index) !== id || index === undefined) {

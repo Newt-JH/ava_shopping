@@ -36,7 +36,7 @@ function newOrderCountDown(ord,res){
             if (err) {
                 throw err;
             }else{
-                if(row[0].proCount > ord.orderCount){
+                if(row[0].proCount >= ord.orderCount){
                     // 재고가 주문량보다 많으면
                     newOrder(ord);
                     res.json("주문에 성공하였습니다.");
