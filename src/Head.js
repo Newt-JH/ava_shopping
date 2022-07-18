@@ -12,12 +12,20 @@ function Head() {
     const [serch, setSearch] = useState('');
     const navigate = useNavigate();
 
-    // JWT 토큰 가져와서 디코딩
-    const jwttoken = cookies.get("loginCookie");
-    var decToken = jwt_decode(jwttoken);
 
-    // 유저 인덱스 가져오기
-    const index = decToken.userIndex;
+
+    // JWT 토큰 가져와서 디코딩
+    // 토큰이 없을 경우 예외 처리를 위해 index값 0으로 초기 설정
+    // 토큰 있다면 index값을 유저 index로 변환 / 토큰 없다면 index는 0으로 유지
+
+    let index = 0;
+    const jwttoken = cookies.get("loginCookie");
+    if(jwttoken !== undefined){
+        var decToken = jwt_decode(jwttoken);
+        index = decToken.userIndex;
+    }else{
+        index = 0;
+    }
 
     const serchHandler = (e) => {
         setSearch((String(e.target.value)).replace(/\//g,""));
@@ -36,7 +44,6 @@ function Head() {
 
     const logoutOnclick = (e) => {
         cookies.set("loginCookie", "쿠키 삭제", { path: "/", expires: new Date(Date.now() - time) })
-        cookies.set("userIndex", "쿠키 삭제", { path: "/", expires: new Date(Date.now() - time) })
         navigate(`/`);
     }
 
