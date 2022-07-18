@@ -29,9 +29,8 @@ router.post('/reg/:id',function(req,res) {
       orderState: 0
     }
 
-db.newOrder(ord)
-db.countDown(ord.proIndex,ord.orderCount)
-    res.json("글 등록 성공");
+db.newOrderCountDown(ord,res)
+
 })
 
 // 주문건 수정 ( 미제작 예정 )

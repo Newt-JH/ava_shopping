@@ -40,7 +40,6 @@ function Order(props) {
     
         // 유저 인덱스 가져오기
         const index = decToken.userIndex;
-        console.log(index);
 
     const orderCountHandler = (e) => {
         setOrderCount(e.target.value);
@@ -83,7 +82,7 @@ function Order(props) {
             // 주문 성공 시
             console.log(res.data);
             navigate("/");
-            alert(`${detailData.proName} 물건 구매 완료했습니다.`)
+            alert(`${res.data}`)
         })
     }
 

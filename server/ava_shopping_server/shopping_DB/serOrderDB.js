@@ -5,12 +5,17 @@ const connection = mysql.createConnection({
     user: 'root',
     password: 'tiger',
     port: 3306,
-    database: 'ava_shopping'
+    database: 'ava_shopping',
+    multipleStatements: true
 });
 
 // 주문 생성
 function newOrder(ord) {
-    const query = `insert into \`order\`(userIndex,proIndex,orderCount,orderDate,orderPrice,orderState) value(${ord.userIndex},${ord.proIndex},${ord.orderCount},"${ord.orderDate}",${ord.orderPrice},${ord.orderState});`
+    const query = `
+    start transaction;
+    insert into \`order\`(userIndex,proIndex,orderCount,orderDate,orderPrice,orderState) value(${ord.userIndex},${ord.proIndex},${ord.orderCount},"${ord.orderDate}",${ord.orderPrice},${ord.orderState});
+    update product set proCount = procount - ${ord.orderCount} where proIndex = ${ord.proIndex};
+    commit;`
     connection.query(query,
         (err) => {
             if (err) {
@@ -21,18 +26,33 @@ function newOrder(ord) {
     )
 }
 
-// 재고 줄이기
-function countDown(proIndex,orderCount){
-    const query = `update product set proCount = procount - ${orderCount} where proIndex = ${proIndex};`
+// 주문 새로운 DB 짜보기
+function newOrderCountDown(ord,res){
+    console.log(ord);
+    console.log(ord.proIndex);
+    const query = `select proCount from product where proIndex = ${ord.proIndex};`
     connection.query(query,
-        (err) => {
+        (err,row) => {
             if (err) {
                 throw err;
+            }else{
+                if(row[0].proCount > ord.orderCount){
+                    // 재고가 주문량보다 많으면
+                    newOrder(ord);
+                    res.json("주문에 성공하였습니다.");
+                }else{
+                    res.json("재고 부족으로 인하여 주문에 실패하였습니다.");
+                }
             }
-            return console.log("값 줄이기 완료");
+            
         }
     )
 }
+
+
+
+
+
 
 // 주문건 전체 읽기
 function readOrder(res) {
@@ -78,5 +98,5 @@ module.exports = {
     readOrder,
     readOrderOne,
     deleteOrder,
-    countDown
+    newOrderCountDown
 }
