@@ -20,7 +20,7 @@ function newLogin(userID, userPassword, res) {
         (err, rows) => {
             if (err) { throw err }
             else if(rows[0] === undefined){
-                res.send("존재하지 않는 아이디입니다.")
+                res.send("아이디 또는 패스워드를 확인 후 로그인 해주세요.")
             }
             else if (rows[0].userPassword === userPassword) {
 
@@ -40,7 +40,7 @@ function newLogin(userID, userPassword, res) {
                     }
                 )
             } else {
-                return res.send("암호가 틀렸습니다.")
+                return res.send("아이디 또는 패스워드를 확인 후 로그인 해주세요.")
             }
         })
 }

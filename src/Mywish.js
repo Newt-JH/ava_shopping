@@ -9,6 +9,7 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import CateBest from './CateBest';
 import { Cookies } from 'react-cookie'
+import jwt_decode from "jwt-decode";
 
 function Mywish(props) {
 
@@ -21,16 +22,23 @@ function Mywish(props) {
         }
     ]);
 
-
-    // 유저 인덱스 쿠키에서 가져오기
     const cookies = new Cookies();
-    const index = cookies.get("userIndex");
 
+    // JWT 토큰 가져와서 디코딩
+    const jwttoken = cookies.get("loginCookie");
+    var decToken = jwt_decode(jwttoken);
+
+    // 유저 인덱스 가져오기
+    const index = decToken.userIndex;
+    console.log(index);
+
+
+    // 현재 페이지 인덱스값 가져오기
     const { id } = useParams();
-
+    console.log(id);
     // 현재 내가 있는 페이지와 유저 인덱스가 다르다면 다른 유저의 페이지 진입이므로 막아주기
     const navigate = useNavigate();
-    if (index !== id) {
+    if (String(index) !== id || index === undefined) {
         navigate(`/`);
     }
 

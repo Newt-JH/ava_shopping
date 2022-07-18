@@ -23,7 +23,7 @@ table {
     margin: auto;
     margin-top: 125px;
     width: 420px;
-    height: 450px;
+    height: 510px;
     border: solid 3px;
     border-radius: 10%;
     background: rgb(255, 255, 255);
@@ -84,4 +84,8 @@ table {
 .css-1rwt2y5-MuiButtonBase-root-MuiButton-root {
     border: 1px solid rgb(0 0 0 / 50%) !important;
     color: #000000 !important;
+}
+
+a{
+    text-decoration: none;
 }

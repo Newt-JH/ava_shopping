@@ -80,29 +80,19 @@ function Order(props) {
         })
     }
 
-
     return (
 
         <div>
-            {cookies.get("loginCookie") === undefined ?
-                <div>
-                    <h1>로그인 후 이용해주세요</h1>
-                    <Link to="/login"><h2>로그인 하러가기</h2></Link>
-                    <Link to="/join"><h2>회원가입 하러가기</h2></Link>
-                </div> :
-
                 <div className='jebal'>
                     <div className='leftRight'>
                         <img className='proimg' src={detailData.proDetailImg} width="80%"></img>
                     </div>
                     <div className='Right'>
                         <div className='orderData'>
-
                             <h1>{detailData.proName}</h1>
                             <h2>{detailData.proPrice} 원</h2>
                             <h3>{detailData.proCount} 개 남아있습니다.</h3>
                             <form className='frmNewAcc' onSubmit={submitHandler}>
-
                                 <div className='soobutton'>
                                     구매 수량
                                     <ArrowLeftIcon sx={{ fontSize: 30 }} onClick={leftCount} />
@@ -121,9 +111,7 @@ function Order(props) {
                         </div>
                     </div>
                 </div>
-            }
-        </div>
-
+            </div>
     );
 }
 

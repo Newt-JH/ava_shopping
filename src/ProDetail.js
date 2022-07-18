@@ -4,7 +4,7 @@ import { Link, useParams } from 'react-router-dom';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import { Cookies } from 'react-cookie'
-
+import { useNavigate } from "react-router-dom";
 
 import './Order.css';
 
@@ -37,16 +37,29 @@ function ProDetail(props) {
         alert(response.data);
     };
 
-
-
-    function wishButtonHandler(e) {
-       
-        if(userIn === undefined){
-            alert("찜 목록은 로그인 후 이용해주세요.")
+    const wishCheck = () => {
+        if(cookies.get("loginCookie") === undefined){
+            if (window.confirm("로그인 하시겠습니까?")) {
+                navigate(`/login`);
+                } else {
+                }
         }else{
             sendWish();
         }
+      };
+
+    const navigate = useNavigate();
+
+  const loginCheck = () => {
+    if(cookies.get("loginCookie") === undefined){
+        if (window.confirm("로그인 하시겠습니까?")) {
+            navigate(`/login`);
+            } else {
+            }
+    }else{
+        navigate(`../order/${id}`);
     }
+  };
 
         // 금액 3자리마다 , 찍어주기
         function numberWithCommas(x) {
@@ -78,15 +91,12 @@ function ProDetail(props) {
                         <h2>{detailData.proPrice} 원</h2>
                         <h3>{detailData.proCount} 개 남아있습니다.</h3>
                         <div className='buy'>
-                            <Link to={"../order/" + id}>
                                 <Stack spacing={2} direction="row">
-                                    <Button variant="outlined" >Buy</Button>
+                                    <Button onClick={loginCheck} variant="outlined" >Buy</Button>
                                 </Stack>
-                            </Link>
 
-                            
                                 <Stack spacing={2} direction="row">
-                                    <Button onClick={wishButtonHandler} variant="outlined" >Wish</Button>
+                                    <Button onClick={wishCheck} variant="outlined" >Wish</Button>
                                 </Stack>
                             
                         </div>

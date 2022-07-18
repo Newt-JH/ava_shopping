@@ -1,7 +1,7 @@
 import axios from 'axios';
 import './Login.css'
 import React, { useState } from 'react';
-import { useNavigate } from "react-router-dom";
+import { useNavigate,Link } from "react-router-dom";
 import { Cookies } from 'react-cookie'
 
 
@@ -72,7 +72,7 @@ function LoginTwo() {
           <div class="password">
             <input className='logInput' type="password" value={password} minLength="4" maxLength="10" onChange={passwordChangeHandler} placeholder="Password"></input><br />
           </div>
-
+          <Link to="/join"><h3>회원이 아니십니까?</h3></Link>
           {/* <button className='subButton'></button> */}
           <Stack spacing={2} direction="row" marginTop="30px">
             <Button type='submit' variant="outlined" >Login</Button>
