@@ -45,6 +45,7 @@ function readOneProduct(params,res) {
         })
 }
 
+
 // 카테고리 Best 상품
 function readBest(params,res) {
     const query = `select sum(orderCount) as oc,\`order\`.proIndex as pi,cateIndex,proProfile
@@ -59,12 +60,14 @@ function readBest(params,res) {
             if(err) {throw err;}
             return res.json(row);
         })
-
 }
 
 // 상품 검색
 function serchProduct(params,res) {
-    const query = `select * from product where proName like "%${params}%" and proCount > 0`
+    const query = `select * from product where proName like "%${params}%" and proCount > 0
+    UNION DISTINCT
+    select proIndex,product.cateIndex,proName,proProfile,proContents,proDetailImg,proPrice,proCount from product,category where product.cateIndex = category.cateIndex
+    and category.cateName like "${params}"`
     connection.query(query,
         (err,rows) => {
             if(err) {

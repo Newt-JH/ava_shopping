@@ -8,7 +8,7 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import CateBest from './CateBest';
-import 'moment/locale/ko';
+import moment from 'moment';
 import './Search.css'
 import { Cookies } from 'react-cookie'
 
@@ -48,13 +48,16 @@ function Mypage(props) {
         sendRequest();
     }, []);
 
-
+    // 금액 3자리마다 , 찍어주기
+    function numberWithCommas(x) {
+	    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	}
 
     if ((data.length) === 0) {
         return (
             <>
                 <div className='wrap'>
-                    <a>검색 결과가 없습니다.</a>
+                    <a>구매하신 상품이 없습니다.</a>
                     <a>이런 상품은 어떠신가요?</a>
                     <a>카테고리별 Best 상품입니다.</a>
                 </div>
@@ -72,13 +75,13 @@ function Mypage(props) {
                                 {datas.proName}
                             </Typography>
                             <Typography variant="subtitle2" color="text.secondary" component="div">
-                                총 구매 금액 : {datas.orderPrice} 원
+                                총 구매 금액 : {numberWithCommas(String(datas.orderPrice))} 원
                             </Typography>
                             <Typography variant="subtitle2" color="text.secondary" component="div">
                                 총 구매 수량 : {datas.orderCount}개
                             </Typography>
                             <Typography variant="subtitle2" color="text.secondary" component="div">
-                                주문날짜 : {datas.orderDate}
+                                주문날짜 : {moment(datas.orderDate).format('YYYY-MM-DD')}
                             </Typography>
                         </CardContent>
                         <Box sx={{ display: 'flex', alignItems: 'center', pl: 1, pb: 1 }}>

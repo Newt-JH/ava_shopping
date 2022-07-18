@@ -12,8 +12,9 @@ import Order from './Order';
 import Main from './Main';
 import Cate from './Cate';
 import Mypage from './Mypage';
+import Mywish from './Mywish';
 
-
+import LoginTwo from './LoginTwo';
 function App() {
 
 
@@ -38,8 +39,10 @@ function App() {
           <Route path="/product/cate/:id" element={<Cate />}></Route>
           {/* 주문 페이지 */}
           <Route path="/order/:id" element={<Order />}></Route>
-          {/* 마이 페이지 */}
+          {/* 구매 목록 페이지 */}
           <Route path="/mypage/:id" element={<Mypage />}></Route>
+          {/* 찜목록 페이지 */}
+          <Route path="/mywish/:id" element={<Mywish />}></Route>
         </Routes>
 
       </BrowserRouter>

@@ -32,13 +32,11 @@ function Order(props) {
 
     //const [userIndex, setUserIndex] = useState('');
     const [orderCount, setOrderCount] = useState(0);
-    const [orderPrice, setOrderPirce] = useState('');
 
     const userIndex = cookies.get("userIndex");
 
     const orderCountHandler = (e) => {
         setOrderCount(e.target.value);
-        setOrderPirce((e.target.value) * detailData.proPrice);
     }
 
     const { id } = useParams();
@@ -54,7 +52,7 @@ function Order(props) {
 
     function leftCount(e) {
         if (orderCount == 0) {
-            setOrderCount(0)
+            setOrderCount(0);
         } else {
             setOrderCount(Number(orderCount) - 1)
         }
@@ -72,7 +70,7 @@ function Order(props) {
             data: {
                 userIndex: userIndex,
                 orderCount: orderCount,
-                orderPrice: orderPrice
+                orderPrice: orderCount * detailData.proPrice
             }
         }).then(function orderCheck(res) {
             // 주문 성공 시

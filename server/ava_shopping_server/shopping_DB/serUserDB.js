@@ -19,7 +19,9 @@ function newLogin(userID, userPassword, res) {
     connection.query(query,
         (err, rows) => {
             if (err) { throw err }
-
+            else if(rows[0] === undefined){
+                res.send("존재하지 않는 아이디입니다.")
+            }
             else if (rows[0].userPassword === userPassword) {
 
                 token = jwt.sign({
@@ -38,7 +40,7 @@ function newLogin(userID, userPassword, res) {
                     }
                 )
             } else {
-                return res.json("FAIL")
+                return res.send("암호가 틀렸습니다.")
             }
         })
 }
@@ -75,7 +77,6 @@ function idCheck(id, res) {
             else if (row[0] === undefined) {
                 return res.json("OK");
             } else {
-
                 return res.json("NO");
             }
         })

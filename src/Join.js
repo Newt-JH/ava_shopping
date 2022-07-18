@@ -92,11 +92,6 @@ function Join() {
 
   }
 
-  const idCheck = (event) => {
-    event.preventDefault();
-
-  }
-
   return (
     <>
       <form onSubmit={submitHandler}>

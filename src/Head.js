@@ -13,7 +13,7 @@ function Head() {
     const userIndex = cookies.get("userIndex");
 
     const serchHandler = (e) => {
-        setSearch(e.target.value);
+        setSearch((String(e.target.value)).replace(/\//g,""));
     }
 
     const serchPage = (e) => {
@@ -58,7 +58,8 @@ function Head() {
                     :
                     <div align="right" className='divv2'>
                         <button className='logout' onClick={logoutOnclick}>로그아웃</button>
-                        <Link to={"/mypage/" + userIndex}><button className='mypage'>내 정보</button></Link>
+                        <Link to={"/mywish/" + userIndex}><button className='mypage'>찜목록</button></Link>
+                        <Link to={"/mypage/" + userIndex}><button className='mypage'>구매목록</button></Link>
                     </div>
                 }
 

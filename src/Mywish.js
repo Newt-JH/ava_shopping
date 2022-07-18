@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
+import CateBest from './CateBest';
+import { Cookies } from 'react-cookie'
 
-function Cate(props) {
+function Mywish(props) {
 
     //   MUI
     const theme = useTheme();
@@ -19,10 +21,22 @@ function Cate(props) {
         }
     ]);
 
+
+    // 유저 인덱스 쿠키에서 가져오기
+    const cookies = new Cookies();
+    const index = cookies.get("userIndex");
+
     const { id } = useParams();
+
+    // 현재 내가 있는 페이지와 유저 인덱스가 다르다면 다른 유저의 페이지 진입이므로 막아주기
+    const navigate = useNavigate();
+    if (index !== id) {
+        navigate(`/`);
+    }
+
     // 페이지 진입 시 글 읽어오기
     const sendRequest = async () => {
-        const response = await axios.get(`http://localhost:3000/product/cate/${id}`);
+        const response = await axios.get(`http://localhost:3000/wish/select/${id}`);
         setData(response.data);
     };
     useEffect(() => {
@@ -32,14 +46,19 @@ function Cate(props) {
 
     // 금액 3자리마다 , 찍어주기
     function numberWithCommas(x) {
-	    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-	}
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
 
 
     if ((data.length) === 0) {
         return (
             <>
-                <h1>등록된 상품이 없습니다.</h1>
+                <div className='wrap'>
+                    <a>찜하신 상품이 없습니다.</a>
+                    <a>이런 상품은 어떠신가요?</a>
+                    <a>카테고리별 Best 상품입니다.</a>
+                </div>
+                <CateBest />
             </>
         )
     } else if (data[0].proIndex === undefined) {
@@ -55,10 +74,10 @@ function Cate(props) {
                                     {datas.proName}
                                 </Typography>
                                 <Typography variant="subtitle1" color="text.secondary" component="div">
-                                {numberWithCommas(String(datas.proPrice))} 원
+                                    {numberWithCommas(String(datas.proPrice))} 원
                                 </Typography>
                                 <Typography variant="subtitle2" color="text.secondary" component="div">
-                                {numberWithCommas(String(datas.proCount))} 개
+                                    {numberWithCommas(String(datas.proCount))} 개
                                 </Typography>
                                 <br></br>
                             </CardContent>
@@ -84,4 +103,4 @@ function Cate(props) {
 
 }
 
-export default Cate;
+export default Mywish;

@@ -3,10 +3,14 @@ import axios from 'axios';
 import { Link, useParams } from 'react-router-dom';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
+import { Cookies } from 'react-cookie'
+
 
 import './Order.css';
 
 function ProDetail(props) {
+
+    const cookies = new Cookies();
 
     const [data, setData] = useState([
         {
@@ -24,14 +28,39 @@ function ProDetail(props) {
         sendRequest();
     }, []);
 
+        // 쿠키에서 유저 인덱스 가져오기
+        const userIn = cookies.get("userIndex")
+
+        // 찜 목록 추가 or 삭제하는 요청
+    const sendWish = async () => {
+        const response = await axios.get(`http://localhost:3000/wish/user=${userIn}&pro=${id}`);
+        alert(response.data);
+    };
+
+
+
+    function wishButtonHandler(e) {
+       
+        if(userIn === undefined){
+            alert("찜 목록은 로그인 후 이용해주세요.")
+        }else{
+            sendWish();
+        }
+    }
+
+        // 금액 3자리마다 , 찍어주기
+        function numberWithCommas(x) {
+            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
     const detailData = {
         cateIndex: data[0].cateIndex,
         proName: data[0].proName,
         proProfile: data[0].proProfile,
         proContents: data[0].proContents,
         proDetailImg: data[0].proDetailImg,
-        proPrice: data[0].proPrice,
-        proCount: data[0].proCount
+        proPrice: numberWithCommas(String(data[0].proPrice)),
+        proCount: numberWithCommas(String(data[0].proCount))
     }
 
     return (
@@ -54,6 +83,12 @@ function ProDetail(props) {
                                     <Button variant="outlined" >Buy</Button>
                                 </Stack>
                             </Link>
+
+                            
+                                <Stack spacing={2} direction="row">
+                                    <Button onClick={wishButtonHandler} variant="outlined" >Wish</Button>
+                                </Stack>
+                            
                         </div>
                     </div>
                 </div>
