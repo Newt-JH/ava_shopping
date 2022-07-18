@@ -7,6 +7,7 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
+import jwt_decode from "jwt-decode";
 
 const cookies = new Cookies();
 
@@ -33,7 +34,13 @@ function Order(props) {
     //const [userIndex, setUserIndex] = useState('');
     const [orderCount, setOrderCount] = useState(0);
 
-    const userIndex = cookies.get("userIndex");
+        // JWT 토큰 가져와서 디코딩
+        const jwttoken = cookies.get("loginCookie");
+        var decToken = jwt_decode(jwttoken);
+    
+        // 유저 인덱스 가져오기
+        const index = decToken.userIndex;
+        console.log(index);
 
     const orderCountHandler = (e) => {
         setOrderCount(e.target.value);
@@ -68,7 +75,7 @@ function Order(props) {
             url: `http://localhost:3000/order/reg/${id}`, // api 호출 주소
             method: 'post',
             data: {
-                userIndex: userIndex,
+                userIndex: index,
                 orderCount: orderCount,
                 orderPrice: orderCount * detailData.proPrice
             }

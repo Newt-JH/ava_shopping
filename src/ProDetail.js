@@ -5,6 +5,7 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import { Cookies } from 'react-cookie'
 import { useNavigate } from "react-router-dom";
+import jwt_decode from "jwt-decode";
 
 import './Order.css';
 
@@ -28,43 +29,48 @@ function ProDetail(props) {
         sendRequest();
     }, []);
 
-        // 쿠키에서 유저 인덱스 가져오기
-        const userIn = cookies.get("userIndex")
+    // JWT 토큰 가져와서 디코딩
+    const jwttoken = cookies.get("loginCookie");
+    var decToken = jwt_decode(jwttoken);
 
-        // 찜 목록 추가 or 삭제하는 요청
+    // 유저 인덱스 가져오기
+    const index = decToken.userIndex;
+    console.log(index);
+
+    // 찜 목록 추가 or 삭제하는 요청
     const sendWish = async () => {
-        const response = await axios.get(`http://localhost:3000/wish/user=${userIn}&pro=${id}`);
+        const response = await axios.get(`http://localhost:3000/wish/user=${index}&pro=${id}`);
         alert(response.data);
     };
 
     const wishCheck = () => {
-        if(cookies.get("loginCookie") === undefined){
+        if (cookies.get("loginCookie") === undefined) {
             if (window.confirm("로그인 하시겠습니까?")) {
                 navigate(`/login`);
-                } else {
-                }
-        }else{
+            } else {
+            }
+        } else {
             sendWish();
         }
-      };
+    };
 
     const navigate = useNavigate();
 
-  const loginCheck = () => {
-    if(cookies.get("loginCookie") === undefined){
-        if (window.confirm("로그인 하시겠습니까?")) {
-            navigate(`/login`);
+    const loginCheck = () => {
+        if (cookies.get("loginCookie") === undefined) {
+            if (window.confirm("로그인 하시겠습니까?")) {
+                navigate(`/login`);
             } else {
             }
-    }else{
-        navigate(`../order/${id}`);
-    }
-  };
-
-        // 금액 3자리마다 , 찍어주기
-        function numberWithCommas(x) {
-            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        } else {
+            navigate(`../order/${id}`);
         }
+    };
+
+    // 금액 3자리마다 , 찍어주기
+    function numberWithCommas(x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
 
     const detailData = {
         cateIndex: data[0].cateIndex,
@@ -91,14 +97,14 @@ function ProDetail(props) {
                         <h2>{detailData.proPrice} 원</h2>
                         <h3>{detailData.proCount} 개 남아있습니다.</h3>
                         <div className='buy'>
-                                <Stack spacing={2} direction="row">
-                                    <Button onClick={loginCheck} variant="outlined" >Buy</Button>
-                                </Stack>
+                            <Stack spacing={2} direction="row">
+                                <Button onClick={loginCheck} variant="outlined" >Buy</Button>
+                            </Stack>
 
-                                <Stack spacing={2} direction="row">
-                                    <Button onClick={wishCheck} variant="outlined" >Wish</Button>
-                                </Stack>
-                            
+                            <Stack spacing={2} direction="row">
+                                <Button onClick={wishCheck} variant="outlined" >Wish</Button>
+                            </Stack>
+
                         </div>
                     </div>
                 </div>

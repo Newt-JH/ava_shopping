@@ -43,7 +43,6 @@ function LoginTwo() {
           const time = 1000 * 60 * 15;
           if (cookies.get("loginCookie") === undefined) {
             cookies.set("loginCookie", res.data.token, { path: "/", expires: new Date(Date.now() + time) })
-            cookies.set("userIndex", res.data.userIndex, { path: "/", expires: new Date(Date.now() + time) })
           } else {
             console.log("쿠키가 이미 있음");
           } 

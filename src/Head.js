@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { Cookies } from 'react-cookie'
+import jwt_decode from "jwt-decode";
 
 function Head() {
 
@@ -10,7 +11,13 @@ function Head() {
 
     const [serch, setSearch] = useState('');
     const navigate = useNavigate();
-    const userIndex = cookies.get("userIndex");
+
+    // JWT 토큰 가져와서 디코딩
+    const jwttoken = cookies.get("loginCookie");
+    var decToken = jwt_decode(jwttoken);
+
+    // 유저 인덱스 가져오기
+    const index = decToken.userIndex;
 
     const serchHandler = (e) => {
         setSearch((String(e.target.value)).replace(/\//g,""));
@@ -58,8 +65,8 @@ function Head() {
                     :
                     <div align="right" className='divv2'>
                         <button className='logout' onClick={logoutOnclick}>로그아웃</button>
-                        <Link to={"/mywish/" + userIndex}><button className='mypage'>찜목록</button></Link>
-                        <Link to={"/mypage/" + userIndex}><button className='mypage'>구매목록</button></Link>
+                        <Link to={"/mywish/" + index}><button className='mypage'>찜목록</button></Link>
+                        <Link to={"/mypage/" + index}><button className='mypage'>구매목록</button></Link>
                     </div>
                 }
 
