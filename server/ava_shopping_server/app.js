@@ -11,6 +11,8 @@ var userRouter = require('./routes/serUser');
 var productRouter = require('./routes/serProduct');
 var orderRouter = require('./routes/serOrder');
 var categoryRouter = require('./routes/serCategory');
+var wishRouter = require('./routes/serWish');
+var gameRouter = require('./routes/serGameCate');
 
 let corsOptions = {
   origin: 'https://www.localhost:8080',
@@ -37,6 +39,10 @@ app.use('/user', userRouter);
 app.use('/product', productRouter);
 app.use('/order', orderRouter);
 app.use('/category', categoryRouter);
+app.use('/wish', wishRouter);
+app.use('/gameitem', gameRouter);
+
+
 app.use('/uploads', express.static('uploads'));
 
 // catch 404 and forward to error handler

@@ -1,5 +1,5 @@
 import './App.css';
-import React, { Component } from 'react';
+import React from 'react';
 import { BrowserRouter, Route, Routes, Link, Switch } from "react-router-dom";
 import Head from './Head.js';
 import Login from './Login';
@@ -11,7 +11,10 @@ import Search from './Serch';
 import Order from './Order';
 import Main from './Main';
 import Cate from './Cate';
-
+import Mypage from './Mypage';
+import Mywish from './Mywish';
+import MyInfo from './MyInfo';
+import GameItemCate from './GameItemCate';
 
 function App() {
 
@@ -37,6 +40,14 @@ function App() {
           <Route path="/product/cate/:id" element={<Cate />}></Route>
           {/* 주문 페이지 */}
           <Route path="/order/:id" element={<Order />}></Route>
+          {/* 구매 목록 페이지 */}
+          <Route path="/mypage/:id" element={<Mypage />}></Route>
+          {/* 찜목록 페이지 */}
+          <Route path="/mywish/:id" element={<Mywish />}></Route>
+          {/* 내 정보 페이지 */}
+          <Route path="/myinfo/:id" element={<MyInfo />}></Route>
+                    {/* 내 정보 페이지 */}
+                    <Route path="/gamecate/id=:id&game=:game" element={<GameItemCate />}></Route>
         </Routes>
 
       </BrowserRouter>

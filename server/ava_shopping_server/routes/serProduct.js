@@ -48,6 +48,11 @@ router.get('/serch/:id', function (req, res) {
 
 })
 
+// 베스트 상품
+router.get('/best/product',function(req,res) {
+    db.readBest(res)
+})
+
 // 카테고리 상품 읽어오기
 router.get('/cate/:id', function (req, res) {
     params = req.params.id;
@@ -56,7 +61,17 @@ router.get('/cate/:id', function (req, res) {
     }else{
         db.serchCate(params, res)
     }
+})
 
+// 게임 카테고리 상품 읽어오기
+router.get('/category/id=:id&game=:game', function (req, res) {
+    gameparams = req.params.game;
+    idparams = req.params.id;
+    if(params.length === 0){
+
+    }else{
+        db.gameCategory(gameparams,idparams, res)
+    }
 })
 
 // 상품 등록
@@ -76,12 +91,11 @@ router.post('/reg',upload.single('proDetailImg'),function(req, res, next) {
         proContents: rb.proContents,
         proDetailImg: req.file.path.slice(12),
         proPrice: rb.proPrice,
-        proCount: rb.proCount
+        proCount: rb.proCount,
+        gameIndex:rb.gameIndex
     }
 
-    db.newProduct(pro);
-
-    res.json("상품 등록 성공");
+    db.newProduct(pro,res);
 })
 
 // 상품 수정
@@ -95,10 +109,10 @@ router.put('/update/:id', function (req, res) {
         proContents: rb.proContents,
         proDetailImg: rb.proDetailImg,
         proPrice: rb.proPrice,
-        proCount: rb.proCount
+        proCount: rb.proCount,
+        gameIndex: rb.gameIndex
     }
-    db.updateProduct(params, pro)
-    res.json("상품 정보 수정 성공");
+    db.updateProduct(params,pro,res)
 })
 
 // 상품 삭제
