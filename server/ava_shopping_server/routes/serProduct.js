@@ -49,9 +49,8 @@ router.get('/serch/:id', function (req, res) {
 })
 
 // 베스트 상품
-router.get('/best/:id',function(req,res) {
-    params = req.params.id;
-    db.readBest(params,res)
+router.get('/best/product',function(req,res) {
+    db.readBest(res)
 })
 
 // 카테고리 상품 읽어오기

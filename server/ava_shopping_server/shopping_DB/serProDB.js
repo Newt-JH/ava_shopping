@@ -22,7 +22,7 @@ function newProduct(pro) {
 
 // 상품 전체 읽기
 function readProduct(res) {
-    const query = `select * from product where proCount > 0`
+    const query = `select * from product where proCount`
     connection.query(query,
         (err,rows) => {
             if(err) {
@@ -47,13 +47,41 @@ function readOneProduct(params,res) {
 
 
 // 카테고리 Best 상품
-function readBest(params,res) {
-    const query = `select sum(orderCount) as oc,\`order\`.proIndex as pi,cateIndex,proProfile
+function readBest(res) {
+    const query = `(select sum(orderCount) as oc,\`order\`.proIndex as pi,cateIndex,proProfile
     from \`order\`,product
-    where \`order\`.proIndex = product.proIndex and cateIndex = ${params}
+    where \`order\`.proIndex = product.proIndex and cateIndex = 1
     group by \`order\`.proIndex
     order by oc desc
-    limit 1;`
+    limit 1)
+union
+(select sum(orderCount) as oc,\`order\`.proIndex as pi,cateIndex,proProfile
+    from \`order\`,product
+    where \`order\`.proIndex = product.proIndex and cateIndex = 2
+    group by \`order\`.proIndex
+    order by oc desc
+    limit 1)
+union
+(select sum(orderCount) as oc,\`order\`.proIndex as pi,cateIndex,proProfile
+    from \`order\`,product
+    where \`order\`.proIndex = product.proIndex and cateIndex = 3
+    group by \`order\`.proIndex
+    order by oc desc
+    limit 1)
+union
+(select sum(orderCount) as oc,\`order\`.proIndex as pi,cateIndex,proProfile
+    from \`order\`,product
+    where \`order\`.proIndex = product.proIndex and cateIndex = 4
+    group by \`order\`.proIndex
+    order by oc desc
+    limit 1)
+union
+(select sum(orderCount) as oc,\`order\`.proIndex as pi,cateIndex,proProfile
+    from \`order\`,product
+    where \`order\`.proIndex = product.proIndex and cateIndex = 5
+    group by \`order\`.proIndex
+    order by oc desc
+    limit 1)`
 
     connection.query(query,
         (err,row) => {
@@ -64,7 +92,7 @@ function readBest(params,res) {
 
 // 상품 검색
 function serchProduct(params,res) {
-    const query = `select * from product where proName like "%${params}%" and proCount > 0
+    const query = `select * from product where proName like "%${params}%"
     UNION DISTINCT
     select proIndex,product.cateIndex,proName,proProfile,proContents,proDetailImg,proPrice,proCount from product,category where product.cateIndex = category.cateIndex
     and category.cateName = "${params}"`
@@ -80,7 +108,7 @@ function serchProduct(params,res) {
 
 // 카테고리 검색
 function serchCate(params,res) {
-    const query = `select * from product where cateIndex = ${params} and proCount > 0`
+    const query = `select * from product where cateIndex = ${params}`
     connection.query(query,
         (err,rows) => {
             if(err) {

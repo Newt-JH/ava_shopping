@@ -35,10 +35,10 @@ function ProDetail(props) {
 
     let index = 0;
     const jwttoken = cookies.get("loginCookie");
-    if(jwttoken !== undefined){
+    if (jwttoken !== undefined) {
         var decToken = jwt_decode(jwttoken);
         index = decToken.userIndex;
-    }else{
+    } else {
         index = 0;
     }
 
@@ -100,12 +100,20 @@ function ProDetail(props) {
                         <h1>{detailData.proName}</h1>
                         <a>{detailData.proContents}</a>
                         <h2>{detailData.proPrice} 원</h2>
-                        <h3>{detailData.proCount} 개 남아있습니다.</h3>
+                        {detailData.proCount !== "0" ?
+                            <h3>{detailData.proCount} 개 남아있습니다.</h3> :
+                            "품절입니다."
+                        }
+
+
                         <div className='buy'>
+
+                        {detailData.proCount !== "0" ?
+
                             <Stack spacing={2} direction="row">
                                 <Button onClick={loginCheck} variant="outlined" >Buy</Button>
                             </Stack>
-
+                            : <></>}
                             <Stack spacing={2} direction="row">
                                 <Button onClick={wishCheck} variant="outlined" >Wish</Button>
                             </Stack>

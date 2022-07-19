@@ -44,6 +44,22 @@ function UserProfile(props) {
         setRePass(e.target.value);
     }
 
+    const nickDivHanlder = (e) => {
+        if(nickBox === 0){
+            setNickBox(1);
+        }else{
+            setNickBox(0);
+        }
+    }
+
+    const PasswordDivHanlder = (e) => {
+        if(passBox === 0){
+            setPassBox(1);
+        }else{
+            setPassBox(0);
+        }
+    }
+
 
     const submitNickHandler = (event) => {
         event.preventDefault();
@@ -131,7 +147,7 @@ function UserProfile(props) {
                         <Typography sx={{ fontSize: 30 }} color="text.secondary" gutterBottom>
                             NickName {bull} {userdata[0].userName}
                         </Typography>
-                        <Button size="small">NickName reset</Button>
+                        <Button onClick={nickDivHanlder} size="small">NickName reset</Button>
                         <Typography sx={{ mb: 1.5 }} color="text.secondary">
 
                         </Typography>
@@ -145,7 +161,7 @@ function UserProfile(props) {
                         </Typography>
                         <Typography sx={{ mb: 1.5 }} color="text.secondary">
                         </Typography>
-                        <Button size="small">Password reset</Button>
+                        <Button onClick={PasswordDivHanlder} size="small">Password reset</Button>
                     </CardContent>
                 </Card>
 

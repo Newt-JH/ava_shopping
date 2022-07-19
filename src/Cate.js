@@ -58,7 +58,13 @@ function Cate(props) {
                                 {numberWithCommas(String(datas.proPrice))} 원
                                 </Typography>
                                 <Typography variant="subtitle2" color="text.secondary" component="div">
-                                {numberWithCommas(String(datas.proCount))} 개
+                                    {datas.proCount !== 0 ?
+                                    numberWithCommas(String(datas.proCount)) + "개"
+                                    :
+                                    "품절"
+                                }
+                                
+
                                 </Typography>
                                 <br></br>
                             </CardContent>

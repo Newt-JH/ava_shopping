@@ -135,7 +135,7 @@ function updateUserNick(params, userName) {
 
 // 유저 닉네임 중복 체크
 function nickCheck(params, userName,res) {
-    const query = `select * from user where userName = ${userName}`;
+    const query = `select * from user where userName = "${userName}"`;
     connection.query(query,
         (err,row) => {
             if (err) {
