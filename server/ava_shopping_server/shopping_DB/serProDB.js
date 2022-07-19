@@ -4,7 +4,7 @@ const connection = con.dataCon;
 
 // 상품 등록
 function newProduct(pro,res) {
-    const query = `insert into product(cateIndex, proName, proProfile, proContents, proDetailImg, proPrice, proCount) value (${pro.cateIndex},"${pro.proName}","${pro.proProfile}","${pro.proContents}","${pro.proDetailImg}",${pro.proPrice},${pro.proCount});`
+    const query = `insert into product(cateIndex, proName, proProfile, proContents, proDetailImg, proPrice, proCount,gameIndex) value (${pro.cateIndex},"${pro.proName}","${pro.proProfile}","${pro.proContents}","${pro.proDetailImg}",${pro.proPrice},${pro.proCount},${pro.gameIndex});`
     connection.query(query,
         (err) => {
             if (err) throw err;
@@ -86,14 +86,19 @@ union
 // 상품 검색
 function serchProduct(params,res) {
     const query = `select * 
-    from product join category
-    on product.cateIndex = category.cateIndex
+    from product product join gamename join category
+    on product.cateIndex = category.cateIndex and product.gameIndex = gamename.gameIndex
     where proName like "%${params}%"
     UNION DISTINCT
     select * 
-    from product join category
-        on product.cateIndex = category.cateIndex
-    where category.cateName = "${params}"`
+    from product join gamename join category
+        on product.cateIndex = category.cateIndex and product.gameIndex = gamename.gameIndex
+    where category.cateName = "${params}"
+    UNION DISTINCT
+    select * 
+    from product join gamename join category
+        on product.gameIndex = gamename.gameIndex and category.cateIndex = product.cateIndex
+    where gamename.gametitle like "%${params}%"`
     connection.query(query,
         (err,rows) => {
             if(err) {
@@ -107,6 +112,19 @@ function serchProduct(params,res) {
 // 카테고리 검색
 function serchCate(params,res) {
     const query = `select * from product where cateIndex = ${params}`
+    connection.query(query,
+        (err,rows) => {
+            if(err) {
+                throw err;
+            }
+            console.log("Select One Success");
+            return res.json(rows);
+        })
+}
+
+// 게임 카테고리 검색
+function gameCategory(game,id,res) {
+    const query = `select * from product where cateIndex = ${id} and gameIndex = ${game}`
     connection.query(query,
         (err,rows) => {
             if(err) {
@@ -149,5 +167,6 @@ module.exports = {
     deleteProduct,
     serchProduct,
     serchCate,
-    readBest
+    readBest,
+    gameCategory
 }

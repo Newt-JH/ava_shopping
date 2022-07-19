@@ -14,6 +14,7 @@ import Cate from './Cate';
 import Mypage from './Mypage';
 import Mywish from './Mywish';
 import MyInfo from './MyInfo';
+import GameItemCate from './GameItemCate';
 
 function App() {
 
@@ -45,6 +46,8 @@ function App() {
           <Route path="/mywish/:id" element={<Mywish />}></Route>
           {/* 내 정보 페이지 */}
           <Route path="/myinfo/:id" element={<MyInfo />}></Route>
+                    {/* 내 정보 페이지 */}
+                    <Route path="/gamecate/id=:id&game=:game" element={<GameItemCate />}></Route>
         </Routes>
 
       </BrowserRouter>

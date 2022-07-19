@@ -15,7 +15,7 @@ function Join() {
   const [email, setEmail] = useState('');
   const [idCheckDiv, setidCheckDiv] = useState('');
   const [idCheckA, setidCheckA] = useState('아이디를 입력해주세요.');
-  const [joinCheckList, setJoinCheckList] = useState('');
+
   const navigate = useNavigate();
 
 
@@ -57,35 +57,41 @@ function Join() {
     setEmail(e.target.value);
   }
 
+  // 유효성 검사 부분, 숫자와 영어 소문자만 입력 가능
+  var regExpId = /^[0-9a-z]+$/;
+
   const submitHandler = (event) => {
 
     event.preventDefault();
-
     if (idCheckDiv === "OK") {
-      if (password !== repassword) {
-        alert("비밀번호를 동일하게 입력 후 버튼을 눌러주세요.")
-      } else if (email.includes("@")) {
-
-        axios({
-          url: 'http://localhost:3000/user/reg', // api 호출 주소
-          method: 'post',
-          data: {
-            userID: id,
-            userPassword: password,
-            userEmail: email
-          }
-        }).then(function loginCheck(res) {
-          // 회원가입 성공 시
-          console.log(res.data);
-          setJoinCheckList("OK")
-          navigate("/");
-          alert(`${id} 고객님 회원가입 성공했습니다.`)
-        })
-
+      if(regExpId.test(password)){
+        if (password !== repassword) {
+          alert("비밀번호를 동일하게 입력 후 버튼을 눌러주세요.")
+        } else if (email.includes("@") && email.includes(".")) {
+  
+          axios({
+            url: 'http://localhost:3000/user/reg', // api 호출 주소
+            method: 'post',
+            data: {
+              userID: id,
+              userPassword: password,
+              userEmail: email
+            }
+          }).then(function loginCheck(res) {
+            // 회원가입 성공 시
+            console.log(res.data);
+            navigate("/");
+            alert(`${id} 고객님 회원가입 성공했습니다.`)
+          })
+  
+        }
+        else {
+          alert("올바른 이메일 형식이 아닙니다. 확인 후 다시 입력해주세요.")
+        }
+      }else{
+        alert("입력 불가한 패스워드입니다. 확인 후 입력 부탁드립니다.");
       }
-      else {
-        alert("이메일에 @를 포함해주세요.")
-      }
+
     } else if (idCheckDiv === "NO") {
       alert("아이디 확인 후 버튼을 눌러주세요.")
     }
@@ -105,8 +111,10 @@ function Join() {
           {idCheckDiv === "OK" ? <a>{idCheckA}</a> : <a>{idCheckA}</a>}<br />
 
           <div class="password">
-            <input className='logInput' type="password" value={password} minLength="4" maxLength="10" onChange={passwordChangeHandler} placeholder="Password"></input><br />
+            <input className='logInput' type="password" value={password} minLength="4" maxLength="10" onChange={passwordChangeHandler} placeholder="Password"></input>
           </div>
+
+          {regExpId.test(password) ? <div><a></a><br /></div> : <div><a>패스워드는 4 - 9 글자로 숫자와 소문자만 입력 가능합니다.</a><br /></div>}
 
           <div class="email">
             <input className='logInput' type="password" value={repassword} minLength="4" maxLength="10" onChange={repasswordChangeHandler} placeholder="비밀번호 재입력"></input>

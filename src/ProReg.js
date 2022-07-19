@@ -4,7 +4,8 @@ import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 
 function ProReg() {
-  const [cateIndex, setCateIndex] = useState('');
+  const [cateIndex, setCateIndex] = useState('1');
+  const [gameIndex, setGameIndex] = useState('1');
   const [proName, setproName] = useState('');
   const [proProfile, setproProfile] = useState('');
   const [proContents, setproContents] = useState('');
@@ -16,6 +17,10 @@ function ProReg() {
 
   const cateIndexHandler = (e) => {
     setCateIndex(e.target.value);
+  }
+
+  const gameIndexHandler = (e) => {
+    setGameIndex(e.target.value);
   }
 
   const proNameHandler = (e) => {
@@ -49,6 +54,7 @@ function ProReg() {
 
     const formData = new FormData();
     formData.append('cateIndex',cateIndex);
+    formData.append('gameIndex',gameIndex);
     formData.append('proName',proName);
     formData.append('proProfile',proProfile);
     formData.append('proContents',proContents);
@@ -73,8 +79,24 @@ function ProReg() {
   return (
     <>
       <form className='frmNewAcc' encType='multipart/form-data' onSubmit={submitHandler}>
-        카테고리 번호
-        <input type="number" value={cateIndex} onChange={cateIndexHandler} max="5"></input><br></br>
+        카테고리 이름
+        {/* <input type="number" value={cateIndex} onChange={cateIndexHandler} max="5"></input><br></br> */}
+        <select onChange={cateIndexHandler}>
+          <option value="1">무기</option>
+          <option value="2">방어구</option>
+          <option value="3">장신구</option>
+          <option value="4">펫</option>
+          <option value="5">설치</option>
+        </select><br />
+
+        게임 이름
+        {/* <input type="number" value={cateIndex} onChange={cateIndexHandler} max="5"></input><br></br> */}
+        <select onChange={gameIndexHandler}>
+          <option value="1">메이플스토리</option>
+          <option value="2">마인크래프트</option>
+          <option value="3">로스트아크</option>
+        </select><br />
+
         상품 이름
         <input type="text" value={proName} onChange={proNameHandler}></input><br></br>
         {/* 상품 프로필 사진

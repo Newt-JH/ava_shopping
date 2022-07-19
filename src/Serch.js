@@ -21,6 +21,11 @@ function Search(props) {
         }
     ]);
 
+    // 금액 3자리마다 , 찍어주기
+    function numberWithCommas(x) {
+	    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	}
+
     const { id } = useParams();
     // 페이지 진입 시 글 읽어오기
     const sendRequest = async () => {
@@ -59,7 +64,11 @@ function Search(props) {
                                     {datas.proPrice} 원
                                 </Typography>
                                 <Typography variant="subtitle2" color="text.secondary" component="div">
-                                    {datas.proCount} 개
+                                {datas.proCount !== 0 ?
+                                    numberWithCommas(String(datas.proCount)) + "개"
+                                    :
+                                    "품절"
+                                }
                                 </Typography>
                                 <br></br>
                             </CardContent>

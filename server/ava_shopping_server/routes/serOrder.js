@@ -26,7 +26,7 @@ router.post('/reg/:id',function(req,res) {
       orderCount: rb.orderCount,
       orderDate: today.format("YY-MM-DD"),
       orderPrice: rb.orderPrice,
-      orderState: 0
+      orderState: 0,
     }
 
 db.newOrderCountDown(ord,res)

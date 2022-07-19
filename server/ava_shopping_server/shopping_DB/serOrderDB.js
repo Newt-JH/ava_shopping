@@ -4,9 +4,8 @@ const connection = con.dataCon;
 
 // 주문 시 주문 가능한지 파악 및 주문 생성 / 재고 차감
 function newOrderCountDown(ord,res){
-    console.log(ord);
-    console.log(ord.proIndex);
-    const query = `select proCount from product where proIndex = ${ord.proIndex};`
+    const query = `select proCount 
+    from product where proIndex = ${ord.proIndex};`
     connection.query(query,
         (err,row) => {
             if (err) {
@@ -27,11 +26,15 @@ function newOrderCountDown(ord,res){
 
 // 주문 생성
 function newOrder(ord) {
-    const query = `
-    start transaction;
-    insert into \`order\`(userIndex,proIndex,orderCount,orderDate,orderPrice,orderState) value(${ord.userIndex},${ord.proIndex},${ord.orderCount},"${ord.orderDate}",${ord.orderPrice},${ord.orderState});
+    console.log(ord);
+    const query = 
+    `start transaction;
+    insert into \`order\`(userIndex,proIndex,orderCount,orderDate,orderPrice,orderState)
+        value(${ord.userIndex},${ord.proIndex},${ord.orderCount},"${ord.orderDate}",${ord.orderPrice},0);
     update product set proCount = procount - ${ord.orderCount} where proIndex = ${ord.proIndex};
     commit;`
+
+
     connection.query(query,
         (err) => {
             if (err) {

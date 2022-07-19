@@ -48,7 +48,6 @@ function Mypage(props) {
         setData(response.data);
     };
 
-
     useEffect(() => {
         sendRequest();
     }, []);
@@ -90,7 +89,7 @@ function Mypage(props) {
                             </Typography>
                         </CardContent>
                         <Box sx={{ display: 'flex', alignItems: 'center', pl: 1, pb: 1 }}>
-
+                      
                         </Box>
                     </Box>
                     <Link to={"../product/" + datas.pi}><CardMedia

@@ -5,7 +5,8 @@ const dataCon = mysql.createConnection({
     user: 'root',
     password: 'tiger',
     port: 3306,
-    database: 'ava_shopping'
+    database: 'ava_shopping',
+    multipleStatements:true
 });
 
 module.exports = {
