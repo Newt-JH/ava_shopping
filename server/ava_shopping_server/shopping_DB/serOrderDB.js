@@ -1,32 +1,8 @@
-const mysql = require('mysql');
+const con = require('./DatabaseConn');
+const connection = con.dataCon;
 
-const connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: 'tiger',
-    port: 3306,
-    database: 'ava_shopping',
-    multipleStatements: true
-});
 
-// 주문 생성
-function newOrder(ord) {
-    const query = `
-    start transaction;
-    insert into \`order\`(userIndex,proIndex,orderCount,orderDate,orderPrice,orderState) value(${ord.userIndex},${ord.proIndex},${ord.orderCount},"${ord.orderDate}",${ord.orderPrice},${ord.orderState});
-    update product set proCount = procount - ${ord.orderCount} where proIndex = ${ord.proIndex};
-    commit;`
-    connection.query(query,
-        (err) => {
-            if (err) {
-                throw err;
-            }
-            return console.log("order insert success");
-        }
-    )
-}
-
-// 주문 새로운 DB 짜보기
+// 주문 시 주문 가능한지 파악 및 주문 생성 / 재고 차감
 function newOrderCountDown(ord,res){
     console.log(ord);
     console.log(ord.proIndex);
@@ -49,10 +25,22 @@ function newOrderCountDown(ord,res){
     )
 }
 
-
-
-
-
+// 주문 생성
+function newOrder(ord) {
+    const query = `
+    start transaction;
+    insert into \`order\`(userIndex,proIndex,orderCount,orderDate,orderPrice,orderState) value(${ord.userIndex},${ord.proIndex},${ord.orderCount},"${ord.orderDate}",${ord.orderPrice},${ord.orderState});
+    update product set proCount = procount - ${ord.orderCount} where proIndex = ${ord.proIndex};
+    commit;`
+    connection.query(query,
+        (err) => {
+            if (err) {
+                throw err;
+            }
+            return console.log("order insert success");
+        }
+    )
+}
 
 // 주문건 전체 읽기
 function readOrder(res) {
@@ -78,8 +66,6 @@ function readOrderOne(params,res) {
             return res.json(rows);
         })
 }
-
-// 주문 수정 X ( 추후 개수만 수정 가능하게 만들 수도 있음 )
 
 // 주문 삭제
 function deleteOrder(params,res){

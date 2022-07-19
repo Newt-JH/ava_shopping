@@ -1,21 +1,14 @@
-const mysql = require('mysql');
-
-const connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: 'tiger',
-    port: 3306,
-    database: 'ava_shopping'
-});
+const con = require('./DatabaseConn');
+const connection = con.dataCon;
 
 
 // 카테고리 등록
-function newCate(categoryName) {
+function newCate(categoryName,res) {
     const query = `insert into category(cateName) value("${categoryName}");`
     connection.query(query,
         (err) => {
             if (err) throw err;
-            return console.log("category insert success");
+            return res.json("글 등록 성공");
         }
     )
 }
@@ -46,7 +39,7 @@ function readCateOne(params,res) {
 }
 
 // 카테고리 수정
-function updateCate(params,cateName){
+function updateCate(params,cateName,res){
     const query = `update category set cateName = "${cateName}" where cateIndex = ${params}`;
     connection.query(query,
         (err) => {
@@ -54,6 +47,7 @@ function updateCate(params,cateName){
                 throw err;
             }
             console.log("Update Success")
+            res.json("글 수정 성공");
         })
 }
 

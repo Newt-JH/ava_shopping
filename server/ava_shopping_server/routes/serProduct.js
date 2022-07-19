@@ -84,9 +84,7 @@ router.post('/reg',upload.single('proDetailImg'),function(req, res, next) {
         proCount: rb.proCount
     }
 
-    db.newProduct(pro);
-
-    res.json("상품 등록 성공");
+    db.newProduct(pro,res);
 })
 
 // 상품 수정
@@ -102,8 +100,7 @@ router.put('/update/:id', function (req, res) {
         proPrice: rb.proPrice,
         proCount: rb.proCount
     }
-    db.updateProduct(params, pro)
-    res.json("상품 정보 수정 성공");
+    db.updateProduct(params,pro,res)
 })
 
 // 상품 삭제

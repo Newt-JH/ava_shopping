@@ -1,12 +1,5 @@
-const mysql = require('mysql');
-
-const connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: 'tiger',
-    port: 3306,
-    database: 'ava_shopping'
-});
+const con = require('./DatabaseConn');
+const connection = con.dataCon;
 
 // JWT 구현
 const jwt = require('jsonwebtoken');
@@ -58,12 +51,12 @@ function readUserIndex(userID, res) {
 }
 
 // 회원 가입
-function newUser(user) {
+function newUser(user,res) {
     const query = `insert into user(userID,userPassword,userName,userEmail) value("${user.userID}","${user.userPassword}","${user.userName}","${user.userEmail}");`
     connection.query(query,
         (err) => {
             if (err) throw err;
-            return console.log("User Join success");
+            return res.json("OK");
         }
     )
 }
@@ -152,14 +145,14 @@ function nickCheck(params, userName,res) {
 }
 
 // 유저 패스워드 수정
-function updateUserPassword(params, userPassword) {
+function updateUserPassword(params, userPassword,res) {
     const query = `update user set userPassword = "${userPassword}" where userIndex = ${params}`;
     connection.query(query,
         (err) => {
             if (err) {
                 throw err;
             }
-            console.log("Password Update Success")
+            return res.json("유저 패스워드 수정 완료");
         })
 }
 

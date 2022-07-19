@@ -1,21 +1,14 @@
-const mysql = require('mysql');
-
-const connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: 'tiger',
-    port: 3306,
-    database: 'ava_shopping'
-});
+const con = require('./DatabaseConn');
+const connection = con.dataCon;
 
 
 // 상품 등록
-function newProduct(pro) {
+function newProduct(pro,res) {
     const query = `insert into product(cateIndex, proName, proProfile, proContents, proDetailImg, proPrice, proCount) value (${pro.cateIndex},"${pro.proName}","${pro.proProfile}","${pro.proContents}","${pro.proDetailImg}",${pro.proPrice},${pro.proCount});`
     connection.query(query,
         (err) => {
             if (err) throw err;
-            return console.log("Product insert success");
+            return res.json("글 등록 성공");
         }
     )
 }
@@ -49,36 +42,36 @@ function readOneProduct(params,res) {
 // 카테고리 Best 상품
 function readBest(res) {
     const query = `(select sum(orderCount) as oc,\`order\`.proIndex as pi,cateIndex,proProfile
-    from \`order\`,product
-    where \`order\`.proIndex = product.proIndex and cateIndex = 1
+    from \`order\` join product
+    on \`order\`.proIndex = product.proIndex where cateIndex = 1
     group by \`order\`.proIndex
     order by oc desc
     limit 1)
 union
 (select sum(orderCount) as oc,\`order\`.proIndex as pi,cateIndex,proProfile
-    from \`order\`,product
-    where \`order\`.proIndex = product.proIndex and cateIndex = 2
+    from \`order\` join product
+    on \`order\`.proIndex = product.proIndex where cateIndex = 2
     group by \`order\`.proIndex
     order by oc desc
     limit 1)
 union
 (select sum(orderCount) as oc,\`order\`.proIndex as pi,cateIndex,proProfile
-    from \`order\`,product
-    where \`order\`.proIndex = product.proIndex and cateIndex = 3
+    from \`order\` join product
+    on \`order\`.proIndex = product.proIndex where cateIndex = 3
     group by \`order\`.proIndex
     order by oc desc
     limit 1)
 union
 (select sum(orderCount) as oc,\`order\`.proIndex as pi,cateIndex,proProfile
-    from \`order\`,product
-    where \`order\`.proIndex = product.proIndex and cateIndex = 4
+    from \`order\`join product
+    on \`order\`.proIndex = product.proIndex where cateIndex = 4
     group by \`order\`.proIndex
     order by oc desc
     limit 1)
 union
 (select sum(orderCount) as oc,\`order\`.proIndex as pi,cateIndex,proProfile
-    from \`order\`,product
-    where \`order\`.proIndex = product.proIndex and cateIndex = 5
+    from \`order\` join product
+    on \`order\`.proIndex = product.proIndex where cateIndex = 5
     group by \`order\`.proIndex
     order by oc desc
     limit 1)`
@@ -92,10 +85,15 @@ union
 
 // 상품 검색
 function serchProduct(params,res) {
-    const query = `select * from product where proName like "%${params}%"
+    const query = `select * 
+    from product join category
+    on product.cateIndex = category.cateIndex
+    where proName like "%${params}%"
     UNION DISTINCT
-    select proIndex,product.cateIndex,proName,proProfile,proContents,proDetailImg,proPrice,proCount from product,category where product.cateIndex = category.cateIndex
-    and category.cateName = "${params}"`
+    select * 
+    from product join category
+        on product.cateIndex = category.cateIndex
+    where category.cateName = "${params}"`
     connection.query(query,
         (err,rows) => {
             if(err) {
@@ -120,14 +118,14 @@ function serchCate(params,res) {
 }
 
 // 상품 수정
-function updateProduct(params,pro){
+function updateProduct(params,pro,res){
     const query = `update product set cateIndex = "${pro.cateIndex}",proName ="${pro.proName}",proProfile="${pro.proProfile}",proContents="${pro.proContents}",proDetailImg="${pro.proDetailImg}",proPrice=${pro.proPrice},proCount = ${pro.proCount} where proIndex = ${params}`;
     connection.query(query,
         (err) => {
             if(err) {
                 throw err;
             }
-            console.log("Update Success")
+            return res.json("상품 정보 수정 성공");
         })
 }
 

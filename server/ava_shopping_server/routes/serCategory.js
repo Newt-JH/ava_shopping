@@ -17,8 +17,7 @@ router.get('/:id',function(req,res){
 router.post('/reg',function(req,res) {
     rb = req.body;
     cateName = rb.cateName;
-    db.newCate(cateName);
-    res.json("글 등록 성공");
+    db.newCate(cateName,res);
 })
 
 // 카테고리 수정
@@ -29,8 +28,7 @@ router.put('/update/:id',function(req,res) {
         res.json("cateName 비어있음");
     }else{
         cateName = rb.cateName;
-        db.updateCate(params,cateName)
-        res.json("글 수정 성공");
+        db.updateCate(params,cateName,res)
     }
 })
 

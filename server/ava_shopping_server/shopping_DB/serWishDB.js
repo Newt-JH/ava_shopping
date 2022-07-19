@@ -1,13 +1,5 @@
-const mysql = require('mysql');
-
-const connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: 'tiger',
-    port: 3306,
-    database: 'ava_shopping'
-});
-
+const con = require('./DatabaseConn');
+const connection = con.dataCon;
 
 
 // 찜 목록 조회 후 추가 or 삭제
