@@ -9,7 +9,7 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import CateBest from './CateBest';
 import moment from 'moment';
-import './Search.css'
+import '../cssFolder/Search.css'
 import { Cookies } from 'react-cookie'
 import jwt_decode from "jwt-decode";
 

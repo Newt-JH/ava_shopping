@@ -1,20 +1,20 @@
-import './App.css';
+import './cssFolder/App.css';
 import React from 'react';
 import { BrowserRouter, Route, Routes, Link, Switch } from "react-router-dom";
-import Head from './Head.js';
-import Login from './Login';
-import Join from './Join';
-import ProReg from './ProReg';
-import ProAll from './ProAll';
-import ProDetail from './ProDetail';
-import Search from './Serch';
-import Order from './Order';
-import Main from './Main';
-import Cate from './Cate';
-import Mypage from './Mypage';
-import Mywish from './Mywish';
-import MyInfo from './MyInfo';
-import GameItemCate from './GameItemCate';
+import Head from './jsFolder/Head.js';
+import Login from './jsFolder/Login';
+import Join from './jsFolder/Join';
+import ProReg from './jsFolder/ProReg';
+import ProAll from './jsFolder/ProAll';
+import ProDetail from './jsFolder/ProDetail';
+import Search from './jsFolder/Serch';
+import Order from './jsFolder/Order';
+import Main from './jsFolder/Main';
+import Mypage from './jsFolder/Mypage';
+import Mywish from './jsFolder/Mywish';
+import MyInfo from './jsFolder/MyInfo';
+import GameItemCate from './jsFolder/GameItemCate';
+import GameList from './jsFolder/GameList';
 
 function App() {
 
@@ -37,7 +37,9 @@ function App() {
           {/* 글 검색 페이지 */}
           <Route path="/product/serch/:id" element={<Search />}></Route>
           {/* 카테고리 페이지 */}
-          <Route path="/product/cate/:id" element={<Cate />}></Route>
+          <Route path="/gamecate/id=:id&game=:game" element={<GameItemCate />}></Route>
+          {/* 게임 페이지 */}
+          <Route path="/product/game/:id" element={<GameList />}></Route>
           {/* 주문 페이지 */}
           <Route path="/order/:id" element={<Order />}></Route>
           {/* 구매 목록 페이지 */}
@@ -46,8 +48,7 @@ function App() {
           <Route path="/mywish/:id" element={<Mywish />}></Route>
           {/* 내 정보 페이지 */}
           <Route path="/myinfo/:id" element={<MyInfo />}></Route>
-                    {/* 내 정보 페이지 */}
-                    <Route path="/gamecate/id=:id&game=:game" element={<GameItemCate />}></Route>
+
         </Routes>
 
       </BrowserRouter>

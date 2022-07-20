@@ -4,7 +4,7 @@ const connection = con.dataCon;
 
 // 상품 등록
 function newProduct(pro,res) {
-    const query = `insert into product(cateIndex, proName, proProfile, proContents, proDetailImg, proPrice, proCount,gameIndex) value (${pro.cateIndex},"${pro.proName}","${pro.proProfile}","${pro.proContents}","${pro.proDetailImg}",${pro.proPrice},${pro.proCount},${pro.gameIndex});`
+    const query = `insert into product(cateIndex, proName, proProfile, proContents, proDetailImg, proPrice, proCount,gameIndex) value ("${pro.cateIndex}","${pro.proName}","${pro.proProfile}","${pro.proContents}","${pro.proDetailImg}",${pro.proPrice},${pro.proCount},${pro.gameIndex});`
     connection.query(query,
         (err) => {
             if (err) throw err;
@@ -93,7 +93,7 @@ function serchProduct(params,res) {
     select * 
     from product join gamename join category
         on product.cateIndex = category.cateIndex and product.gameIndex = gamename.gameIndex
-    where category.cateName = "${params}"
+    where category.cateName like "%${params}%"
     UNION DISTINCT
     select * 
     from product join gamename join category
@@ -122,15 +122,42 @@ function serchCate(params,res) {
         })
 }
 
-// 게임 카테고리 검색
-function gameCategory(game,id,res) {
-    const query = `select * from product where cateIndex = ${id} and gameIndex = ${game}`
+
+// 게임 검색
+function serchGame(params,res) {
+    const query = `select * from product where gameIndex = ${params}`
     connection.query(query,
         (err,rows) => {
             if(err) {
                 throw err;
             }
             console.log("Select One Success");
+            return res.json(rows);
+        })
+}
+
+
+// 게임 카테고리 검색
+function gameCategory(game,id,res) {
+    if(game === "0" || game > 5){
+        if(id === "10"){
+            query = `select * from product where cateIndex > "${id}"`
+        }else{
+            query = `select * from product where cateIndex = "${id}" or cateIndex ="1${id}"`
+        }
+
+    }else{
+        if(id === "10"){
+            query = `select * from product where cateIndex > "${id}" and gameIndex = "${game}"`
+        }else{
+            query = `select * from product where (cateIndex = "${id}" or cateIndex ="1${id}") and gameIndex = "${game}"`
+        }
+    }
+    connection.query(query,
+        (err,rows) => {
+            if(err) {
+                throw err;
+            }
             return res.json(rows);
         })
 }
@@ -168,5 +195,6 @@ module.exports = {
     serchProduct,
     serchCate,
     readBest,
-    gameCategory
+    gameCategory,
+    serchGame
 }

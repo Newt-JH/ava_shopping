@@ -167,7 +167,32 @@ strong {
     border: 1px solid #1b5ac2;
 }
 
+
 .tabli a {
+    text-decoration: none;
+    font-weight: bold;
+}
+
+
+
+
+
+
+
+.tabnav li .tabaw {
+    position: relative;
+    display: block;
+    background: #fff;
+    color: #1b5ac2;
+    padding: 0px;
+    line-height: 46px;
+    text-decoration: none;
+    font-size: 13px;
+    border-radius: 4px;
+    border: 1px solid #1b5ac2;
+}
+
+.tabaw {
     text-decoration: none;
     font-weight: bold;
 }

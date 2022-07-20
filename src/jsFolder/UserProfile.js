@@ -10,7 +10,7 @@ import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
-import './UserProfile.css'
+import '../cssFolder/UserProfile.css'
 
 function UserProfile(props) {
 

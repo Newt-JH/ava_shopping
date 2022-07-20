@@ -2,7 +2,7 @@ import { BrowserRouter, Route, Routes, Link, Switch } from "react-router-dom";
 import React, { Component, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
-import './Join.css'
+import '../cssFolder/Join.css'
 
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';

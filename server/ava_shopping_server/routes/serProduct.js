@@ -63,6 +63,16 @@ router.get('/cate/:id', function (req, res) {
     }
 })
 
+// 게임 상품 읽어오기
+router.get('/game/:id', function (req, res) {
+    params = req.params.id;
+    if(params.length === 0){
+
+    }else{
+        db.serchGame(params, res)
+    }
+})
+
 // 게임 카테고리 상품 읽어오기
 router.get('/category/id=:id&game=:game', function (req, res) {
     gameparams = req.params.game;

@@ -7,7 +7,7 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
-import CateBest from './CateBest';
+import CateBest from '../cssFolder/CateBest.css';
 import { Cookies } from 'react-cookie'
 import jwt_decode from "jwt-decode";
 

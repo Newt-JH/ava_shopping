@@ -21,8 +21,6 @@ function GameItemCate(props) {
 
     const { id } = useParams();
     const { game } = useParams();
-    console.log(id);
-    console.log(game);
     // 페이지 진입 시 글 읽어오기
     const sendRequest = async () => {
         const response = await axios.get(`http://localhost:3000/gameitem/id=${id}&game=${game}`);

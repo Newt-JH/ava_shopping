@@ -7,7 +7,7 @@ import { Cookies } from 'react-cookie'
 import { useNavigate } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 
-import './Order.css';
+import '../cssFolder/Order.css';
 
 function ProDetail(props) {
 

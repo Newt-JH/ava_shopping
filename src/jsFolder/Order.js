@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { Cookies } from 'react-cookie'
-import './Order.css';
+import '../cssFolder/Order.css';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';

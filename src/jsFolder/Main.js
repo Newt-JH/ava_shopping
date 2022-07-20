@@ -1,5 +1,5 @@
 import React from 'react';
-import './Main.css';
+import '../cssFolder/Main.css';
 import CateBest from './CateBest';
 
 function Main(props) {

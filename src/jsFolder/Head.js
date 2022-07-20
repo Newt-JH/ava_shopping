@@ -1,6 +1,6 @@
-import './Head.css'
+import '../cssFolder/Head.css'
 import React, { useState } from 'react';
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { Cookies } from 'react-cookie'
 import jwt_decode from "jwt-decode";
@@ -11,36 +11,43 @@ function Head() {
 
     const [serch, setSearch] = useState('');
     const navigate = useNavigate();
-    const [gameCate, setGameCate] = useState(0);
-
     const [gameTitle, setGameTitle] = useState(0);
 
     const mapleHandler = (e) => {
-        setGameTitle(1);
-        if (gameCate === 0) {
-            setGameCate(1);
-        } else {
-            setGameCate(0);
+        if(gameTitle !== 1){
+            setGameTitle(1);
+            navigate("/product/game/1")
+        }else{
+            setGameTitle(0);
+            navigate("/product")
         }
+
     }
 
     const mineHandler = (e) => {
-        setGameTitle(2);
-        if (gameCate === 0) {
-            setGameCate(1);
-        } else {
-            setGameCate(0);
+        if(gameTitle !== 2){
+            setGameTitle(2);
+            navigate("/product/game/2")
+        }else{
+            setGameTitle(0);
+            navigate("/product")
         }
     }
 
     const lostHandler = (e) => {
-        setGameTitle(3);
-        if (gameCate === 0) {
-            setGameCate(1);
-        } else {
-            setGameCate(0);
+        if(gameTitle !== 3){
+            setGameTitle(3);
+            navigate("/product/game/3")
+        }else{
+            setGameTitle(0);
+            navigate("/product")
         }
     }
+
+    const logo = (e) => {
+        setGameTitle(0);
+    }
+
     // JWT 토큰 가져와서 디코딩
     // 토큰이 없을 경우 예외 처리를 위해 index값 0으로 초기 설정
     // 토큰 있다면 index값을 유저 index로 변환 / 토큰 없다면 index는 0
@@ -67,14 +74,6 @@ function Head() {
         }
     }
 
-    const gameCateHandler = (e) => {
-        if (gameCate === 0) {
-            setGameCate(1);
-        } else {
-            setGameCate(0);
-        }
-    }
-
     const time = 10000;
 
     const logoutOnclick = (e) => {
@@ -86,7 +85,7 @@ function Head() {
         <div>
             <div vertical-align="middle" className='di'>
                 <div className='divv'>
-                    <Link to="/"><img src='/img/logo.png' className='img'></img></Link>
+                    <Link to="/"><img onClick={logo} src='/img/logo.png' className='img'></img></Link>
                 </div>
 
 
@@ -115,19 +114,21 @@ function Head() {
 
             </div>
             <div class="tab">
-                {gameCate === 1 ? <ul class="tabnav"> 
-                    <li className='tabli'><a onClick={gameCateHandler} className='taba'>게임 선택</a></li>
+            <ul class="tabnav">       
+                        <li className='tabli'><a onClick={mapleHandler} className={gameTitle === 1 ? 'tabaw' : 'taba'}>메이플스토리</a></li>
+                        <li className='tabli'><a onClick={mineHandler} className={gameTitle === 2 ? 'tabaw' : 'taba'}>마인크래프트</a></li>
+                        <li className='tabli'><a onClick={lostHandler} className={gameTitle === 3 ? 'tabaw' : 'taba'}>로스트아크</a></li>
+                    </ul>
+                <ul class="tabnav"> 
+                    {/* <li className='tabli'><a onClick={gameCateHandler} className='taba'>게임 선택</a></li> */}
                     <li className='tabli'><Link to={"/gamecate/id=1&game="+gameTitle}><a className='taba'>무기</a></Link></li>
                     <li className='tabli'><Link to={"/gamecate/id=2&game="+gameTitle}><a className='taba'>방어구</a></Link></li>
                     <li className='tabli'><Link to={"/gamecate/id=3&game="+gameTitle}><a className='taba'>장신구</a></Link></li>
                     <li className='tabli'><Link to={"/gamecate/id=4&game="+gameTitle}><a className='taba'>펫</a></Link></li>
                     <li className='tabli'><Link to={"/gamecate/id=5&game="+gameTitle}><a className='taba'>설치</a></Link></li>
-                </ul> :
-                    <ul class="tabnav">
-                        <li className='tabli'><a onClick={mapleHandler} className='taba'>메이플스토리</a></li>
-                        <li className='tabli'><a onClick={mineHandler} className='taba'>마인크래프트</a></li>
-                        <li className='tabli'><a onClick={lostHandler} className='taba'>로스트아크</a></li>
-                    </ul>}
+                    <li className='tabli'><Link to={"/gamecate/id=10&game="+gameTitle}><a className='taba'>캐시</a></Link></li>
+                </ul> 
+
 
             </div>
         </div>
