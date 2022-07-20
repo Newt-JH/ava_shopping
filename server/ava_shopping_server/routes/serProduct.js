@@ -113,14 +113,8 @@ router.put('/update/:id', function (req, res) {
     rb = req.body;
     params = req.params.id;
     const pro = {
-        cateIndex: rb.cateIndex,
-        proName: rb.proName,
-        proProfile: rb.proProfile,
-        proContents: rb.proContents,
-        proDetailImg: rb.proDetailImg,
         proPrice: rb.proPrice,
         proCount: rb.proCount,
-        gameIndex: rb.gameIndex
     }
     db.updateProduct(params,pro,res)
 })

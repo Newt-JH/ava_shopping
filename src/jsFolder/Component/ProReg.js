@@ -71,7 +71,7 @@ function ProReg() {
       }
     }).then(function regCheck(res) {
         console.log(res.data);
-        navigate("/");
+        navigate("/admin/proall");
         alert(`${proName} 상품 등록 완료했습니다.`)
     })
   }
@@ -87,6 +87,11 @@ function ProReg() {
           <option value="3">장신구</option>
           <option value="4">펫</option>
           <option value="5">설치</option>
+          <option value="11">캐시 무기</option>
+          <option value="12">캐시 방어구</option>
+          <option value="13">캐시 장신구</option>
+          <option value="14">캐시 펫</option>
+          <option value="15">캐시 설치</option>
         </select><br />
 
         게임 이름

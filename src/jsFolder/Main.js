@@ -1,6 +1,6 @@
 import React from 'react';
 import '../cssFolder/Main.css';
-import CateBest from './CateBest';
+import CateBest from './Component/CateBest';
 
 function Main(props) {
 

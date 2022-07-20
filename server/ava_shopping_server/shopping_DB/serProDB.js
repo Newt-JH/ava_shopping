@@ -15,7 +15,7 @@ function newProduct(pro,res) {
 
 // 상품 전체 읽기
 function readProduct(res) {
-    const query = `select * from product where proCount`
+    const query = `select * from product`
     connection.query(query,
         (err,rows) => {
             if(err) {
@@ -164,7 +164,7 @@ function gameCategory(game,id,res) {
 
 // 상품 수정
 function updateProduct(params,pro,res){
-    const query = `update product set cateIndex = "${pro.cateIndex}",proName ="${pro.proName}",proProfile="${pro.proProfile}",proContents="${pro.proContents}",proDetailImg="${pro.proDetailImg}",proPrice=${pro.proPrice},proCount = ${pro.proCount} where proIndex = ${params}`;
+    const query = `update product set proPrice=${pro.proPrice},proCount = ${pro.proCount} where proIndex = ${params}`;
     connection.query(query,
         (err) => {
             if(err) {

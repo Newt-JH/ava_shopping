@@ -4,7 +4,6 @@ import { BrowserRouter, Route, Routes, Link, Switch } from "react-router-dom";
 import Head from './jsFolder/Head.js';
 import Login from './jsFolder/Login';
 import Join from './jsFolder/Join';
-import ProReg from './jsFolder/ProReg';
 import ProAll from './jsFolder/ProAll';
 import ProDetail from './jsFolder/ProDetail';
 import Search from './jsFolder/Serch';
@@ -15,6 +14,11 @@ import Mywish from './jsFolder/Mywish';
 import MyInfo from './jsFolder/MyInfo';
 import GameItemCate from './jsFolder/GameItemCate';
 import GameList from './jsFolder/GameList';
+import AdminPage from './jsFolder/AdminPage'
+import AdminEdit from './jsFolder/AdminEdit';
+import AdminProAll from './jsFolder/Component/AdminProAll';
+import ProReg from './jsFolder/Component/ProReg'
+import AdminUser from './jsFolder/AdminUser';
 
 function App() {
 
@@ -28,8 +32,6 @@ function App() {
           <Route path="/" element={<Main />}></Route>
           <Route path="/login" element={<Login />}></Route>
           <Route path="/join" element={<Join />}></Route>
-          {/* 글 등록 */}
-          <Route path="/proreg" element={<ProReg />}></Route>
           {/* 전체 글 */}
           <Route path="/product" element={<ProAll />}></Route>
           {/* 글 상세 페이지 */}
@@ -48,6 +50,16 @@ function App() {
           <Route path="/mywish/:id" element={<Mywish />}></Route>
           {/* 내 정보 페이지 */}
           <Route path="/myinfo/:id" element={<MyInfo />}></Route>
+          {/* 어드민 페이지 */}
+          <Route path="/admin" element={<AdminPage />}></Route>
+          {/* 어드민 글 전체 보기 페이지 */}
+          <Route path="/admin/proall" element={<AdminProAll />}></Route>
+          {/* 어드민 글 전체 보기 페이지 */}
+          <Route path="/admin/proreg" element={<ProReg />}></Route>
+          {/* 어드민 글 수정 페이지 */}
+          <Route path="/admin/productedit/:id" element={<AdminEdit />}></Route>
+          {/* 어드민 유져 관리 페이지 */}
+          <Route path="/admin/user" element={<AdminUser />}></Route>
 
         </Routes>
 

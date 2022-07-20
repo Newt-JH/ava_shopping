@@ -1,28 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Link, useParams } from 'react-router-dom';
-import { useTheme } from '@mui/material/styles';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
-import '../cssFolder/ProAll.css';
+import '../../cssFolder/AdminProAll.css';
 
 
-function ProAll(props) {
+function AdminProAll(props) {
 
-    //   MUI
-    const theme = useTheme();
-    //
+    const navigate = useNavigate();
 
     const [data, setData] = useState([
         {
         }
     ]);
+    const [delId, setDelId] = useState('');
 
     const { id } = useParams();
-    
+
     // 페이지 진입 시 글 읽어오기
     const sendRequest = async () => {
         const response = await axios.get(`http://localhost:3000/product`);
@@ -30,13 +28,28 @@ function ProAll(props) {
     };
     useEffect(() => {
         sendRequest();
-    }, [id]);
+    }, []);
 
+    // 글 삭제
+    const deleteRequest = async (num) => {
+        if (window.confirm("삭제 하시겠습니까?")) {
+            await axios.delete(`http://localhost:3000/product/delete/${num}`);
+            alert(num + " 번 글 삭제 완료");
+            sendRequest();
+        } else {
+        }
+
+    }
+
+    // 글 삭제 클릭 핸들러
+    const delHandler = (e, num) => {
+        deleteRequest(num);
+    }
 
     // 금액 3자리마다 , 찍어주기
     function numberWithCommas(x) {
-	    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-	}
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
 
 
     if ((data.length) === 0) {
@@ -50,7 +63,7 @@ function ProAll(props) {
     } else {
         return (
             <div className='haaw'>
-                <h2>전체 아이템</h2>
+                <h2>전체 아이템 관리 페이지 / 수정 삭제 가능</h2>
                 {data.map((datas) => (
                     <Card sx={{ display: 'flex', width: '500px', height: '200px', margin: "0 auto", justifyContent: "space-between", alignItems: 'center', marginBottom: "0px", marginTop: "20px" }}>
                         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
@@ -59,16 +72,22 @@ function ProAll(props) {
                                     {datas.proName}
                                 </Typography>
                                 <Typography variant="subtitle1" color="text.secondary" component="div">
-                                {numberWithCommas(String(datas.proPrice))} 원
+                                    {numberWithCommas(String(datas.proPrice))} 원
                                 </Typography>
                                 <Typography variant="subtitle2" color="text.secondary" component="div">
                                     {datas.proCount !== 0 ?
-                                    numberWithCommas(String(datas.proCount)) + "개"
-                                    :
-                                    "품절"
-                                }
-                                
+                                        numberWithCommas(String(datas.proCount)) + "개"
+                                        :
+                                        "품절"
+                                    }
 
+
+                                </Typography>
+                                <Typography border="1px solid" width="30px" borderRadius="10px" variant="subtitle1" color="text.secondary" component="div">
+                                    <Link to={"/admin/productedit/" + datas.proIndex}>수정</Link>
+                                </Typography>
+                                <Typography border="1px solid" width="30px" borderRadius="10px" onClick={(e) => delHandler(e, datas.proIndex)} variant="subtitle1" color="text.secondary" component="div">
+                                    삭제
                                 </Typography>
                                 <br></br>
                             </CardContent>
@@ -94,4 +113,4 @@ function ProAll(props) {
 
 }
 
-export default ProAll;
+export default AdminProAll;
