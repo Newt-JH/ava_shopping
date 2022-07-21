@@ -41,6 +41,7 @@ function newOrder(ord) {
             if (err) {
                 throw err;
             }
+            // 메일 발송
             ordermail.orderMail(ord.userIndex,rows[3][0].orderIndex);
             return console.log("order insert success");
         }
