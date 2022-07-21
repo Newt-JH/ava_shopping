@@ -3,9 +3,6 @@ const db = require('./../shopping_DB/serUserDB');
 var router = express.Router();
 const crypto = require('crypto');
 
-
-
-
 // 로그인
 router.post('/login', function (req, res) {
     rb = req.body;
@@ -88,5 +85,6 @@ router.delete('/delete/:id', function (req, res) {
     params = req.params.id;
     db.deleteUser(params, res);
 })
+
 
 module.exports = router;

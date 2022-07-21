@@ -9,12 +9,10 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 
 
-
-
-
 function LoginTwo() {
 
   const cookies = new Cookies();
+
 
   const [id, setID] = useState('');
   const [password, setPassword] = useState('');
@@ -38,6 +36,7 @@ function LoginTwo() {
           userPassword: password
         }
       }).then(function loginCheck(res){
+
         if(res.data.me === "OK"){
           const time = 1000 * 60 * 15;
           if (cookies.get("loginCookie") === undefined) {

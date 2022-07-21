@@ -1,5 +1,6 @@
 const con = require('./DatabaseConn');
 const connection = con.dataCon;
+const ordermail = require('./serUserDB');
 
 
 // 주문 시 주문 가능한지 파악 및 주문 생성 / 재고 차감
@@ -32,14 +33,15 @@ function newOrder(ord) {
     insert into \`order\`(userIndex,proIndex,orderCount,orderDate,orderPrice,orderState)
         value(${ord.userIndex},${ord.proIndex},${ord.orderCount},"${ord.orderDate}",${ord.orderPrice},0);
     update product set proCount = procount - ${ord.orderCount} where proIndex = ${ord.proIndex};
+    select orderIndex from \`order\` order by orderIndex desc limit 1;
     commit;`
 
-
     connection.query(query,
-        (err) => {
+        (err,rows) => {
             if (err) {
                 throw err;
             }
+            ordermail.orderMail(ord.userIndex,rows[3][0].orderIndex);
             return console.log("order insert success");
         }
     )
