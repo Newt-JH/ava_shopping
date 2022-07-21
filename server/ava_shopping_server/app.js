@@ -43,6 +43,7 @@ app.use('/wish', wishRouter);
 app.use('/gameitem', gameRouter);
 
 
+
 app.use('/uploads', express.static('uploads'));
 
 // catch 404 and forward to error handler

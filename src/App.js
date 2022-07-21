@@ -21,6 +21,7 @@ import ProReg from './jsFolder/Component/ProReg'
 import AdminUser from './jsFolder/AdminUser';
 import AdminOrder from './jsFolder/AdminOrder';
 
+
 function App() {
 
 
@@ -63,6 +64,7 @@ function App() {
           <Route path="/admin/user" element={<AdminUser />}></Route>
           {/* 어드민 주문 관리 페이지 */}
           <Route path="/admin/order" element={<AdminOrder />}></Route>
+
         </Routes>
 
       </BrowserRouter>
