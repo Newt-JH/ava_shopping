@@ -14,10 +14,10 @@ function Head() {
     const [gameTitle, setGameTitle] = useState(0);
 
     const mapleHandler = (e) => {
-        if(gameTitle !== 1){
+        if (gameTitle !== 1) {
             setGameTitle(1);
             navigate("/product/game/1")
-        }else{
+        } else {
             setGameTitle(0);
             navigate("/product")
         }
@@ -25,20 +25,20 @@ function Head() {
     }
 
     const mineHandler = (e) => {
-        if(gameTitle !== 2){
+        if (gameTitle !== 2) {
             setGameTitle(2);
             navigate("/product/game/2")
-        }else{
+        } else {
             setGameTitle(0);
             navigate("/product")
         }
     }
 
     const lostHandler = (e) => {
-        if(gameTitle !== 3){
+        if (gameTitle !== 3) {
             setGameTitle(3);
             navigate("/product/game/3")
-        }else{
+        } else {
             setGameTitle(0);
             navigate("/product")
         }
@@ -78,6 +78,7 @@ function Head() {
 
     const logoutOnclick = (e) => {
         cookies.set("loginCookie", "쿠키 삭제", { path: "/", expires: new Date(Date.now() - time) })
+        cookies.set("adminCookie", "쿠키 삭제", { path: "/", expires: new Date(Date.now() - time) })
         navigate(`/`);
     }
 
@@ -98,36 +99,42 @@ function Head() {
                 </form>
 
 
-                {cookies.get("loginCookie") === undefined ?
+                {cookies.get("loginCookie") === undefined && cookies.get("adminCookie") === undefined ?
                     <div align="right" className='divv2'>
                         <Link to="/join"><button className='join'>회원가입</button></Link>
                         <Link to="/login"><button className='login'>로그인</button></Link>
                     </div>
-                    :
-                    <div align="right" className='divv2'>
-                        <button className='logout' onClick={logoutOnclick}>로그아웃</button>
-                        <Link to={"/mywish/" + index}><button className='mypage'>찜목록</button></Link>
-                        <Link to={"/mypage/" + index}><button className='mypage'>구매목록</button></Link>
-                        <Link to={"/myinfo/" + index}><button className='mypage'>내 정보</button></Link>
-                    </div>
+                    : cookies.get("loginCookie") !== undefined ?
+                        <div align="right" className='divv2'>
+                            <button className='logout' onClick={logoutOnclick}>로그아웃</button>
+                            <Link to={"/mywish/" + index}><button className='mypage'>찜목록</button></Link>
+                            <Link to={"/mypage/" + index}><button className='mypage'>구매목록</button></Link>
+                            <Link to={"/myinfo/" + index}><button className='mypage'>내 정보</button></Link>
+                        </div> :
+                        <div align="right" className='divv2'>
+                            <button className='logout' onClick={logoutOnclick}>로그아웃</button>
+                            <Link to={"/admin"}><button className='mypage'>어드민</button></Link>
+                        </div>
+
                 }
+
 
             </div>
             <div class="tab">
-            <ul class="tabnav">       
-                        <li className='tabli'><a onClick={mapleHandler} className={gameTitle === 1 ? 'tabaw' : 'taba'}>메이플스토리</a></li>
-                        <li className='tabli'><a onClick={mineHandler} className={gameTitle === 2 ? 'tabaw' : 'taba'}>마인크래프트</a></li>
-                        <li className='tabli'><a onClick={lostHandler} className={gameTitle === 3 ? 'tabaw' : 'taba'}>로스트아크</a></li>
-                    </ul>
-                <ul class="tabnav"> 
+                <ul class="tabnav">
+                    <li className='tabli'><a onClick={mapleHandler} className={gameTitle === 1 ? 'tabaw' : 'taba'}>메이플스토리</a></li>
+                    <li className='tabli'><a onClick={mineHandler} className={gameTitle === 2 ? 'tabaw' : 'taba'}>마인크래프트</a></li>
+                    <li className='tabli'><a onClick={lostHandler} className={gameTitle === 3 ? 'tabaw' : 'taba'}>로스트아크</a></li>
+                </ul>
+                <ul class="tabnav">
                     {/* <li className='tabli'><a onClick={gameCateHandler} className='taba'>게임 선택</a></li> */}
-                    <li className='tabli'><Link to={"/gamecate/id=1&game="+gameTitle}><a className='taba'>무기</a></Link></li>
-                    <li className='tabli'><Link to={"/gamecate/id=2&game="+gameTitle}><a className='taba'>방어구</a></Link></li>
-                    <li className='tabli'><Link to={"/gamecate/id=3&game="+gameTitle}><a className='taba'>장신구</a></Link></li>
-                    <li className='tabli'><Link to={"/gamecate/id=4&game="+gameTitle}><a className='taba'>펫</a></Link></li>
-                    <li className='tabli'><Link to={"/gamecate/id=5&game="+gameTitle}><a className='taba'>설치</a></Link></li>
-                    <li className='tabli'><Link to={"/gamecate/id=10&game="+gameTitle}><a className='taba'>캐시</a></Link></li>
-                </ul> 
+                    <li className='tabli'><Link to={"/gamecate/id=1&game=" + gameTitle}><a className='taba'>무기</a></Link></li>
+                    <li className='tabli'><Link to={"/gamecate/id=2&game=" + gameTitle}><a className='taba'>방어구</a></Link></li>
+                    <li className='tabli'><Link to={"/gamecate/id=3&game=" + gameTitle}><a className='taba'>장신구</a></Link></li>
+                    <li className='tabli'><Link to={"/gamecate/id=4&game=" + gameTitle}><a className='taba'>펫</a></Link></li>
+                    <li className='tabli'><Link to={"/gamecate/id=5&game=" + gameTitle}><a className='taba'>설치</a></Link></li>
+                    <li className='tabli'><Link to={"/gamecate/id=10&game=" + gameTitle}><a className='taba'>캐시</a></Link></li>
+                </ul>
 
 
             </div>

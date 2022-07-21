@@ -9,10 +9,20 @@ import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import jwt_decode from "jwt-decode";
 
-const cookies = new Cookies();
-
-
 function AdminEdit() {
+
+
+    const cookies = new Cookies();
+
+    const adminCookie = cookies.get("adminCookie");
+
+    function notAdmin(){
+        if(adminCookie === undefined){
+            alert("비정상적인 접근입니다.")
+            navigate("/");
+        }
+    }
+
 
     const navigate = useNavigate();
 
@@ -51,6 +61,7 @@ function AdminEdit() {
     };
     useEffect(() => {
         sendRequest();
+        notAdmin();
     }, []);
 
     const submitHandler = (event) => {
@@ -70,7 +81,7 @@ function AdminEdit() {
         }).then(function productChange(res) {
             // 정보 변경 시
             console.log(res.data);
-            navigate("/admin");
+            navigate("/admin/proall");
             alert(`${res.data}`)
         })
     }

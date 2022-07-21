@@ -47,7 +47,12 @@ function LoginTwo() {
             console.log("쿠키가 이미 있음");
           } 
           navigate("/");
-        }else {
+        }else if(res.data.me === "admin"){
+          const time = 1000 * 60 * 15;
+          cookies.set("adminCookie", res.data.token, { path: "/", expires: new Date(Date.now() + time) })
+          navigate("/");
+        }else
+        {
           // 로그인 실패 시
           alert(res.data);
           console.log(res.data);

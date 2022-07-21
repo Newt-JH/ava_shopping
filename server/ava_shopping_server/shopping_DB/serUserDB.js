@@ -4,18 +4,27 @@ const connection = con.dataCon;
 // JWT 구현
 const jwt = require('jsonwebtoken');
 const secret = 'hwan'
-
+let adminpan = false;
 // 로그인
 function newLogin(userID, userPassword, res) {
 
     const query = `select userPassword,userIndex from user where userID = "${userID}";`
     connection.query(query,
-        (err, rows) => {
+        function (err, rows) {
             if (err) { throw err }
-            else if(rows[0] === undefined){
+            else if (rows[0] === undefined) {
                 res.send("아이디 또는 패스워드를 확인 후 로그인 해주세요.")
             }
             else if (rows[0].userPassword === userPassword) {
+                console.log(adminpan);
+
+                // 어드민 계정 찾아오기
+                readAdmin(userID);
+                const userIndex = rows[0].userIndex;
+                // 위에 함수가 실행되는데 시간이 소요되어 setTimeoutd으로 시간 텀 준 후 반환 함수 실행
+                setTimeout(() => admin(adminpan,res,userIndex),50);
+                //setTimeout(() => console.log(adminpan),300)
+
 
                 token = jwt.sign({
                     type: 'JWT',
@@ -25,17 +34,52 @@ function newLogin(userID, userPassword, res) {
                     issuer: userID,
                 });
 
-                return res.json(
-                    {
-                        me: "OK",
-                        token: token,
-                        userIndex: rows[0].userIndex
-                    }
-                )
             } else {
                 return res.send("아이디 또는 패스워드를 확인 후 로그인 해주세요.")
             }
         })
+}
+
+// Admin 판별
+function readAdmin(userID) {
+    const query = `select * from admin where userID = "${userID}"`
+    connection.query(query,
+        (err, row) => {
+            if (err) { throw err }
+            if (row[0] !== undefined) {
+                console.log("아이디 있어요")
+                adminpan = true;
+                return adminpan;
+            } else {
+                console.log("아이디 없어요");
+                adminpan = false;
+                return adminpan;
+            }
+        })
+}
+
+// 위에서 쓸 함수 / true라면 어드민 토큰 반환되도록 me > admin / false라면 유저 토큰 반환되도록 me > ok 반환
+function admin(adminpan, res,userIndex) {
+    if (adminpan === true) {
+        console.log(adminpan);
+        return res.json(
+            {
+                me: "admin",
+                token: token,
+                userIndex: userIndex
+            }
+        )
+    }
+    else {
+        console.log(adminpan);
+        return res.json(
+            {
+                me: "OK",
+                token: token,
+                userIndex: userIndex
+            }
+        )
+    }
 }
 
 // 유저 인덱스 조회
@@ -51,7 +95,7 @@ function readUserIndex(userID, res) {
 }
 
 // 회원 가입
-function newUser(user,res) {
+function newUser(user, res) {
     const query = `insert into user(userID,userPassword,userName,userEmail) value("${user.userID}","${user.userPassword}","${user.userName}","${user.userEmail}");`
     connection.query(query,
         (err) => {
@@ -127,25 +171,25 @@ function updateUserNick(params, userName) {
 }
 
 // 유저 닉네임 중복 체크
-function nickCheck(params, userName,res) {
+function nickCheck(params, userName, res) {
     const query = `select * from user where userName = "${userName}"`;
     connection.query(query,
-        (err,row) => {
+        (err, row) => {
             if (err) {
                 throw err;
-            }if(row[0] === undefined){
-                updateUserNick(params,userName);
+            } if (row[0] === undefined) {
+                updateUserNick(params, userName);
                 res.json("OK")
-            }else{
+            } else {
                 res.json("NO")
             }
-            
+
 
         })
 }
 
 // 유저 패스워드 수정
-function updateUserPassword(params, userPassword,res) {
+function updateUserPassword(params, userPassword, res) {
     const query = `update user set userPassword = "${userPassword}" where userIndex = ${params}`;
     connection.query(query,
         (err) => {

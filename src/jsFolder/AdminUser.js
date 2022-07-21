@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link, useParams, useNavigate } from 'react-router-dom';
+import { Cookies } from 'react-cookie'
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import '../cssFolder/AdminProAll.css';
 
@@ -12,6 +12,18 @@ import '../cssFolder/AdminProAll.css';
 function AdminUser(props) {
 
     const navigate = useNavigate();
+
+    const cookies = new Cookies();
+    const adminCookie = cookies.get("adminCookie");
+
+    function notAdmin(){
+        if(adminCookie === undefined){
+            alert("비정상적인 접근입니다.")
+            navigate("/");
+        }
+    }
+
+
 
     const [data, setData] = useState([
         {
@@ -26,6 +38,7 @@ function AdminUser(props) {
     };
     useEffect(() => {
         sendRequest();
+        notAdmin();
     }, []);
 
     // 글 삭제
