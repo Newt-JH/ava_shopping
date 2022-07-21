@@ -12,6 +12,7 @@ import '../cssFolder/Order.css';
 function ProDetail(props) {
 
     const cookies = new Cookies();
+    const adminCookie = cookies.get("adminCookie");
 
     const [data, setData] = useState([
         {
@@ -72,6 +73,10 @@ function ProDetail(props) {
         }
     };
 
+    const adminEdit = () => {
+        navigate(`/admin/productedit/${id}`)
+    }
+
     // 금액 3자리마다 , 찍어주기
     function numberWithCommas(x) {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -107,13 +112,22 @@ function ProDetail(props) {
 
 
                         <div className='buy'>
+                            {adminCookie !== undefined ?
+                                <Stack spacing={2} direction="row">
+                                    <Button onClick={adminEdit} variant="outlined" >수정</Button>
+                                </Stack>
+                                :
+                                <></>}
 
-                        {detailData.proCount !== "0" ?
+                            {detailData.proCount !== "0" ?
 
-                            <Stack spacing={2} direction="row">
-                                <Button onClick={loginCheck} variant="outlined" >Buy</Button>
-                            </Stack>
-                            : <></>}
+                                <Stack spacing={2} direction="row">
+                                    <Button onClick={loginCheck} variant="outlined" >Buy</Button>
+                                </Stack>
+                                :
+                                <></>
+                            }
+
                             <Stack spacing={2} direction="row">
                                 <Button onClick={wishCheck} variant="outlined" >Wish</Button>
                             </Stack>

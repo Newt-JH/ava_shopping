@@ -19,7 +19,6 @@ function LoginTwo() {
   const [id, setID] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
-  const [idCheckDiv, setidCheckDiv] = useState('');
 
   const idChangeHandler = (e) => {
     setID(e.target.value)
@@ -50,6 +49,7 @@ function LoginTwo() {
         }else if(res.data.me === "admin"){
           const time = 1000 * 60 * 15;
           cookies.set("adminCookie", res.data.token, { path: "/", expires: new Date(Date.now() + time) })
+          cookies.set("loginCookie", res.data.token, { path: "/", expires: new Date(Date.now() + time) })
           navigate("/");
         }else
         {

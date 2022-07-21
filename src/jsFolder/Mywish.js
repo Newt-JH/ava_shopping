@@ -7,7 +7,8 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
-import CateBest from '../cssFolder/CateBest.css';
+import CateBest1 from '../cssFolder/CateBest.css';
+import CateBest from './Component/CateBest';
 import { Cookies } from 'react-cookie'
 import jwt_decode from "jwt-decode";
 
@@ -66,11 +67,9 @@ function Mywish(props) {
                 <CateBest />
             </>
         )
-    } else if (data[0].proIndex === undefined) {
-
-    } else {
-        return (
-            <div>
+    } else return (
+            <div className='orderList'>
+                <h1>찜 목록</h1>
                 {data.map((datas) => (
                     <Card sx={{ display: 'flex', width: '500px', height: '200px', margin: "0 auto", justifyContent: "space-between", alignItems: 'center', marginBottom: "0px", marginTop: "20px" }}>
                         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
@@ -107,7 +106,7 @@ function Mywish(props) {
 
             </div>
         );
-    }
+    
 
 
 }

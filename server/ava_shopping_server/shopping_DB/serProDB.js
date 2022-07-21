@@ -43,35 +43,35 @@ function readOneProduct(params,res) {
 function readBest(res) {
     const query = `(select sum(orderCount) as oc,\`order\`.proIndex as pi,cateIndex,proProfile
     from \`order\` join product
-    on \`order\`.proIndex = product.proIndex where cateIndex = 1
+    on \`order\`.proIndex = product.proIndex where cateIndex = 1 or cateIndex = 11
     group by \`order\`.proIndex
     order by oc desc
     limit 1)
 union
 (select sum(orderCount) as oc,\`order\`.proIndex as pi,cateIndex,proProfile
     from \`order\` join product
-    on \`order\`.proIndex = product.proIndex where cateIndex = 2
+    on \`order\`.proIndex = product.proIndex where cateIndex = 2 or cateIndex = 12
     group by \`order\`.proIndex
     order by oc desc
     limit 1)
 union
 (select sum(orderCount) as oc,\`order\`.proIndex as pi,cateIndex,proProfile
     from \`order\` join product
-    on \`order\`.proIndex = product.proIndex where cateIndex = 3
+    on \`order\`.proIndex = product.proIndex where cateIndex = 3 or cateIndex = 13
     group by \`order\`.proIndex
     order by oc desc
     limit 1)
 union
 (select sum(orderCount) as oc,\`order\`.proIndex as pi,cateIndex,proProfile
     from \`order\`join product
-    on \`order\`.proIndex = product.proIndex where cateIndex = 4
+    on \`order\`.proIndex = product.proIndex where cateIndex = 4 or cateIndex = 14
     group by \`order\`.proIndex
     order by oc desc
     limit 1)
 union
 (select sum(orderCount) as oc,\`order\`.proIndex as pi,cateIndex,proProfile
     from \`order\` join product
-    on \`order\`.proIndex = product.proIndex where cateIndex = 5
+    on \`order\`.proIndex = product.proIndex where cateIndex = 5 or cateIndex = 15
     group by \`order\`.proIndex
     order by oc desc
     limit 1)`

@@ -58,6 +58,8 @@ function AdminEdit() {
     const sendRequest = async () => {
         const response = await axios.get(`http://localhost:3000/product/${id}`);
         setData(response.data);
+        setOrderCount(response.data[0].proCount);
+        setOrderPrice(response.data[0].proPrice);
     };
     useEffect(() => {
         sendRequest();
@@ -85,6 +87,8 @@ function AdminEdit() {
             alert(`${res.data}`)
         })
     }
+
+    
 
     return (
 

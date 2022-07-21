@@ -47,7 +47,7 @@ function newOrder(ord) {
 
 // 주문건 전체 읽기
 function readOrder(res) {
-    const query = `select * from \`order\``
+    const query = `select \`order\`.proIndex as pi,orderCount,orderDate,orderPrice,proName,proProfile,orderState,userID,userName,orderIndex from \`order\` JOIN user JOIN product ON \`order\`.userIndex = user.userIndex and \`order\`.proIndex = product.proIndex`
     connection.query(query,
         (err,rows) => {
             if(err) {
@@ -82,10 +82,23 @@ function deleteOrder(params,res){
             return readOrder(res);
         })
 }
+
+// 거래 완료
+function succOrder(params,res){
+    const query = `update \`order\` set orderState = 1 where orderIndex = ${params};`
+    connection.query(query,
+        (err) => {
+            if(err) {
+                throw err;
+            }
+            return readOrder(res);
+        })
+}
 module.exports = {
     newOrder,
     readOrder,
     readOrderOne,
     deleteOrder,
-    newOrderCountDown
+    newOrderCountDown,
+    succOrder
 }

@@ -104,16 +104,19 @@ function Head() {
                         <Link to="/join"><button className='join'>회원가입</button></Link>
                         <Link to="/login"><button className='login'>로그인</button></Link>
                     </div>
-                    : cookies.get("loginCookie") !== undefined ?
+                    : cookies.get("loginCookie") !== undefined && cookies.get("adminCookie") !== undefined ?
                         <div align="right" className='divv2'>
                             <button className='logout' onClick={logoutOnclick}>로그아웃</button>
+                            <Link to={"/admin"}><button className='mypage'>어드민</button></Link>
                             <Link to={"/mywish/" + index}><button className='mypage'>찜목록</button></Link>
                             <Link to={"/mypage/" + index}><button className='mypage'>구매목록</button></Link>
                             <Link to={"/myinfo/" + index}><button className='mypage'>내 정보</button></Link>
                         </div> :
                         <div align="right" className='divv2'>
                             <button className='logout' onClick={logoutOnclick}>로그아웃</button>
-                            <Link to={"/admin"}><button className='mypage'>어드민</button></Link>
+                            <Link to={"/mywish/" + index}><button className='mypage'>찜목록</button></Link>
+                            <Link to={"/mypage/" + index}><button className='mypage'>구매목록</button></Link>
+                            <Link to={"/myinfo/" + index}><button className='mypage'>내 정보</button></Link>
                         </div>
 
                 }

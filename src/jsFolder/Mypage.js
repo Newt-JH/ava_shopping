@@ -46,6 +46,7 @@ function Mypage(props) {
     const sendRequest = async () => {
         const response = await axios.get(`http://localhost:3000/user/mypage/${id}`);
         setData(response.data);
+        console.log(response.data);
     };
 
     useEffect(() => {
@@ -54,8 +55,8 @@ function Mypage(props) {
 
     // 금액 3자리마다 , 찍어주기
     function numberWithCommas(x) {
-	    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-	}
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
 
     if ((data.length) === 0) {
         return (
@@ -70,38 +71,88 @@ function Mypage(props) {
         )
     }
     else return (
-        <div>
+        <div className='orderList'>
+            <h1>거래 대기 중 주문</h1>
             {data.map((datas) => (
-                <Card sx={{ display: 'flex', width: '500px', height: '200px', margin: "0 auto", justifyContent: "space-between", alignItems: 'center', marginBottom: "0px", marginTop: "20px" }}>
-                    <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                        <CardContent sx={{ flex: '1 0 auto' }}>
-                            <Typography sx={{ fontWeight: 900 }} className='proName' component="div" variant="h5">
-                                {datas.proName}
-                            </Typography>
-                            <Typography variant="subtitle2" color="text.secondary" component="div">
-                                총 구매 금액 : {numberWithCommas(String(datas.orderPrice))} 원
-                            </Typography>
-                            <Typography variant="subtitle2" color="text.secondary" component="div">
-                                총 구매 수량 : {datas.orderCount}개
-                            </Typography>
-                            <Typography variant="subtitle2" color="text.secondary" component="div">
-                                주문날짜 : {moment(datas.orderDate).format('YYYY-MM-DD')}
-                            </Typography>
-                        </CardContent>
-                        <Box sx={{ display: 'flex', alignItems: 'center', pl: 1, pb: 1 }}>
-                      
-                        </Box>
-                    </Box>
-                    <Link to={"../product/" + datas.pi}><CardMedia
-                        component="img"
-                        sx={{ width: 180 }}
-                        image={datas.proProfile}
-                        alt="No pic"
-                    /></Link>
 
-                </Card>
+                <div>
+                    {datas.orderState === 0 ?
+                        <div>
+                            <Card sx={{ display: 'flex', width: '500px', height: '200px', margin: "0 auto", justifyContent: "space-between", alignItems: 'center', marginBottom: "0px", marginTop: "20px" }}>
+                                <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                                    <CardContent sx={{ flex: '1 0 auto' }}>
+                                        <Typography sx={{ fontWeight: 900 }} className='proName' component="div" variant="h5">
+                                            {datas.proName}
+                                        </Typography>
+                                        <Typography variant="subtitle2" color="text.secondary" component="div">
+                                            총 구매 금액 : {numberWithCommas(String(datas.orderPrice))} 원
+                                        </Typography>
+                                        <Typography variant="subtitle2" color="text.secondary" component="div">
+                                            총 구매 수량 : {datas.orderCount}개
+                                        </Typography>
+                                        <Typography variant="subtitle2" color="text.secondary" component="div">
+                                            주문날짜 : {moment(datas.orderDate).format('YYYY-MM-DD')}
+                                        </Typography>
+                                    </CardContent>
+                                    <Box sx={{ display: 'flex', alignItems: 'center', pl: 1, pb: 1 }}>
+
+                                    </Box>
+                                </Box>
+                                <Link to={"../product/" + datas.pi}><CardMedia
+                                    component="img"
+                                    sx={{ width: 180 }}
+                                    image={datas.proProfile}
+                                    alt="No pic"
+                                /></Link>
+
+                            </Card>
+                        </div> : <div></div>}
+
+                </div>
 
             ))}
+            <br /><br />
+            <h1>거래 완료 주문</h1>
+
+            {data.map((datas) => (
+
+                <div>
+                    {datas.orderState === 1 ?
+                        <div>
+                            <Card sx={{ display: 'flex', width: '500px', height: '200px', margin: "0 auto", justifyContent: "space-between", alignItems: 'center', marginBottom: "0px", marginTop: "20px" }}>
+                                <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                                    <CardContent sx={{ flex: '1 0 auto' }}>
+                                        <Typography sx={{ fontWeight: 900 }} className='proName' component="div" variant="h5">
+                                            {datas.proName}
+                                        </Typography>
+                                        <Typography variant="subtitle2" color="text.secondary" component="div">
+                                            총 구매 금액 : {numberWithCommas(String(datas.orderPrice))} 원
+                                        </Typography>
+                                        <Typography variant="subtitle2" color="text.secondary" component="div">
+                                            총 구매 수량 : {datas.orderCount}개
+                                        </Typography>
+                                        <Typography variant="subtitle2" color="text.secondary" component="div">
+                                            주문날짜 : {moment(datas.orderDate).format('YYYY-MM-DD')}
+                                        </Typography>
+                                    </CardContent>
+                                    <Box sx={{ display: 'flex', alignItems: 'center', pl: 1, pb: 1 }}>
+
+                                    </Box>
+                                </Box>
+                                <Link to={"../product/" + datas.pi}><CardMedia
+                                    component="img"
+                                    sx={{ width: 180 }}
+                                    image={datas.proProfile}
+                                    alt="No pic"
+                                /></Link>
+
+                            </Card>
+                        </div> : <div></div>}
+
+                </div>
+
+            ))}
+
 
         </div>
     );

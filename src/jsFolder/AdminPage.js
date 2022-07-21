@@ -26,7 +26,8 @@ function AdminPage() {
 
             <Link to="/admin/proall"><a>상품 전체 보기</a></Link> <br /><br />
             <Link to="/admin/proreg"><a>상품 등록</a></Link><br /><br />
-            <Link to="/admin/user"><a>유저 관리</a></Link>
+            <Link to="/admin/user"><a>유저 관리</a></Link><br /><br />
+            <Link to="/admin/order"><a>주문 관리</a></Link><br /><br />
         </div>
 
     );
