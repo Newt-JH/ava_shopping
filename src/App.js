@@ -20,7 +20,9 @@ import AdminProAll from './jsFolder/Component/AdminProAll';
 import ProReg from './jsFolder/Component/ProReg'
 import AdminUser from './jsFolder/AdminUser';
 import AdminOrder from './jsFolder/AdminOrder';
-
+import Toss from './jsFolder/Toss';
+import OrderSuccess from './jsFolder/OrderSuccess';
+import OrderFail from './jsFolder/OrderFail';
 
 function App() {
 
@@ -64,7 +66,13 @@ function App() {
           <Route path="/admin/user" element={<AdminUser />}></Route>
           {/* 어드민 주문 관리 페이지 */}
           <Route path="/admin/order" element={<AdminOrder />}></Route>
-
+          {/* 어드민 주문 관리 페이지 */}
+          <Route path="/toss" element={<Toss />}></Route>
+          {/* 토스 결제 성공 */}
+          <Route path="/tosssuccess/prodID=:prodID&userIndex=:userIndex&orderCount=:orderCount" element={<OrderSuccess />}></Route>
+          {/* 토스 결제 실패 */}
+          <Route path="/tossfail" element={<OrderFail />}></Route>
+        
         </Routes>
 
       </BrowserRouter>
