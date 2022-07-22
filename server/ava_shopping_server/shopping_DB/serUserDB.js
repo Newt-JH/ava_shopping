@@ -24,8 +24,6 @@ function newLogin(userID, userPassword, res) {
                 const userIndex = rows[0].userIndex;
                 // 위에 함수가 실행되는데 시간이 소요되어 setTimeoutd으로 시간 텀 준 후 반환 함수 실행
                 setTimeout(() => admin(adminpan, res, userIndex), 50);
-                //setTimeout(() => console.log(adminpan),300)
-
 
                 token = jwt.sign({
                     type: 'JWT',
@@ -48,11 +46,9 @@ function readAdmin(userID) {
         (err, row) => {
             if (err) { throw err }
             if (row[0] !== undefined) {
-                console.log("아이디 있어요")
                 adminpan = true;
                 return adminpan;
             } else {
-                console.log("아이디 없어요");
                 adminpan = false;
                 return adminpan;
             }
@@ -62,7 +58,7 @@ function readAdmin(userID) {
 // 위에서 쓸 함수 / true라면 어드민 토큰 반환되도록 me > admin / false라면 유저 토큰 반환되도록 me > ok 반환
 function admin(adminpan, res, userIndex) {
     if (adminpan === true) {
-        console.log(adminpan);
+
         return res.json(
             {
                 me: "admin",
@@ -72,7 +68,6 @@ function admin(adminpan, res, userIndex) {
         )
     }
     else {
-        console.log(adminpan);
         return res.json(
             {
                 me: "OK",
@@ -229,30 +224,7 @@ function deleteUser(params, res) {
         })
 }
 
-// 주문 시 유저의 이메일을 읽어와서 메일 보내주기
-function orderMail(userIndex,orderIndex){
-    const query = `select userEmail from \`user\` where userIndex = "${userIndex}";`
-    connection.query(query,
-        (err,row) => {
-            if(err) {
-                throw err;
-            }
-            let emailParam = {
-                toEmail: row[0].userEmail,     // 수신할 이메일
-            
-                subject: `Newt Mall 주문 완료 메일입니다.`,   // 메일 제목
-                                                        // 메일 내용
-                text: `
-                안녕하세요!
-                주문 완료되어 메일 발송해드립니다.
-                주문하신 상품의 주문 번호는 ${orderIndex}입니다.
-                `                
-              };
-            
-              mailer.sendGmail(emailParam);
 
-        })
-}
 module.exports = {
     newUser,
     readAllUser,
@@ -264,6 +236,5 @@ module.exports = {
     readUserIndex,
     readMypage,
     updateUserPassword,
-    nickCheck,
-    orderMail
+    nickCheck
 }

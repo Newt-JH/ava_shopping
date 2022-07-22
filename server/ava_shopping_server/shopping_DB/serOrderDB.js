@@ -1,6 +1,6 @@
 const con = require('./DatabaseConn');
 const connection = con.dataCon;
-const ordermail = require('./serUserDB');
+const mailer = require('../mail/main');
 
 
 // 주문 시 주문 가능한지 파악 및 주문 생성 / 재고 차감
@@ -33,7 +33,7 @@ function newOrder(ord) {
     insert into \`order\`(userIndex,proIndex,orderCount,orderDate,orderPrice,orderState)
         value(${ord.userIndex},${ord.proIndex},${ord.orderCount},"${ord.orderDate}",${ord.orderPrice},0);
     update product set proCount = procount - ${ord.orderCount} where proIndex = ${ord.proIndex};
-    select orderIndex from \`order\` order by orderIndex desc limit 1;
+    select orderIndex from \`order\` where userIndex = ${ord.userIndex} order by orderIndex desc limit 1;
     commit;`
 
     connection.query(query,
@@ -42,7 +42,7 @@ function newOrder(ord) {
                 throw err;
             }
             // 메일 발송
-            ordermail.orderMail(ord.userIndex,rows[3][0].orderIndex);
+            orderMail(ord.userIndex,rows[3][0].orderIndex);
             return console.log("order insert success");
         }
     )
@@ -95,6 +95,31 @@ function succOrder(params,res){
                 throw err;
             }
             return readOrder(res);
+        })
+}
+
+// 주문 시 유저의 이메일을 읽어와서 메일 보내주기
+function orderMail(userIndex,orderIndex){
+    const query = `select userEmail from \`user\` where userIndex = "${userIndex}";`
+    connection.query(query,
+        (err,row) => {
+            if(err) {
+                throw err;
+            }
+            let emailParam = {
+                toEmail: row[0].userEmail,     // 수신할 이메일
+            
+                subject: `Newt Mall 주문 완료 메일입니다.`,   // 메일 제목
+                                                        // 메일 내용
+                text: `
+                안녕하세요!
+                주문 완료되어 메일 발송해드립니다.
+                주문하신 상품의 주문 번호는 ${orderIndex}입니다.
+                `                
+              };
+            
+              mailer.sendGmail(emailParam);
+
         })
 }
 module.exports = {

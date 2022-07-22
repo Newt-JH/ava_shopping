@@ -63,7 +63,7 @@ function GameItemCate(props) {
                                     numberWithCommas(String(datas.proCount)) + "개"
                                     :
                                     "품절"
-                                }
+                                    }
                                 
 
                                 </Typography>

@@ -74,6 +74,7 @@ function Order(props) {
         setOrderCount(Number(orderCount) + 1)
     }
 
+    // 주문하기 클릭 시
     const submitHandler = (event) => {
         event.preventDefault();
 
@@ -84,7 +85,6 @@ function Order(props) {
 
     // 토스 걸제창 여는 함수
     async function tossMo(proName, orderPrice) {
-
 
         const clientKey = 'test_ck_D5GePWvyJnrK0W0k6q8gLzN97Eoq'
         const tossPayments = await loadTossPayments(clientKey);
