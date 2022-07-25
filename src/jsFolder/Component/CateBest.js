@@ -24,7 +24,7 @@ function CateBest(props) {
     
     <>
         {(data[0].pi) === undefined ?  
-        <div></div>   
+        <div>aa</div>   
         :     
         <div className='mainWrap'>
             <div className='product-title'>

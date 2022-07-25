@@ -41,64 +41,35 @@ function readOneProduct(params,res) {
 
 // 카테고리 Best 상품
 function readBest(res) {
-    const query = `(select sum(orderCount) as oc,\`order\`.proIndex as pi,cateIndex,proProfile
-    from \`order\` join product
-    on \`order\`.proIndex = product.proIndex where cateIndex = 1 or cateIndex = 11
-    group by pi
-    order by oc desc
-    limit 1)
-union
-(select sum(orderCount) as oc,\`order\`.proIndex as pi,cateIndex,proProfile
-    from \`order\` join product
-    on \`order\`.proIndex = product.proIndex where cateIndex = 2 or cateIndex = 12
-    group by pi
-    order by oc desc
-    limit 1)
-union
-(select sum(orderCount) as oc,\`order\`.proIndex as pi,cateIndex,proProfile
-    from \`order\` join product
-    on \`order\`.proIndex = product.proIndex where cateIndex = 3 or cateIndex = 13
-    group by pi
-    order by oc desc
-    limit 1)
-union
-(select sum(orderCount) as oc,\`order\`.proIndex as pi,cateIndex,proProfile
-    from \`order\`join product
-    on \`order\`.proIndex = product.proIndex where cateIndex = 4 or cateIndex = 14
-    group by pi
-    order by oc desc
-    limit 1)
-union
-(select sum(orderCount) as oc,\`order\`.proIndex as pi,cateIndex,proProfile
-    from \`order\` join product
-    on \`order\`.proIndex = product.proIndex where cateIndex = 5 or cateIndex = 15
-    group by pi
-    order by oc desc
-    limit 1)`
+    const query = `SET sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));
+    select * from
+    (select
+        sum(orderCount) as oc,o.proIndex as pi,cateIndex,proProfile from
+                 \`order\` o left join product p
+                    on o.proIndex = p.proIndex
+    group by o.proIndex) as sumtable
+             group by cateIndex`
 
     connection.query(query,
         (err,row) => {
             if(err) {throw err;}
-            return res.json(row);
+            return res.json(row[1]);
         })
 }
 
 // 상품 검색
 function serchProduct(params,res) {
     const query = `select * 
-    from product product join gamename join category
-    on product.cateIndex = category.cateIndex and product.gameIndex = gamename.gameIndex
+    from 
+        product join category
+    on product.cateIndex = category.cateIndex
+    join gamename
+    on    product.gameIndex = gamename.gameIndex
     where proName like "%${params}%"
-    UNION DISTINCT
-    select * 
-    from product join gamename join category
-        on product.cateIndex = category.cateIndex and product.gameIndex = gamename.gameIndex
-    where category.cateName like "%${params}%"
-    UNION DISTINCT
-    select * 
-    from product join gamename join category
-        on product.gameIndex = gamename.gameIndex and category.cateIndex = product.cateIndex
-    where gamename.gametitle like "%${params}%"`
+        or category.cateName like "%${params}%"
+        or  gamename.gametitle like "%${params}%"
+
+`
     connection.query(query,
         (err,rows) => {
             if(err) {
