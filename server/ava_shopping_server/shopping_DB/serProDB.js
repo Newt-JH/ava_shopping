@@ -42,7 +42,7 @@ function readOneProduct(params,res) {
 // 카테고리 Best 상품
 function readBest(res) {
     const query = `SET sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));
-    select * from
+    select max(oc),pi,cateIndex,proProfile from
     (select
         sum(orderCount) as oc,o.proIndex as pi,cateIndex,proProfile from
                  \`order\` o left join product p
