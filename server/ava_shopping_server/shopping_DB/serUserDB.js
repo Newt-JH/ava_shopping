@@ -157,7 +157,7 @@ function readOneUser(params, res) {
 
 // 마이 페이지
 function readMypage(params, res) {
-    const query = `select \`order\`.proIndex as pi,orderCount,orderDate,orderPrice,proName,proProfile,orderState from \`order\`,user,product where \`order\`.userIndex = user.userIndex and \`order\`.proIndex = product.proIndex and \`order\`.userIndex = ${params};`
+    const query = `select \`order\`.proIndex as pi,orderIndex,orderCount,orderDate,orderPrice,proName,proProfile,orderState from \`order\`,user,product where \`order\`.userIndex = user.userIndex and \`order\`.proIndex = product.proIndex and \`order\`.userIndex = ${params};`
     connection.query(query,
         (err, rows) => {
             if (err) {

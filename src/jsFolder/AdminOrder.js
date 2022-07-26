@@ -42,30 +42,30 @@ function AdminOrder(props) {
         notAdmin();
     }, []);
 
-    // 거래 완료 처리
-    const tradeRequest = async (num) => {
-        if (window.confirm("주문 완료 처리 하시겠습니까?")) {
-            axios({
-                url: `http://localhost:3000/order/admin/orderClear/${num}`, // api 호출 주소
-                method: 'put',
-                data: {
-                }
-            }).then(function productChange(res) {
-                // 정보 변경 시
-                console.log(res.data);
-                navigate("/admin/order");
-            })
-            alert(num + " 번 거래 완료 처리 되었습니다.");
-            sendRequest();
-        } else {
-        }
+    // // 거래 완료 핸들러
+    // const tradeHandler = (e, num) => {
+    //     tradeRequest(num);
+    // }
 
-    }
-
-    // 거래 완료 핸들러
-    const tradeHandler = (e, num) => {
-        tradeRequest(num);
-    }
+    //     // 거래 완료 처리
+    //     const tradeRequest = async (num) => {
+    //         if (window.confirm("주문 완료 처리 하시겠습니까?")) {
+    //             axios({
+    //                 url: `http://localhost:3000/order/admin/orderClear/${num}`, // api 호출 주소
+    //                 method: 'put',
+    //                 data: {
+    //                 }
+    //             }).then(function productChange(res) {
+    //                 // 정보 변경 시
+    //                 console.log(res.data);
+    //                 navigate("/admin/order");
+    //             })
+    //             alert(num + " 번 거래 완료 처리 되었습니다.");
+    //             sendRequest();
+    //         } else {
+    //         }
+    
+    //     }
 
     // 금액 3자리마다 , 찍어주기
     function numberWithCommas(x) {
@@ -84,7 +84,7 @@ function AdminOrder(props) {
     } else {
         return (
             <div className='haaw'>
-                <h2>주문 관리 페이지 / 거래 완료 처리 가능</h2>
+                <h2>주문 관리 페이지</h2>
                 {data.map((datas) => (
                     <div>
                         {datas.orderState === 0 ?
@@ -104,10 +104,10 @@ function AdminOrder(props) {
                                             <Typography variant="subtitle2" color="text.secondary" component="div">
                                                 구매자 : {datas.userID} / 닉네임 : {datas.userName}
                                             </Typography>
-                                            <Typography border="1px solid" width="63px" borderRadius="10px" onClick={(e) => tradeHandler(e, datas.orderIndex)} variant="subtitle1" color="text.secondary" component="div">
+                                            {/* <Typography border="1px solid" width="63px" borderRadius="10px" onClick={(e) => tradeHandler(e, datas.orderIndex)} variant="subtitle1" color="text.secondary" component="div">
                                                 거래 완료
                                             </Typography>
-                                            <br></br>
+                                            <br></br> */}
                                         </CardContent>
                                         <Box sx={{ display: 'flex', alignItems: 'center', pl: 1, pb: 1 }}>
 

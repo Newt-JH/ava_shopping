@@ -14,9 +14,9 @@ function newProduct(pro,res) {
 }
 
 // 상품 전체 읽기
-function readProduct(res) {
+async function readProduct(res) {
     const query = `select * from product`
-    connection.query(query,
+    const hwnn = await connection.query(query,
         (err,rows) => {
             if(err) {
                 throw err;

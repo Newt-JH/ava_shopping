@@ -49,6 +49,31 @@ function Mypage(props) {
         console.log(response.data);
     };
 
+    // 거래 완료 핸들러
+    const tradeHandler = (e, num) => {
+        tradeRequest(num);
+    }
+
+        // 거래 완료 처리
+        const tradeRequest = async (num) => {
+            if (window.confirm("상품을 수령하셨습니까? 거래 확정 이후 되돌리기는 불가합니다.")) {
+                axios({
+                    url: `http://localhost:3000/order/admin/orderClear/${num}`, // api 호출 주소
+                    method: 'put',
+                    data: {
+                    }
+                }).then(function productChange(res) {
+                    // 정보 변경 시
+                    console.log(res.data);
+                    navigate(`/mypage/${id}`);
+                })
+                alert(num + " 번 거래 완료 처리 되었습니다.");
+                sendRequest();
+            } else {
+            }
+    
+        }
+
     useEffect(() => {
         sendRequest();
     }, []);
@@ -82,7 +107,7 @@ function Mypage(props) {
                                 <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                                     <CardContent sx={{ flex: '1 0 auto' }}>
                                         <Typography sx={{ fontWeight: 900 }} className='proName' component="div" variant="h5">
-                                            {datas.proName}
+                                            {datas.orderIndex}. {datas.proName}
                                         </Typography>
                                         <Typography variant="subtitle2" color="text.secondary" component="div">
                                             총 구매 금액 : {numberWithCommas(String(datas.orderPrice))} 원
@@ -92,6 +117,9 @@ function Mypage(props) {
                                         </Typography>
                                         <Typography variant="subtitle2" color="text.secondary" component="div">
                                             주문날짜 : {moment(datas.orderDate).format('YYYY-MM-DD')}
+                                        </Typography>
+                                        <Typography border="1px solid" width="63px" borderRadius="10px" onClick={(e) => tradeHandler(e, datas.orderIndex)} variant="subtitle1" color="text.secondary" component="div">
+                                            수령 완료
                                         </Typography>
                                     </CardContent>
                                     <Box sx={{ display: 'flex', alignItems: 'center', pl: 1, pb: 1 }}>
@@ -123,7 +151,7 @@ function Mypage(props) {
                                 <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                                     <CardContent sx={{ flex: '1 0 auto' }}>
                                         <Typography sx={{ fontWeight: 900 }} className='proName' component="div" variant="h5">
-                                            {datas.proName}
+                                        {datas.orderIndex}. {datas.proName}
                                         </Typography>
                                         <Typography variant="subtitle2" color="text.secondary" component="div">
                                             총 구매 금액 : {numberWithCommas(String(datas.orderPrice))} 원

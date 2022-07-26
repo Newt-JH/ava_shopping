@@ -6,6 +6,17 @@ const multer = require('multer');
 const fs = require('fs');
 const path = require('path');
  
+const wrapper = asyncFn => {
+    return (async (req, res, next) => {
+      try {
+        return await asyncFn(req, res, next);
+      } catch (error) {
+        return next(error);
+      }
+    });
+  };
+
+
 try {
 	fs.readdirSync('uploads'); // 폴더 확인
 } catch(err) {
@@ -27,9 +38,9 @@ const upload = multer({
 });
 
 // 전체 상품 읽어오기
-router.get('/', function (req, res) {
+router.get('/', wrapper(async function (req, res) {
     db.readProduct(res);
-});
+}));
 
 // 선택한 상품 읽어오기
 router.get('/:id', function (req, res) {

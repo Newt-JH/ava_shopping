@@ -45,17 +45,17 @@ function UserProfile(props) {
     }
 
     const nickDivHanlder = (e) => {
-        if(nickBox === 0){
+        if (nickBox === 0) {
             setNickBox(1);
-        }else{
+        } else {
             setNickBox(0);
         }
     }
 
     const PasswordDivHanlder = (e) => {
-        if(passBox === 0){
+        if (passBox === 0) {
             setPassBox(1);
-        }else{
+        } else {
             setPassBox(0);
         }
     }
@@ -63,41 +63,43 @@ function UserProfile(props) {
 
     const submitNickHandler = (event) => {
         event.preventDefault();
-        if(nick.length === 0){
+        if (nick.length === 0) {
             alert("비밀번호 입력 후 변경하기 버튼을 눌러주세요.")
-        }else{
-        axios({
-            url: `http://localhost:3000/user/update/name/${index}`, // api 호출 주소
-            method: 'put',
-            data: {
-                userName: nick
-            }
-        }).then(function nick(res) {
-            if(res.data === "OK"){
-                alert("닉네임이 변경되었습니다.")
-                navigate(`/`);
-            }else{
-                alert("동일한 닉네임이 있습니다. 확인 후 다시 눌러주세요.")
-            }
-        })
-    }
+        } else {
+            axios({
+                url: `http://localhost:3000/user/update/name/${index}`, // api 호출 주소
+                method: 'put',
+                data: {
+                    userName: nick
+                }
+            }).then(function nick(res) {
+                if (res.data === "OK") {
+                    alert("닉네임이 변경되었습니다.");
+                    setNickBox(0);
+                    navigate(`/myinfo/${id}`);
+                } else {
+                    alert("동일한 닉네임이 있습니다. 확인 후 다시 눌러주세요.")
+                }
+            })
+        }
     }
 
     const submitPassHandler = (event) => {
         event.preventDefault();
-        if(pass.length === 0){
+        if (pass.length === 0) {
             alert("비밀번호 입력 후 변경하기 버튼을 눌러주세요.")
-        }else{
+        } else {
             axios({
                 url: `http://localhost:3000/user/update/password/${index}`, // api 호출 주소
                 method: 'put',
                 data: {
-                    userID:userdata[0].userID,
+                    userID: userdata[0].userID,
                     userPassword: pass
                 }
             }).then(function passCheck(res) {
                 // 비밀번호 변경 성공 시
-                navigate(`/`);
+                navigate(`/myinfo/${id}`);
+                setPassBox(0);
                 alert("비밀번호 변경 완료하였습니다.");
             })
         }
@@ -129,12 +131,13 @@ function UserProfile(props) {
     const sendRequest = async () => {
         const response = await axios.get(`http://localhost:3000/user/${index}`);
         setUserData(response.data);
+        setNick(response.data[0].userName)
     };
 
 
     useEffect(() => {
         sendRequest();
-    }, []);
+    }, [nickBox,passBox]);
 
     return (
         <div>
@@ -144,9 +147,20 @@ function UserProfile(props) {
 
                 <Card className='profileCard' sx={{ minWidth: 275, maxWidth: 700 }}>
                     <CardContent>
+                        {nickBox === 0 ? <div>                       
                         <Typography sx={{ fontSize: 30 }} color="text.secondary" gutterBottom>
                             NickName {bull} {userdata[0].userName}
+                        </Typography></div> :
+                            <div className='nickPassDIV'>
+                                <form className='nickPassForm' onSubmit={submitNickHandler}>
+                                <Typography sx={{ fontSize: 30 }} color="text.secondary" gutterBottom>
+                            NickName {bull} <input className="nickPass" type="text" value={nick} onChange={nickChangeHandler} minLength="4" maxLength="10" placeholder="닉네임을 입력해주세요."></input>
                         </Typography>
+                                    <Stack spacing={2} direction="row" marginTop="30px">
+                                        <Button type='submit' variant="outlined" >변경하기</Button>
+                                    </Stack>
+                                </form>
+                            </div>}
                         <Button onClick={nickDivHanlder} size="small">NickName reset</Button>
                         <Typography sx={{ mb: 1.5 }} color="text.secondary">
 
@@ -162,44 +176,30 @@ function UserProfile(props) {
                         <Typography sx={{ mb: 1.5 }} color="text.secondary">
                         </Typography>
                         <Button onClick={PasswordDivHanlder} size="small">Password reset</Button>
+                        {passBox === 0 ? <div></div> :
+                <div className='nickPassDIV'>
+                    <form className='nickPassForm' onSubmit={submitPassHandler}>
+
+                        <div>
+                            <input className='nickPass' type="password" value={pass} minLength="4" maxLength="10" onChange={passChangeHandler} placeholder="비밀번호"></input><br />
+                        </div>
+
+                        <div>
+                            <input className='nickPass' type="password" value={repass} minLength="4" maxLength="10" onChange={repassChangeHandler} placeholder="비밀번호 재입력"></input>
+                        </div>
+
+                        {pass !== repass ? <div><br></br><a>비밀번호가 틀립니다.</a></div> :
+                            <Stack spacing={2} direction="row" marginTop="30px">
+                                <Button type='submit' variant="outlined" >변경하기</Button>
+                            </Stack>}<br></br>
+
+                    </form>
+                </div>
+            }
                     </CardContent>
                 </Card>
 
             </div>
-
-            {nickBox === 1 ? 
-            <div className='nickPassDIV'>
-                <form className='nickPassForm' onSubmit={submitNickHandler}>
-                    <div>
-                        <input className="nickPass" type="text" value={nick} onChange={nickChangeHandler} minLength="4" maxLength="10" placeholder="닉네임을 입력해주세요."></input>
-                    </div>
-                    <Stack spacing={2} direction="row" marginTop="30px">
-                        <Button type='submit' variant="outlined" >변경하기</Button>
-                    </Stack>
-                </form>
-            </div> : <div></div>}
-
-                {passBox === 1 ?            
-                <div className='nickPassDIV'>
-                <form className='nickPassForm' onSubmit={submitPassHandler}>
-
-                    <div>
-                        <input className='nickPass' type="password" value={pass} minLength="4" maxLength="10" onChange={passChangeHandler} placeholder="비밀번호"></input><br />
-                    </div>
-
-                    <div>
-                        <input className='nickPass' type="password" value={repass} minLength="4" maxLength="10" onChange={repassChangeHandler} placeholder="비밀번호 재입력"></input>
-                    </div>
-
-                    {pass !== repass ? <div><br></br><a>비밀번호가 틀립니다.</a></div> :
-                        <Stack spacing={2} direction="row" marginTop="30px">
-                            <Button type='submit' variant="outlined" >변경하기</Button>
-                        </Stack>}<br></br>
-
-                </form>
-            </div> : <div></div>
-                }
-
 
 
 

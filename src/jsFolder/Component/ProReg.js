@@ -87,12 +87,10 @@ function ProReg() {
           <option value="3">장신구</option>
           <option value="4">펫</option>
           <option value="5">설치</option>
-          <option value="11">캐시 무기</option>
-          <option value="12">캐시 방어구</option>
-          <option value="13">캐시 장신구</option>
-          <option value="14">캐시 펫</option>
-          <option value="15">캐시 설치</option>
+          <option value="10">캐시</option>
         </select><br />
+
+        <input type='checkbox' name="name" value="1" />무기
 
         게임 이름
         {/* <input type="number" value={cateIndex} onChange={cateIndexHandler} max="5"></input><br></br> */}

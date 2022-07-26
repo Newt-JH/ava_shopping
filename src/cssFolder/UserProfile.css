@@ -11,21 +11,26 @@
     flex-direction: column;
 }
 
+.css-1ifm1hz-MuiStack-root {
+    margin-top: 0px !important;
+}
+
 .nickPass {
     text-align: left;
-    width: 300px;
+    width: 258px;
     height: 30px;
     border: none;
-    margin-top: 30px;
     font-size: 20px;
     border-bottom: solid 3px black;
     background: rgb(255, 255, 255);
+    font-family: "Roboto","Helvetica","Arial",sans-serif;
+    font-weight: 400;
+    margin-bottom: 10px;
 }
 
 .nickPassDIV {
     display: flex;
     justify-content: center;
-    margin-top: 30px;
 }
 
 .nickPassForm{
