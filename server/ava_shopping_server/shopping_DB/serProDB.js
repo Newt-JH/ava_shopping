@@ -3,44 +3,48 @@ const connection = con.dataCon;
 
 
 // 상품 등록
-function newProduct(pro,res) {
+function newProduct(pro) {
     const query = `insert into product(cateIndex, proName, proProfile, proContents, proDetailImg, proPrice, proCount,gameIndex) value ("${pro.cateIndex}","${pro.proName}","${pro.proProfile}","${pro.proContents}","${pro.proDetailImg}",${pro.proPrice},${pro.proCount},${pro.gameIndex});`
     connection.query(query,
         (err) => {
             if (err) throw err;
-            return res.json("글 등록 성공");
         }
     )
 }
 
 // 상품 전체 읽기
-async function readProduct(res) {
+function readProduct(result) {
     const query = `select * from product`
-    const hwnn = await connection.query(query,
+    connection.query(query,
         (err,rows) => {
             if(err) {
-                throw err;
+                //throw err;
+                result(err,null);
+                return;
             }
-            return res.json(rows);
-        })
-}
+            result(null,rows);
+            })
+        }
+
 
 // 상품 상세 보기
-function readOneProduct(params,res) {
+function readOneProduct(params,result) {
     const query = `select * from product where proIndex = ${params}`
     connection.query(query,
         (err,rows) => {
             if(err) {
-                throw err;
+                //throw err;
+                result(err,null);
+                return;
             }
-            console.log("Select One Success");
-            return res.json(rows);
+            result(null,rows);
+
         })
 }
 
 
 // 카테고리 Best 상품
-function readBest(res) {
+function readBest(result) {
     const query = `SET sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));
     select max(oc),pi,cateIndex,proProfile from
     (select
@@ -52,13 +56,18 @@ function readBest(res) {
 
     connection.query(query,
         (err,row) => {
-            if(err) {throw err;}
-            return res.json(row[1]);
-        })
+            if(err) 
+            {
+                result(err,null)
+                return;
+            }
+            else result(null,row);
+            console.log(row);
+        });
 }
 
 // 상품 검색
-function serchProduct(params,res) {
+function serchProduct(params,result) {
     const query = `select * 
     from 
         product join category
@@ -68,42 +77,41 @@ function serchProduct(params,res) {
     where proName like "%${params}%"
         or category.cateName like "%${params}%"
         or  gamename.gametitle like "%${params}%"
-
 `
     connection.query(query,
         (err,rows) => {
             if(err) {
-                throw err;
+                result(err,null)
+                return;
             }
-            console.log("Select One Success");
-            return res.json(rows);
+            result(null,rows);
         })
 }
 
 // 카테고리 검색
-function serchCate(params,res) {
+function serchCate(params,result) {
     const query = `select * from product where cateIndex = ${params}`
     connection.query(query,
         (err,rows) => {
             if(err) {
-                throw err;
+                result(err,null);
+                return;
             }
-            console.log("Select One Success");
-            return res.json(rows);
+            result(null,rows);
         })
 }
 
 
 // 게임 검색
-function serchGame(params,res) {
+function serchGame(params,result) {
     const query = `select * from product where gameIndex = ${params}`
     connection.query(query,
         (err,rows) => {
             if(err) {
-                throw err;
+                result(err,null)
+                return;
             }
-            console.log("Select One Success");
-            return res.json(rows);
+            result(null,rows)
         })
 }
 
@@ -134,27 +142,24 @@ function gameCategory(game,id,res) {
 }
 
 // 상품 수정
-function updateProduct(params,pro,res){
+function updateProduct(params,pro){
     const query = `update product set proPrice=${pro.proPrice},proCount = ${pro.proCount} where proIndex = ${params}`;
     connection.query(query,
         (err) => {
             if(err) {
                 throw err;
             }
-            return res.json("상품 정보 수정 성공");
         })
 }
 
 // 상품 삭제
-function deleteProduct(params,res){
+function deleteProduct(params){
     const query = `delete from product where proIndex = ${params};`
     connection.query(query,
         (err) => {
             if(err) {
                 throw err;
             }
-            console.log("Delete Success")
-            return readProduct(res);
         })
 }
 module.exports = {

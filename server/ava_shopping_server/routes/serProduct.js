@@ -5,25 +5,26 @@ var router = express.Router();
 const multer = require('multer');
 const fs = require('fs');
 const path = require('path');
- 
+const { resolve } = require('path');
+
 const wrapper = asyncFn => {
     return (async (req, res, next) => {
-      try {
-        return await asyncFn(req, res, next);
-      } catch (error) {
-        return next(error);
-      }
+        try {
+            return await asyncFn(req, res, next);
+        } catch (error) {
+            return next(error);
+        }
     });
-  };
+};
 
 
 try {
-	fs.readdirSync('uploads'); // 폴더 확인
-} catch(err) {
-	console.error('uploads 폴더가 없습니다. 폴더를 생성합니다.');
+    fs.readdirSync('uploads'); // 폴더 확인
+} catch (err) {
+    console.error('uploads 폴더가 없습니다. 폴더를 생성합니다.');
     fs.mkdirSync('uploads'); // 폴더 생성
 }
- 
+
 const upload = multer({
     storage: multer.diskStorage({ // 저장한공간 정보 : 하드디스크에 저장
         destination(req, file, done) { // 저장 위치
@@ -38,49 +39,79 @@ const upload = multer({
 });
 
 // 전체 상품 읽어오기
-router.get('/', wrapper(async function (req, res) {
-    db.readProduct(res);
-}));
+router.get('/', function (req, res) {
+    db.readProduct((err, data) => {
+        if (err) {
+            res.send("Error");
+        } else res.send(data);
+    });
+});
 
 // 선택한 상품 읽어오기
 router.get('/:id', function (req, res) {
     params = req.params.id;
-    db.readOneProduct(params, res)
+    db.readOneProduct(params, (err, data) => {
+        if (err) {
+            res.send("Error");
+        } else res.send(data);
+    })
 })
 
 // 검색 상품 읽어오기
 router.get('/serch/:id', function (req, res) {
     params = req.params.id;
-    if(params.length === 0){
+    if (params.length === 0) {
 
-    }else{
-        db.serchProduct(params, res)
+    } else {
+        db.serchProduct(params, (err,data) => {
+            if(err){
+                res.send(err);
+            }else{
+                res.send(data);
+            }
+        })
     }
 
 })
 
 // 베스트 상품
-router.get('/best/product',function(req,res) {
-    db.readBest(res)
+router.get('/best/product', function (req, res) {
+    db.readBest((err, data) => {
+        if (err) 
+        { res.send(err) }
+        else res.send(data[1]);
+    })
 })
 
 // 카테고리 상품 읽어오기
 router.get('/cate/:id', function (req, res) {
     params = req.params.id;
-    if(params.length === 0){
+    if (params.length === 0) {
 
-    }else{
-        db.serchCate(params, res)
+    } else {
+        db.serchCate(params, (err,data) => {
+            if(err){
+                res.send(err);
+            }else{
+                res.send(data);
+            }
+        })
     }
 })
 
 // 게임 상품 읽어오기
 router.get('/game/:id', function (req, res) {
     params = req.params.id;
-    if(params.length === 0){
+    if (params.length === 0) {
 
-    }else{
-        db.serchGame(params, res)
+    } else {
+        db.serchGame(params, (err,data) => {
+            if(err){
+                res.send(err);
+            }else{
+                res.send(data);
+            }
+        })
     }
 })
 
@@ -88,18 +119,20 @@ router.get('/game/:id', function (req, res) {
 router.get('/category/id=:id&game=:game', function (req, res) {
     gameparams = req.params.game;
     idparams = req.params.id;
-    if(params.length === 0){
+    if (params.length === 0) {
 
-    }else{
-        db.gameCategory(gameparams,idparams, res)
-    }
-})
+    } else {
+        db.gameCategory(gameparams, idparams, res)
+        }
+    });
+    
+    
 
 // 상품 등록
-router.post('/reg',upload.single('proDetailImg'),function(req, res, next) {
+router.post('/reg', upload.single('proDetailImg'), function (req, res) {
 
     const rb = req.body;
-    console.log(req.file,req.body);
+    console.log(req.file, req.body);
     console.log("ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ")
     console.log(req.file);
     console.log("ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ")
@@ -113,10 +146,11 @@ router.post('/reg',upload.single('proDetailImg'),function(req, res, next) {
         proDetailImg: req.file.path.slice(12),
         proPrice: rb.proPrice,
         proCount: rb.proCount,
-        gameIndex:rb.gameIndex
+        gameIndex: rb.gameIndex
     }
 
-    db.newProduct(pro,res);
+    db.newProduct(pro);
+    return res.send("글 등록 성공");
 })
 
 // 상품 수정
@@ -127,13 +161,15 @@ router.put('/update/:id', function (req, res) {
         proPrice: rb.proPrice,
         proCount: rb.proCount,
     }
-    db.updateProduct(params,pro,res)
+    db.updateProduct(params, pro)
+    return res.send("상품 정보 수정 성공");
 })
 
 // 상품 삭제
 router.delete('/delete/:id', function (req, res) {
     params = req.params.id;
-    db.deleteProduct(params,res);
+    db.deleteProduct(params);
+    return res.send("삭제");
 })
 
 module.exports = router;
