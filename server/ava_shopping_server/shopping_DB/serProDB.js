@@ -4,7 +4,48 @@ const connection = con.dataCon;
 
 // 상품 등록
 function newProduct(pro) {
-    const query = `insert into product(cateIndex, proName, proProfile, proContents, proDetailImg, proPrice, proCount,gameIndex) value ("${pro.cateIndex}","${pro.proName}","${pro.proProfile}","${pro.proContents}","${pro.proDetailImg}",${pro.proPrice},${pro.proCount},${pro.gameIndex});`
+    const query = `start transaction;
+    insert into product(cateIndex, proName, proProfile, proContents, proDetailImg, proPrice, proCount,gameIndex) value ("${pro.cateIndex}","${pro.proName}","${pro.proProfile}","${pro.proContents}","${pro.proDetailImg}",${pro.proPrice},${pro.proCount},${pro.gameIndex});
+    select proIndex from product order by proIndex desc limit 1;
+    commit ;`
+    connection.query(query,
+        (err, row) => {
+            if (err) throw err;
+            else {
+                const cate = {
+                    cateIndex: pro.cateIndex,
+                    cateIndex2: pro.cateIndextwo,
+                    cateIndex3: pro.cateIndexthree,
+                }
+                newCate(row[2][0].proIndex, cate)
+            }
+        }
+    )
+}
+
+// 카테고리 등록
+function newCate(proIndex, cate) {
+    console.log(proIndex);
+    console.log(cate);
+
+    var query = ``;
+    if (cate.cateIndex2 === undefined && cate.cateIndex3 === undefined) {
+        // 둘 다 비어있다면 
+        // 1번만 날림
+        query = `insert into cateAll(proIndex,cateIndex) value (${proIndex},${cate.cateIndex});`
+    } else if (cate.cateIndex2 === undefined) {
+        // 2번만 비어있으면
+        // 1번 3번 날림
+        query = `insert into cateAll(proIndex,cateIndex) value (${proIndex},${cate.cateIndex}),(${proIndex},${cate.cateIndex3});`
+    } else if (cate.cateIndex3 === undefined) {
+        // 3번만 비어있으면
+        // 1번 2번 날림
+        query = `insert into cateAll(proIndex,cateIndex) value (${proIndex},${cate.cateIndex}),(${proIndex},${cate.cateIndex2});`
+    } else {
+        // 다 날림
+        query = `insert into cateAll(proIndex,cateIndex) value (${proIndex},${cate.cateIndex}),(${proIndex},${cate.cateIndex2}),(${proIndex},${cate.cateIndex3});`
+    }
+
     connection.query(query,
         (err) => {
             if (err) throw err;
@@ -14,30 +55,34 @@ function newProduct(pro) {
 
 // 상품 전체 읽기
 function readProduct(result) {
-    const query = `select * from product`
+    const query = `SET sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));
+    select proName,cA.cateIndex,proPrice,proCount,product.proIndex,proProfile from
+                 product join cateAll cA on product.proIndex = cA.proIndex
+    group by proName
+    order by cA.proIndex;`
     connection.query(query,
-        (err,rows) => {
-            if(err) {
+        (err, rows) => {
+            if (err) {
                 //throw err;
-                result(err,null);
+                result(err, null);
                 return;
             }
-            result(null,rows);
-            })
-        }
+            result(null, rows);
+        })
+}
 
 
 // 상품 상세 보기
-function readOneProduct(params,result) {
+function readOneProduct(params, result) {
     const query = `select * from product where proIndex = ${params}`
     connection.query(query,
-        (err,rows) => {
-            if(err) {
+        (err, rows) => {
+            if (err) {
                 //throw err;
-                result(err,null);
+                result(err, null);
                 return;
             }
-            result(null,rows);
+            result(null, rows);
 
         })
 }
@@ -46,95 +91,107 @@ function readOneProduct(params,result) {
 // 카테고리 Best 상품
 function readBest(result) {
     const query = `SET sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));
-    select max(oc),pi,cateIndex,proProfile from
-    (select
-        sum(orderCount) as oc,o.proIndex as pi,cateIndex,proProfile from
-                 \`order\` o left join product p
-                    on o.proIndex = p.proIndex
-    group by o.proIndex) as sumtable
-             group by cateIndex`
+    select *
+    from (select jj.*, cA.cateIndex
+          from (Select product.proindex, proname, sum(orderCount) as sc, proprofile
+                from product
+                         left join \`order\` o
+                                   on product.proIndex = o.proIndex
+                where orderCount > 0
+                group by proname) as jj
+                   join cateAll cA on jj.proIndex = cA.proIndex
+    order by sc desc
+    limit 10000
+    ) src
+    group by src.cateIndex;`
 
     connection.query(query,
-        (err,row) => {
-            if(err) 
-            {
-                result(err,null)
+        (err, row) => {
+            if (err) {
+                result(err, null)
                 return;
             }
-            else result(null,row);
-            console.log(row);
+            else result(null, row[1]);
+            console.log(row[1]);
         });
 }
 
 // 상품 검색
-function serchProduct(params,result) {
-    const query = `select * 
-    from 
-        product join category
-    on product.cateIndex = category.cateIndex
-    join gamename
-    on    product.gameIndex = gamename.gameIndex
-    where proName like "%${params}%"
-        or category.cateName like "%${params}%"
-        or  gamename.gametitle like "%${params}%"
+function serchProduct(params, result) {
+    const query = `SET sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));
+    select * from
+    product join cateAll cA
+        on product.proIndex = cA.proIndex
+           join category c on cA.cateIndex = c.cateIndex
+           join gamename g on product.gameIndex = g.gameIndex
+
+where proName like "%${params}%" or cateName like "%${params}%" or gametitle like "%${params}%"
+group by proName
+order by product.proIndex;
 `
     connection.query(query,
-        (err,rows) => {
-            if(err) {
-                result(err,null)
+        (err, rows) => {
+            if (err) {
+                result(err, null)
                 return;
             }
-            result(null,rows);
+            result(null, rows[1]);
         })
 }
 
 // 카테고리 검색
-function serchCate(params,result) {
-    const query = `select * from product where cateIndex = ${params}`
+function serchCate(params, result) {
+    const query = `select proName,cA.cateIndex,proPrice,proCount,product.proIndex,proProfile from
+    product join cateAll cA on product.proIndex = cA.proIndex
+where cA.cateIndex = "${params}"
+order by cA.proIndex;`
     connection.query(query,
-        (err,rows) => {
-            if(err) {
-                result(err,null);
+        (err, rows) => {
+            if (err) {
+                result(err, null);
                 return;
             }
-            result(null,rows);
+            result(null, rows);
         })
 }
 
 
 // 게임 검색
-function serchGame(params,result) {
+function serchGame(params, result) {
     const query = `select * from product where gameIndex = ${params}`
     connection.query(query,
-        (err,rows) => {
-            if(err) {
-                result(err,null)
+        (err, rows) => {
+            if (err) {
+                result(err, null)
                 return;
             }
-            result(null,rows)
+            result(null, rows)
         })
 }
 
 
 // 게임 카테고리 검색
-function gameCategory(game,id,res) {
-    if(game === "0" || game > 5){
-        if(id === "10"){
-            query = `select * from product where cateIndex > "${id}"`
-        }else{
-            query = `select * from product where cateIndex = "${id}" or cateIndex ="1${id}"`
-        }
+function gameCategory(game, id, res) {
 
-    }else{
-        if(id === "10"){
-            query = `select * from product where cateIndex > "${id}" and gameIndex = "${game}"`
-        }else{
-            query = `select * from product where (cateIndex = "${id}" or cateIndex ="1${id}") and gameIndex = "${game}"`
-        }
+    // game이 0일때 id로 category 전체 상품 조회
+    // else game 번호 + category 조회
+    if (game === "0" || game > 3) {
+        query = `select proName,cA.cateIndex,proPrice,proCount,product.proIndex,proProfile from
+        product join cateAll cA on product.proIndex = cA.proIndex
+        where cA.cateIndex = "${id}"
+        order by cA.proIndex;`
     }
+
+    else {
+        query = `select proName,cA.cateIndex,proPrice,proCount,product.proIndex,proProfile,gameIndex from
+        product join cateAll cA on product.proIndex = cA.proIndex
+        where cA.cateIndex = "${id}" and gameIndex = "${game}"
+        order by cA.proIndex;`
+    }
+
     connection.query(query,
-        (err,rows) => {
-            if(err) {
+        (err, rows) => {
+            if (err) {
                 throw err;
             }
             return res.json(rows);
@@ -142,22 +199,25 @@ function gameCategory(game,id,res) {
 }
 
 // 상품 수정
-function updateProduct(params,pro){
+function updateProduct(params, pro) {
     const query = `update product set proPrice=${pro.proPrice},proCount = ${pro.proCount} where proIndex = ${params}`;
     connection.query(query,
         (err) => {
-            if(err) {
+            if (err) {
                 throw err;
             }
         })
 }
 
 // 상품 삭제
-function deleteProduct(params){
-    const query = `delete from product where proIndex = ${params};`
+function deleteProduct(params) {
+    const query = `start transaction;
+    delete from product where proIndex = ${params};
+    delete from cateAll where proIndex = ${params};
+    commit;`
     connection.query(query,
         (err) => {
-            if(err) {
+            if (err) {
                 throw err;
             }
         })
@@ -172,5 +232,6 @@ module.exports = {
     serchCate,
     readBest,
     gameCategory,
-    serchGame
+    serchGame,
+    newCate
 }

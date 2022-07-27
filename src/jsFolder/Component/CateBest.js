@@ -23,38 +23,38 @@ function CateBest(props) {
     return (
     
     <>
-        {(data[0].pi) === undefined ?  
+        {(data[0].proindex) === undefined ?  
         <div>aa</div>   
         :     
         <div className='mainWrap'>
             <div className='product-title'>
 
                 <div className='best-img-div'>
-                    <Link to={"/product/" + data[0].pi}>
-                        <img className='best-img' src={data[0].proProfile}></img>
+                    <Link to={"/product/" + data[0].proindex}>
+                        <img className='best-img' src={data[0].proprofile}></img>
                     </Link>
                 </div>
                 <div className='best-img-div'>
-                    <Link to={"/product/" + data[1].pi}>
-                        <img className='best-img' src={data[1].proProfile}></img>
+                    <Link to={"/product/" + data[1].proindex}>
+                        <img className='best-img' src={data[1].proprofile}></img>
                     </Link>
                 </div>
                 <div className='best-img-div'>
-                    <Link to={"/product/" + data[2].pi}>
-                        <img className='best-img' src={data[2].proProfile}></img>
+                    <Link to={"/product/" + data[2].proindex}>
+                        <img className='best-img' src={data[2].proprofile}></img>
                     </Link>
                 </div>
             </div>
 
             <div className='product-title2'>
                 <div className='best-img-div'>
-                    <Link to={"/product/" + data[3].pi}>
-                        <img className='best-img' src={data[3].proProfile}></img>
+                    <Link to={"/product/" + data[3].proindex}>
+                        <img className='best-img' src={data[3].proprofile}></img>
                     </Link>
                 </div>
                 <div className='best-img-div'>
-                    <Link to={"/product/" + data[4].pi}>
-                        <img className='best-img' src={data[4].proProfile}></img>
+                    <Link to={"/product/" + data[4].proindex}>
+                        <img className='best-img' src={data[4].proprofile}></img>
                     </Link>
                 </div>
             </div>

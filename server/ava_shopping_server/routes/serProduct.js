@@ -43,7 +43,7 @@ router.get('/', function (req, res) {
     db.readProduct((err, data) => {
         if (err) {
             res.send("Error");
-        } else res.send(data);
+        } else res.send(data[1]);
     });
 });
 
@@ -79,7 +79,7 @@ router.get('/best/product', function (req, res) {
     db.readBest((err, data) => {
         if (err) 
         { res.send(err) }
-        else res.send(data[1]);
+        else res.send(data);
     })
 })
 
@@ -140,6 +140,8 @@ router.post('/reg', upload.single('proDetailImg'), function (req, res) {
 
     const pro = {
         cateIndex: rb.cateIndex,
+        cateIndextwo: rb.cateIndextwo,
+        cateIndexthree: rb.cateIndexthree,
         proName: rb.proName,
         proProfile: req.file.path.slice(12),
         proContents: rb.proContents,

@@ -12,7 +12,7 @@ router.post('/login', function (req, res) {
     // sha512로 알고리즘 사용, Id+password값 변환, base64로 인코딩
     password = crypto.createHash("sha512").update(userID + userPassword).digest("base64")
     // 가져온 비밀번호
-    db.newLogin(userID, password, res);
+    db.newLogin(userID, password,res);
 })
 
 // 로그인 시 유저 인덱스 읽어오기
