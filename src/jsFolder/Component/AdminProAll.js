@@ -81,7 +81,7 @@ function AdminProAll(props) {
                         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                             <CardContent sx={{ flex: '1 0 auto' }}>
                                 <Typography sx={{ fontWeight: 900 }} component="div" variant="h5">
-                                    {datas.proName}
+                                    {datas.proIndex + ". " + datas.proName}
                                 </Typography>
                                 <Typography variant="subtitle1" color="text.secondary" component="div">
                                     {numberWithCommas(String(datas.proPrice))} 원

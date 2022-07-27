@@ -119,6 +119,7 @@ strong {
     border: 1px solid #ddd;
     display: flex;
     justify-content: center;
+    padding-inline-start: 0px;
 }
 
 .tabnav li {

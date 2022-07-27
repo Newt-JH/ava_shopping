@@ -84,7 +84,7 @@ function AdminOrder(props) {
     } else {
         return (
             <div className='haaw'>
-                <h2>주문 관리 페이지</h2>
+                <h2>거래 완료 전 주문</h2>
                 {data.map((datas) => (
                     <div>
                         {datas.orderState === 0 ?
