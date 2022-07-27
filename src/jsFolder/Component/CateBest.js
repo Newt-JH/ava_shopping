@@ -1,9 +1,14 @@
 import '../../cssFolder/CateBest.css'
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState,Component } from 'react';
 import { Link } from 'react-router-dom';
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import Slider from "react-slick";
 
 function CateBest(props) {
+
+    
 
     const [data, setData] = useState([{}]);
 
