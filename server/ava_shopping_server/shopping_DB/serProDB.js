@@ -29,15 +29,15 @@ function newCate(proIndex, cate) {
     console.log(cate);
 
     var query = ``;
-    if (cate.cateIndex2 === undefined && cate.cateIndex3 === undefined) {
+    if (cate.cateIndex2 === 'none' && cate.cateIndex3 === 'none') {
         // 둘 다 비어있다면 
         // 1번만 날림
         query = `insert into cateAll(proIndex,cateIndex) value (${proIndex},${cate.cateIndex});`
-    } else if (cate.cateIndex2 === undefined) {
+    } else if (cate.cateIndex2 === 'none') {
         // 2번만 비어있으면
         // 1번 3번 날림
         query = `insert into cateAll(proIndex,cateIndex) value (${proIndex},${cate.cateIndex}),(${proIndex},${cate.cateIndex3});`
-    } else if (cate.cateIndex3 === undefined) {
+    } else if (cate.cateIndex3 === 'none') {
         // 3번만 비어있으면
         // 1번 2번 날림
         query = `insert into cateAll(proIndex,cateIndex) value (${proIndex},${cate.cateIndex}),(${proIndex},${cate.cateIndex2});`
