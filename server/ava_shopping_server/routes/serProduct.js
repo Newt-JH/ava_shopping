@@ -39,12 +39,15 @@ const upload = multer({
 });
 
 // 전체 상품 읽어오기
-router.get('/', function (req, res) {
-    db.readProduct((err, data) => {
-        if (err) {
-            res.send("Error");
-        } else res.send(data[1]);
-    });
+router.get('/', async function (req, res) {
+    
+    try{
+        let f = await db.readProduct()
+        res.send(f);
+    }catch (err){
+        res.send(err);
+    };
+
 });
 
 // 선택한 상품 읽어오기

@@ -54,21 +54,27 @@ function newCate(proIndex, cate) {
 }
 
 // 상품 전체 읽기
-function readProduct(result) {
+function readProduct() {
     const query = `SET sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));
     select proName,cA.cateIndex,proPrice,proCount,product.proIndex,proProfile from
                  product join cateAll cA on product.proIndex = cA.proIndex
     group by proName
     order by cA.proIndex;`
-    connection.query(query,
-        (err, rows) => {
-            if (err) {
-                //throw err;
-                result(err, null);
-                return;
+
+    return pro(query);
+
+}
+
+function pro(query){
+    return new Promise((res,rej) => {
+        connection.query(query,function(err,rows){
+            if(err){
+                rej("Error");
+            }else{
+                res(rows[1]);
             }
-            result(null, rows);
         })
+    })
 }
 
 
@@ -222,6 +228,8 @@ function deleteProduct(params) {
             }
         })
 }
+
+
 module.exports = {
     newProduct,
     readProduct,

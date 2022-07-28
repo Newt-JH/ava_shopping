@@ -13,6 +13,7 @@ var orderRouter = require('./routes/serOrder');
 var categoryRouter = require('./routes/serCategory');
 var wishRouter = require('./routes/serWish');
 var gameRouter = require('./routes/serGameCate');
+var asyncRouter = require('./routes/asyncRoute');
 
 let corsOptions = {
   origin: 'https://www.localhost:8080',
@@ -41,7 +42,7 @@ app.use('/order', orderRouter);
 app.use('/category', categoryRouter);
 app.use('/wish', wishRouter);
 app.use('/gameitem', gameRouter);
-
+app.use('/mysql2', asyncRouter);
 
 
 app.use('/uploads', express.static('uploads'));
