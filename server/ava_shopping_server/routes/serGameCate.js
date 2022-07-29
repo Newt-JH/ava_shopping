@@ -13,7 +13,6 @@ router.get('/id=:id&game=:game', async function (req, res) {
         }catch(err){
             res.send(err);
         }
-       let f = await db.gameCategory(gameparams,idparams)
 
 })
 

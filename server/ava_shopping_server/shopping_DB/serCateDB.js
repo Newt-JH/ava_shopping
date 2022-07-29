@@ -1,67 +1,39 @@
 const con = require('./DatabaseConn');
 const connection = con.dataCon;
+// pro > DB 읽어올때 쓰는 모듈 ( 프로미스 반환 / async await 사용하기 위해 사용 )
+// tto > row에 대해 읽어올 필요가 없는 쿼리 날릴때 사용
+const pro = con.pro;
+const tto = con.tto;
 
 
 // 카테고리 등록
-function newCate(categoryName,res) {
+function newCate(categoryName) {
     const query = `insert into category(cateName) value("${categoryName}");`
-    connection.query(query,
-        (err) => {
-            if (err) throw err;
-            return res.json("글 등록 성공");
-        }
-    )
+    tto(query);
 }
 
 // 카테고리 전체 읽기
-function readCate(res) {
+function readCate() {
     const query = `select * from category`
-    connection.query(query,
-        (err,rows) => {
-            if(err) {
-                throw err;
-            }
-            return res.json(rows);
-        })
+    return pro(query);
 }
 
 // 카테고리 하나 읽기
-function readCateOne(params,res) {
+function readCateOne(params) {
     const query = `select * from category where cateIndex = ${params}`
-    connection.query(query,
-        (err,rows) => {
-            if(err) {
-                throw err;
-            }
-            console.log("Select One Success");
-            return res.json(rows);
-        })
+    return pro(query);
 }
 
 // 카테고리 수정
-function updateCate(params,cateName,res){
+function updateCate(params,cateName){
     const query = `update category set cateName = "${cateName}" where cateIndex = ${params}`;
-    connection.query(query,
-        (err) => {
-            if(err) {
-                throw err;
-            }
-            console.log("Update Success")
-            res.json("글 수정 성공");
-        })
+    tto(query);
 }
 
 // 카테고리 삭제
-function deleteCate(params,res){
+function deleteCate(params){
     const query = `delete from category where cateIndex = ${params};`
-    connection.query(query,
-        (err) => {
-            if(err) {
-                throw err;
-            }
-            console.log("Delete Success")
-            return readCate(res);
-        })
+    tto(query);
 }
 module.exports = {
     newCate,
