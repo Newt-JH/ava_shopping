@@ -7,17 +7,6 @@ const fs = require('fs');
 const path = require('path');
 const { resolve } = require('path');
 
-const wrapper = asyncFn => {
-    return (async (req, res, next) => {
-        try {
-            return await asyncFn(req, res, next);
-        } catch (error) {
-            return next(error);
-        }
-    });
-};
-
-
 try {
     fs.readdirSync('uploads'); // 폴더 확인
 } catch (err) {
@@ -40,93 +29,101 @@ const upload = multer({
 
 // 전체 상품 읽어오기
 router.get('/', async function (req, res) {
-    
     try{
         let f = await db.readProduct()
-        res.send(f);
+        res.send(f[1]);
     }catch (err){
         res.send(err);
     };
-
 });
 
 // 선택한 상품 읽어오기
-router.get('/:id', function (req, res) {
+router.get('/:id', async function (req, res) {
     params = req.params.id;
-    db.readOneProduct(params, (err, data) => {
-        if (err) {
-            res.send("Error");
-        } else res.send(data);
-    })
+    try{
+        let f = await db.readOneProduct(params);
+        console.log(f);
+        res.send(f);
+    }catch(err){
+        res.send(err);
+    }
+
 })
 
 // 검색 상품 읽어오기
-router.get('/serch/:id', function (req, res) {
+router.get('/serch/:id', async function (req, res) {
     params = req.params.id;
     if (params.length === 0) {
-
+        res.send("검색어 미입력");
     } else {
-        db.serchProduct(params, (err,data) => {
-            if(err){
-                res.send(err);
-            }else{
-                res.send(data);
-            }
-        })
+        try{
+            let f = await db.serchProduct(params);
+            res.send(f[1]);
+        }catch(err){
+            res.send(err);
+        }
+
     }
 
 })
 
 // 베스트 상품
-router.get('/best/product', function (req, res) {
-    db.readBest((err, data) => {
-        if (err) 
-        { res.send(err) }
-        else res.send(data);
-    })
+router.get('/best/product', async function (req, res) {
+
+    try{
+        const f = await db.readBest();
+        res.send(f[1]);
+    }catch(err){
+        res.send(err);
+    }
 })
 
 // 카테고리 상품 읽어오기
-router.get('/cate/:id', function (req, res) {
+router.get('/cate/:id', async function (req, res) {
     params = req.params.id;
     if (params.length === 0) {
 
     } else {
-        db.serchCate(params, (err,data) => {
-            if(err){
-                res.send(err);
-            }else{
-                res.send(data);
-            }
-        })
+        try{
+let f = await db.serchCate(params)
+res.send(f);
+        }catch(err){
+res.send(err);
+        }
+
     }
 })
 
 // 게임 상품 읽어오기
-router.get('/game/:id', function (req, res) {
+router.get('/game/:id', async function (req, res) {
     params = req.params.id;
     if (params.length === 0) {
 
     } else {
-        db.serchGame(params, (err,data) => {
-            if(err){
-                res.send(err);
-            }else{
-                res.send(data);
-            }
-        })
+        try{
+            let f = await db.serchGame(params)
+            res.send(f);
+        }catch(err){
+            res.send(err);
+        }
+
     }
 })
 
 // 게임 카테고리 상품 읽어오기
-router.get('/category/id=:id&game=:game', function (req, res) {
+router.get('/category/id=:id&game=:game', async function (req, res) {
     gameparams = req.params.game;
     idparams = req.params.id;
-    if (params.length === 0) {
-
-    } else {
-        db.gameCategory(gameparams, idparams, res)
+    
+        try{
+            let f = await db.gameCategory(gameparams, idparams);
+            console.log(f);
+            res.send(f);
+        }catch(err){
+            res.send(err);
         }
+        
+        
     });
     
     
