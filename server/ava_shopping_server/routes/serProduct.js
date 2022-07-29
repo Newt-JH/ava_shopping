@@ -29,10 +29,10 @@ const upload = multer({
 
 // 전체 상품 읽어오기
 router.get('/', async function (req, res) {
-    try{
+    try {
         let f = await db.readProduct()
         res.send(f[1]);
-    }catch (err){
+    } catch (err) {
         res.send(err);
     };
 });
@@ -40,11 +40,11 @@ router.get('/', async function (req, res) {
 // 선택한 상품 읽어오기
 router.get('/:id', async function (req, res) {
     params = req.params.id;
-    try{
+    try {
         let f = await db.readOneProduct(params);
         console.log(f);
         res.send(f);
-    }catch(err){
+    } catch (err) {
         res.send(err);
     }
 
@@ -56,10 +56,10 @@ router.get('/serch/:id', async function (req, res) {
     if (params.length === 0) {
         res.send("검색어 미입력");
     } else {
-        try{
+        try {
             let f = await db.serchProduct(params);
             res.send(f[1]);
-        }catch(err){
+        } catch (err) {
             res.send(err);
         }
 
@@ -70,10 +70,10 @@ router.get('/serch/:id', async function (req, res) {
 // 베스트 상품
 router.get('/best/product', async function (req, res) {
 
-    try{
+    try {
         const f = await db.readBest();
         res.send(f[1]);
-    }catch(err){
+    } catch (err) {
         res.send(err);
     }
 })
@@ -84,11 +84,11 @@ router.get('/cate/:id', async function (req, res) {
     if (params.length === 0) {
 
     } else {
-        try{
-let f = await db.serchCate(params)
-res.send(f);
-        }catch(err){
-res.send(err);
+        try {
+            let f = await db.serchCate(params)
+            res.send(f);
+        } catch (err) {
+            res.send(err);
         }
 
     }
@@ -100,10 +100,10 @@ router.get('/game/:id', async function (req, res) {
     if (params.length === 0) {
 
     } else {
-        try{
+        try {
             let f = await db.serchGame(params)
             res.send(f);
-        }catch(err){
+        } catch (err) {
             res.send(err);
         }
 
@@ -114,19 +114,19 @@ router.get('/game/:id', async function (req, res) {
 router.get('/category/id=:id&game=:game', async function (req, res) {
     gameparams = req.params.game;
     idparams = req.params.id;
-    
-        try{
-            let f = await db.gameCategory(gameparams, idparams);
-            console.log(f);
-            res.send(f);
-        }catch(err){
-            res.send(err);
-        }
-        
-        
-    });
-    
-    
+
+    try {
+        let f = await db.gameCategory(gameparams, idparams);
+        console.log(f);
+        res.send(f);
+    } catch (err) {
+        res.send(err);
+    }
+
+
+});
+
+
 
 // 상품 등록
 router.post('/reg', upload.single('proDetailImg'), function (req, res) {

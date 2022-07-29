@@ -114,7 +114,7 @@ function serchCate(params) {
     product join cateAll cA on product.proIndex = cA.proIndex
 where cA.cateIndex = "${params}"
 order by cA.proIndex;`
-    
+
     return pro(query);
 }
 
@@ -164,7 +164,7 @@ function deleteProduct(params) {
     delete from product where proIndex = ${params};
     delete from cateAll where proIndex = ${params};
     commit;`
-    
+
     tto(query);
 }
 
