@@ -1,19 +1,6 @@
 const con = require('./DatabaseConn');
 const connection = con.dataCon;
-
-// DB 커넥션 후 Promise 반환
-function pro(query) {
-    return new Promise((res, rej) => {
-        connection.query(query, function (err, rows) {
-            if (err) {
-                rej("Error");
-            } else {
-                res(rows);
-            }
-        })
-    })
-}
-
+const pro = con.pro;
 
 // 상품 등록
 function newProduct(pro) {

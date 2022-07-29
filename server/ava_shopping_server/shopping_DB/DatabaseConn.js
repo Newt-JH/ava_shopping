@@ -17,7 +17,22 @@ const pool = mysql1.createPool({
     database: 'ava_shopping'
 })
 
+
+// DB 커넥션 후 Promise 반환
+function pro(query) {
+    return new Promise((res, rej) => {
+        dataCon.query(query, function (err, rows) {
+            if (err) {
+                rej("Error");
+            } else {
+                res(rows);
+            }
+        })
+    })
+}
+
 module.exports = {
     dataCon,
-    pool
+    pool,
+    pro
 }
