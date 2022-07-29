@@ -1,32 +1,23 @@
+const mailer = require('../mail/main');
 const con = require('./DatabaseConn');
 const connection = con.dataCon;
-const mailer = require('../mail/main');
+// pro > DB 읽어올때 쓰는 모듈 ( 프로미스 반환 / async await 사용하기 위해 사용 )
+// tto > row에 대해 읽어올 필요가 없는 쿼리 날릴때 사용
+const pro = con.pro;
+const tto = con.tto;
 
 
 // 주문 시 주문 가능한지 파악 및 주문 생성 / 재고 차감
-function newOrderCountDown(ord,res){
+function newOrderCountDown(ord){
     const query = `select proCount 
     from product where proIndex = ${ord.proIndex};`
-    connection.query(query,
-        (err,row) => {
-            if (err) {
-                throw err;
-            }else{
-                if(row[0].proCount >= ord.orderCount){
-                    // 재고가 주문량보다 많으면
-                    newOrder(ord);
-                    res.json("주문에 성공하였습니다.");
-                }else{
-                    res.json("재고 부족으로 인하여 주문에 실패하였습니다.");
-                }
-            }
-            
-        }
-    )
+
+    return pro(query);
+
 }
 
 // 주문 생성
-function newOrder(ord) {
+async function newOrder(ord) {
     console.log(ord);
     const query = 
     `start transaction;
@@ -36,66 +27,39 @@ function newOrder(ord) {
     select orderIndex from \`order\` where userIndex = ${ord.userIndex} order by orderIndex desc limit 1;
     commit;`
 
-    connection.query(query,
-        (err,rows) => {
-            if (err) {
-                throw err;
-            }
-            // 메일 발송
-            orderMail(ord.userIndex,rows[3][0].orderIndex);
-            return console.log("order insert success");
-        }
-    )
+    try{
+        let f = await pro(query);
+        orderMail(ord.userIndex,f[3][0].orderIndex);
+    }catch(err){
+        console.log(err);
+    }
+
 }
 
 // 주문건 전체 읽기
-function readOrder(res) {
+function readOrder() {
     const query = `select \`order\`.proIndex as pi,orderCount,orderDate,orderPrice,proName,proProfile,orderState,userID,userName,orderIndex from \`order\` JOIN user JOIN product ON \`order\`.userIndex = user.userIndex and \`order\`.proIndex = product.proIndex`
-    connection.query(query,
-        (err,rows) => {
-            if(err) {
-                throw err;
-            }
-            return res.json(rows);
-        })
+    return pro(query);
 }
 
 // 주문건 하나 읽기
-function readOrderOne(params,res) {
+function readOrderOne(param) {
     const query = `select * from \`order\` where orderIndex = ${params}`
-    connection.query(query,
-        (err,rows) => {
-            if(err) {
-                throw err;
-            }
-            console.log("Select One Success");
-            return res.json(rows);
-        })
+    return pro(query);
 }
 
 // 주문 삭제
-function deleteOrder(params,res){
+function deleteOrder(params){
     const query = `delete from \`order\` where orderIndex = ${params};`
-    connection.query(query,
-        (err,rows) => {
-            if(err) {
-                throw err;
-            }
-            console.log("Delete Success")
-            return readOrder(res);
-        })
+    tto(query);
 }
 
 // 거래 완료
-function succOrder(params,res){
+function succOrder(params){
     const query = `update \`order\` set orderState = 1 where orderIndex = ${params};`
-    connection.query(query,
-        (err) => {
-            if(err) {
-                throw err;
-            }
-            return readOrder(res);
-        })
+        tto(query);
+        // 거래 완료 처리 후 전체 글 읽기 리턴
+        return readOrder();
 }
 
 // 주문 시 유저의 이메일을 읽어와서 메일 보내주기

@@ -5,18 +5,30 @@ const moment = require("moment");
 const { now } = require('moment');
 
 // 전체 주문 건 읽어오기
-router.get('/', function(req, res) {
-  db.readOrder(res);
+router.get('/', async function(req, res) {
+  try{
+    let f = await db.readOrder();
+    res.send(f);
+  }catch(err){
+    res.send(err);
+  }
+
 });
 
 // 선택한 주문 건 읽어오기
-router.get('/:id',function(req,res){
+router.get('/:id',async function(req,res){
     params = req.params.id;
-    db.readOrderOne(params,res)
+    try{
+      let f = await db.readOrderOne(params);
+      res.send(f);
+    }catch(err){
+      res.send(err);
+    }
+
 })
 
 // 주문 건 생성
-router.post('/reg/:id',function(req,res) {
+router.post('/reg/:id',async function(req,res) {
     rb = req.body;
     const today = moment();
 
@@ -29,20 +41,39 @@ router.post('/reg/:id',function(req,res) {
       orderState: 0,
     }
 
-db.newOrderCountDown(ord,res)
+try{
+  let f = await db.newOrderCountDown(ord);
+  console.log(f);
+  if(f[0].proCount >= ord.orderCount){
+    db.newOrder(ord);
+    res.send("주문에 성공하였습니다.");
+  }else{
+    res.json("재고 부족으로 인하여 주문에 실패하였습니다.");
+  }
+}catch(err){
+    res.json(err);
+}
+
 
 })
 
 // 주문 완료
-router.put('/admin/orderClear/:id',function(req,res){
+router.put('/admin/orderClear/:id',async function(req,res){
   const orderIndex = req.params.id;
-  db.succOrder(orderIndex,res)
+  try{
+    let f = await db.succOrder(orderIndex);
+    res.send(f);
+  }catch(err){
+    res.send(err);
+  }
+  
 })
 
 // 주문건 삭제
 router.delete('/delete/:id',function(req,res) {
     params = req.params.id;
-    db.deleteOrder(params,res);
+    db.deleteOrder(params);
+    res.send("주문 삭제");
 })
 
 module.exports = router;
