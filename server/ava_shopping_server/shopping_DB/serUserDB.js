@@ -11,7 +11,6 @@ const jwt = require('jsonwebtoken');
 const secret = 'hwan'
 // 로그인
 function newLogin(userID, userPassword, res) {
-
     const query = `select userPassword,userIndex from user where userID = "${userID}";`
     connection.query(query,
         async function (err, rows) {
@@ -38,6 +37,7 @@ function newLogin(userID, userPassword, res) {
                 } catch (err) {
                     res.send(err);
                 }
+
             } else {
                 return res.send("아이디 또는 패스워드를 확인 후 로그인 해주세요.")
             }
@@ -49,7 +49,6 @@ function readAdmin(userID) {
     const query = `select * from admin where userID = "${userID}"`
 
     return new Promise((res, rej) => {
-
         connection.query(query,
             (err, row) => {
                 if (err) { rej(err) }
@@ -61,7 +60,6 @@ function readAdmin(userID) {
                     res(false);
                 }
             })
-
     })
 }
 
@@ -97,11 +95,9 @@ function readUserIndex(userID) {
 // 회원 가입
 function newUser(user) {
     const query = `insert into user(userID,userPassword,userName,userEmail) value("${user.userID}","${user.userPassword}","${user.userName}","${user.userEmail}");`
-
     tto(query);
 
     // 신규회원 가입 시 메일 발송
-
     let emailParam = {
         toEmail: `${user.userEmail}`,     // 수신할 이메일
         subject: `Newt Mall 회원 가입을 축하합니다.`,   // 메일 제목
@@ -110,9 +106,7 @@ function newUser(user) {
                     ${user.userName} 고객님, 
                     회원 가입을 축하 드립니다.`                // 메일 내용
     };
-
     mailer.sendGmail(emailParam);
-
 }
 
 // 유저 아이디 중복 체크
@@ -134,7 +128,7 @@ function readOneUser(params) {
 }
 
 // 마이 페이지
-function readMypage(params, res) {
+function readMypage(params) {
     const query = `select \`order\`.proIndex as pi,orderIndex,orderCount,orderDate,orderPrice,proName,proProfile,orderState from \`order\`,user,product where \`order\`.userIndex = user.userIndex and \`order\`.proIndex = product.proIndex and \`order\`.userIndex = ${params};`
     return pro(query);
 }
@@ -147,13 +141,13 @@ function updateUserNick(params, userName) {
 }
 
 // 유저 닉네임 중복 체크
-function nickCheck(params, userName) {
+function nickCheck(userName) {
     const query = `select * from user where userName = "${userName}"`;
-        return pro(query);
+    return pro(query);
 }
 
 // 유저 패스워드 수정
-function updateUserPassword(params, userPassword, res) {
+function updateUserPassword(params, userPassword) {
     const query = `update user set userPassword = "${userPassword}" where userIndex = ${params}`;
     tto(query);
 }

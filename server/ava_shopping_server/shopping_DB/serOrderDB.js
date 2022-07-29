@@ -8,29 +8,26 @@ const tto = con.tto;
 
 
 // 주문 시 주문 가능한지 파악 및 주문 생성 / 재고 차감
-function newOrderCountDown(ord){
-    const query = `select proCount 
-    from product where proIndex = ${ord.proIndex};`
-
+function newOrderCountDown(ord) {
+    const query = `select proCount from product where proIndex = ${ord.proIndex};`
     return pro(query);
-
 }
 
 // 주문 생성
 async function newOrder(ord) {
     console.log(ord);
-    const query = 
-    `start transaction;
+    const query =
+        `start transaction;
     insert into \`order\`(userIndex,proIndex,orderCount,orderDate,orderPrice,orderState)
         value(${ord.userIndex},${ord.proIndex},${ord.orderCount},"${ord.orderDate}",${ord.orderPrice},0);
     update product set proCount = procount - ${ord.orderCount} where proIndex = ${ord.proIndex};
     select orderIndex from \`order\` where userIndex = ${ord.userIndex} order by orderIndex desc limit 1;
-    commit;`
+    commit;`;
 
-    try{
+    try {
         let f = await pro(query);
-        orderMail(ord.userIndex,f[3][0].orderIndex);
-    }catch(err){
+        orderMail(ord.userIndex, f[3][0].orderIndex);
+    } catch (err) {
         console.log(err);
     }
 
@@ -43,46 +40,46 @@ function readOrder() {
 }
 
 // 주문건 하나 읽기
-function readOrderOne(param) {
+function readOrderOne(params) {
     const query = `select * from \`order\` where orderIndex = ${params}`
     return pro(query);
 }
 
 // 주문 삭제
-function deleteOrder(params){
+function deleteOrder(params) {
     const query = `delete from \`order\` where orderIndex = ${params};`
     tto(query);
 }
 
 // 거래 완료
-function succOrder(params){
+function succOrder(params) {
     const query = `update \`order\` set orderState = 1 where orderIndex = ${params};`
-        tto(query);
-        // 거래 완료 처리 후 전체 글 읽기 리턴
-        return readOrder();
+    tto(query);
+    // 거래 완료 처리 후 전체 글 읽기 리턴
+    return readOrder();
 }
 
 // 주문 시 유저의 이메일을 읽어와서 메일 보내주기
-function orderMail(userIndex,orderIndex){
+function orderMail(userIndex, orderIndex) {
     const query = `select userEmail from \`user\` where userIndex = "${userIndex}";`
     connection.query(query,
-        (err,row) => {
-            if(err) {
+        (err, row) => {
+            if (err) {
                 throw err;
             }
             let emailParam = {
                 toEmail: row[0].userEmail,     // 수신할 이메일
-            
+
                 subject: `Newt Mall 주문 완료 메일입니다.`,   // 메일 제목
-                                                        // 메일 내용
+                // 메일 내용
                 text: `
                 안녕하세요!
                 주문 완료되어 메일 발송해드립니다.
                 주문하신 상품의 주문 번호는 ${orderIndex}입니다.
-                `                
-              };
-            
-              mailer.sendGmail(emailParam);
+                `
+            };
+
+            mailer.sendGmail(emailParam);
 
         })
 }

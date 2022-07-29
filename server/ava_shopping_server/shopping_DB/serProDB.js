@@ -6,30 +6,29 @@ const pro = con.pro;
 const tto = con.tto;
 
 // 상품 등록
-function newProduct(pro) {
+async function newProduct(proa) {
     const query = `start transaction;
-    insert into product(cateIndex, proName, proProfile, proContents, proDetailImg, proPrice, proCount,gameIndex) value ("${pro.cateIndex}","${pro.proName}","${pro.proProfile}","${pro.proContents}","${pro.proDetailImg}",${pro.proPrice},${pro.proCount},${pro.gameIndex});
+    insert into product(cateIndex, proName, proProfile, proContents, proDetailImg, proPrice, proCount,gameIndex) value ("${proa.cateIndex}","${proa.proName}","${proa.proProfile}","${proa.proContents}","${proa.proDetailImg}",${proa.proPrice},${proa.proCount},${proa.gameIndex});
     select proIndex from product order by proIndex desc limit 1;
     commit ;`
-    connection.query(query,
-        (err, row) => {
-            if (err) throw err;
-            else {
-                const cate = {
-                    cateIndex: pro.cateIndex,
-                    cateIndex2: pro.cateIndextwo,
-                    cateIndex3: pro.cateIndexthree,
-                }
-                newCate(row[2][0].proIndex, cate)
-            }
-        }
-    )
+
+    const cate = {
+        cateIndex: proa.cateIndex,
+        cateIndex2: proa.cateIndextwo,
+        cateIndex3: proa.cateIndexthree,
+    }
+
+    try {
+        let f = await pro(query);
+        newCate(f[2][0].proIndex, cate)
+    } catch (err) {
+        console.log(err);
+    }
+
 }
 
 // 카테고리 등록
 function newCate(proIndex, cate) {
-    console.log(proIndex);
-    console.log(cate);
 
     var query = ``;
     if (cate.cateIndex2 === 'none' && cate.cateIndex3 === 'none') {
@@ -62,7 +61,6 @@ function readProduct() {
     order by cA.proIndex;`
 
     return pro(query);
-
 }
 
 
@@ -94,7 +92,7 @@ function readBest() {
 }
 
 // 상품 검색
-function serchProduct(params, result) {
+function serchProduct(params) {
     const query = `SET sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));
     select * from
     product join cateAll cA
@@ -104,8 +102,7 @@ function serchProduct(params, result) {
 
 where proName like "%${params}%" or cateName like "%${params}%" or gametitle like "%${params}%"
 group by proName
-order by product.proIndex;
-`
+order by product.proIndex;`;
 
     return pro(query);
 }
@@ -150,7 +147,6 @@ function gameCategory(game, id) {
 
         return pro(query);
     }
-
 
 }
 

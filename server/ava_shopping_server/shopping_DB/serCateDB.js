@@ -25,13 +25,13 @@ function readCateOne(params) {
 }
 
 // 카테고리 수정
-function updateCate(params,cateName){
+function updateCate(params, cateName) {
     const query = `update category set cateName = "${cateName}" where cateIndex = ${params}`;
     tto(query);
 }
 
 // 카테고리 삭제
-function deleteCate(params){
+function deleteCate(params) {
     const query = `delete from category where cateIndex = ${params};`
     tto(query);
 }

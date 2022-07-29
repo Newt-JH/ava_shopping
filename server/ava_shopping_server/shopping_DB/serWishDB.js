@@ -7,26 +7,26 @@ const tto = con.tto;
 
 
 // 찜 목록 조회 후 추가 or 삭제
-function wish(user,proin) {
+function wish(user, proin) {
     const query = `select * from wish where userIndex = ${user} and proIndex = ${proin}`;
     return pro(query);
 }
 
 
 // 찜 목록 추가
-function newWish(user,pro) {
+function newWish(user, pro) {
     const query = `insert into wish(userIndex,proIndex) value(${user},${pro})`
     tto(query);
 }
 
 // 찜 목록 삭제
-function delWish(user,pro) {
+function delWish(user, pro) {
     const query = `delete from wish where userIndex = ${user} and proIndex = ${pro}`
     tto(query);
 }
 
 // 유저 찜 목록
-function userWish(user){
+function userWish(user) {
     const query = `select * from wish,product where wish.proIndex = product.proIndex and userIndex = ${user};`
     return pro(query);
 }
