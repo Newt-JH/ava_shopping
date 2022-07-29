@@ -16,27 +16,51 @@ router.post('/login', function (req, res) {
 })
 
 // 로그인 시 유저 인덱스 읽어오기
-router.post('/login/index', function (req, res) {
+router.post('/login/index', async function (req, res) {
     rb = req.body;
     userID = rb.userID;
-    db.readUserIndex(userID, res)
+    try{
+        let f = await db.readUserIndex(userID);
+        res.send(f);
+    }catch(err){
+        res.send(err);
+    }
+
 })
 
 // 전체 회원 읽어오기
-router.get('/', function (req, res) {
-    db.readAllUser(res);
+router.get('/', async function (req, res) {
+    try{
+        let f = await db.readAllUser();
+        res.send(f);
+    }catch(err){
+        res.send(err);
+    }
+
 });
 
 // 선택한 회원 읽어오기
-router.get('/:id', function (req, res) {
+router.get('/:id', async function (req, res) {
     params = req.params.id;
-    db.readOneUser(params, res)
+    try{
+        let f = await db.readOneUser(params);
+        res.send(f);
+    }catch(err){
+        res.send(err);
+    }
+
 })
 
 // 마이페이지 구매 정보 읽어오기
-router.get('/mypage/:id', function (req, res) {
+router.get('/mypage/:id', async function (req, res) {
     params = req.params.id;
-    db.readMypage(params, res)
+    try{
+        let f = await db.readMypage(params, res);
+        res.send(f);
+    }catch(err){
+        res.send(err);
+    }
+
 })
 
 // 회원 등록
@@ -52,22 +76,49 @@ router.post('/reg', function (req, res) {
         userName: userNick,
         userEmail: rb.userEmail
     }
-    db.newUser(user,res);
+    try{
+        db.newUser(user);
+        res.send("회원가입 완료");
+    }catch(err)
+    {
+        res.send(err);
+    }
 })
 
 // Join ID 중복 체크
-router.post('/join/idcheck', function (req, res) {
+router.post('/join/idcheck', async function (req, res) {
     rb = req.body;
     id = rb.userID;
-    db.idCheck(id, res);
+    try{
+        let f = await db.idCheck(id);
+        if(f[0] === undefined){
+            return res.json("OK");
+        }else{
+            return res.json("NO");
+        }
+    }catch(err){
+        res.send(err);
+    }
+
 })
 
 // 유저 닉네임 수정
-router.put('/update/name/:id', function (req, res) {
+router.put('/update/name/:id', async function (req,res) {
     rb = req.body;
     params = req.params.id;
     userName = rb.userName;
-    db.nickCheck(params, userName,res);
+    try{
+        let f = await db.nickCheck(params, userName);
+        if(f[0] === undefined){
+            db.updateUserNick(params,userName);
+            res.send("OK")
+        }else{
+            res.send("NO")
+        }
+    }catch(err){
+        res.send(err);
+    }
+    
 })
 
 // 유저 패스워드 수정
@@ -77,13 +128,20 @@ router.put('/update/password/:id', function (req, res) {
     password = rb.userPassword;
      // sha512로 알고리즘 사용, Id+password값 변환, base64로 인코딩
      userPass = crypto.createHash("sha512").update(rb.userID + password).digest("base64")
-    db.updateUserPassword(params,userPass,res);
+    db.updateUserPassword(params,userPass);
+    res.send("패스워드 변경 완료");
 })
 
 // 유저  삭제
-router.delete('/delete/:id', function (req, res) {
+router.delete('/delete/:id', async function (req, res) {
     params = req.params.id;
-    db.deleteUser(params, res);
+    try{
+        let f = await db.deleteUser(params);
+        res.send(f);
+    }catch(err){
+        res.send(err);
+    }
+
 })
 
 
