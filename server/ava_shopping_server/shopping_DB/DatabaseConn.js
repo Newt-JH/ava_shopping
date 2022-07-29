@@ -31,8 +31,18 @@ function pro(query) {
     })
 }
 
+// DB 커넥션
+function tto(query){
+    dataCon.query(query, function (err) {
+        if (err) {
+            throw err
+        } 
+    })
+}
+
 module.exports = {
     dataCon,
     pool,
-    pro
+    pro,
+    tto
 }

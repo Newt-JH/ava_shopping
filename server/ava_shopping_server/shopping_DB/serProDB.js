@@ -1,6 +1,7 @@
 const con = require('./DatabaseConn');
 const connection = con.dataCon;
 const pro = con.pro;
+const tto = con.tto;
 
 // 상품 등록
 function newProduct(pro) {
@@ -46,11 +47,8 @@ function newCate(proIndex, cate) {
         query = `insert into cateAll(proIndex,cateIndex) value (${proIndex},${cate.cateIndex}),(${proIndex},${cate.cateIndex2}),(${proIndex},${cate.cateIndex3});`
     }
 
-    connection.query(query,
-        (err) => {
-            if (err) throw err;
-        }
-    )
+    tto(query);
+
 }
 
 // 상품 전체 읽기
@@ -157,12 +155,7 @@ function gameCategory(game, id) {
 // 상품 수정
 function updateProduct(params, pro) {
     const query = `update product set proPrice=${pro.proPrice},proCount = ${pro.proCount} where proIndex = ${params}`;
-    connection.query(query,
-        (err) => {
-            if (err) {
-                throw err;
-            }
-        })
+    tto(query);
 }
 
 // 상품 삭제
@@ -171,12 +164,8 @@ function deleteProduct(params) {
     delete from product where proIndex = ${params};
     delete from cateAll where proIndex = ${params};
     commit;`
-    connection.query(query,
-        (err) => {
-            if (err) {
-                throw err;
-            }
-        })
+    
+    tto(query);
 }
 
 
