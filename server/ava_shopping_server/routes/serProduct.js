@@ -1,6 +1,8 @@
 var express = require('express');
 const db = require('./../shopping_DB/serProDB');
 var router = express.Router();
+const wrap = require('./wrapper');
+const wrapper = wrap.wrapper;
 
 const multer = require('multer');
 const fs = require('fs');
@@ -27,108 +29,77 @@ const upload = multer({
 });
 
 // 전체 상품 읽어오기
-router.get('/', async function (req, res) {
+router.get('/', wrapper(async function (req, res) {
 
-    try {
         let f = await db.readProduct()
         res.send(f[1]);
-    } catch (err) {
-        res.send(err);
-    };
 
-});
+}));
 
 // 선택한 상품 읽어오기
-router.get('/:id', async function (req, res) {
+router.get('/:id', wrapper(async function (req, res) {
     params = req.params.id;
 
-    try {
         let f = await db.readOneProduct(params);
         console.log(f);
         res.send(f);
-    } catch (err) {
-        res.send(err);
-    };
 
-})
+}))
 
 // 검색 상품 읽어오기
-router.get('/serch/:id', async function (req, res) {
+router.get('/serch/:id', wrapper(async function (req, res) {
     params = req.params.id;
 
     if (params.length === 0) {
         res.send("검색어 미입력");
     } else {
 
-        try {
             let f = await db.serchProduct(params);
             res.send(f[1]);
-        } catch (err) {
-            res.send(err);
-        }
 
     }
-})
+}))
 
 // 베스트 상품
-router.get('/best/product', async function (req, res) {
+router.get('/best/product', wrapper(async function (req, res) {
 
-    try {
         const f = await db.readBest();
         res.send(f[1]);
-    } catch (err) {
-        res.send(err);
-    }
 
-})
+}))
 
 // 카테고리 상품 읽어오기
-router.get('/cate/:id', async function (req, res) {
+router.get('/cate/:id', wrapper(async function (req, res) {
     params = req.params.id;
     if (params.length === 0) {
 
     } else {
-
-        try {
             let f = await db.serchCate(params)
             res.send(f);
-        } catch (err) {
-            res.send(err);
-        }
-
     }
-})
+}))
 
 // 게임 상품 읽어오기
-router.get('/game/:id', async function (req, res) {
+router.get('/game/:id', wrapper(async function (req, res) {
     params = req.params.id;
     if (params.length === 0) {
 
     } else {
-        try {
             let f = await db.serchGame(params)
             res.send(f);
-        } catch (err) {
-            res.send(err);
-        }
-
     }
-})
+}))
 
 // 게임 카테고리 상품 읽어오기
-router.get('/category/id=:id&game=:game', async function (req, res) {
+router.get('/category/id=:id&game=:game', wrapper(async function (req, res) {
     gameparams = req.params.game;
     idparams = req.params.id;
 
-    try {
         let f = await db.gameCategory(gameparams, idparams);
         console.log(f);
         res.send(f);
-    } catch (err) {
-        res.send(err);
-    }
 
-});
+}));
 
 
 
@@ -150,12 +121,8 @@ router.post('/reg', upload.single('proDetailImg'), function (req, res) {
         gameIndex: rb.gameIndex
     }
 
-    try {
         db.newProduct(pro);
         res.send("글 등록 성공");
-    } catch (err) {
-        res.send(err);
-    }
 
 });
 
@@ -168,12 +135,9 @@ router.put('/update/:id', function (req, res) {
         proCount: rb.proCount,
     }
 
-    try {
         db.updateProduct(params, pro)
         return res.send("상품 정보 수정 성공");
-    } catch (err) {
-        res.send(err);
-    }
+
 
 });
 
@@ -181,12 +145,8 @@ router.put('/update/:id', function (req, res) {
 router.delete('/delete/:id', function (req, res) {
     params = req.params.id;
 
-    try {
         db.deleteProduct(params);
         return res.send("상품 삭제");
-    } catch (err) {
-        res.send(err);
-    }
 
 });
 
